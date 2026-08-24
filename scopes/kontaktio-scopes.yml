@@ -1,0 +1,55 @@
+generated: '2026-08-23'
+method: searched
+source: https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+docs: https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+note: 'No OpenAPI in this repo declares an oauth2 securityScheme — the specs declare
+  http/bearer and apiKey only — so derive-oauth-scopes.py correctly found nothing.
+  The OAuth surface is documented in prose instead: the Entity Management Integration
+  API authenticates with the OAuth2 client-credentials grant against a per-tenant
+  Keycloak realm. Kontakt.io publishes NO API permission scopes; the scope string in
+  the documented token request is the standard OIDC set, and API authorization is
+  carried by a Keycloak CLIENT ROLE (integration-api) rather than by scopes. Recorded
+  as searched from the docs so a later derived pass cannot overwrite it.'
+schemes:
+- name: keycloak-client-credentials
+  source: https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://kc.cloud.{region}.kontakt.io/realms/{tenant}/protocol/openid-connect/token
+    token_lifetime_seconds: 300
+    region_values:
+    - us
+    - uk
+    note: '{tenant} is the account Tenant Name, taken from the account URL https://{tenant}.app.cloud.{region}.kontakt.io'
+scopes:
+- scope: openid
+  description: Standard OIDC scope requested in the documented token call.
+  flows:
+  - clientCredentials
+  kind: oidc-standard
+- scope: profile
+  description: Standard OIDC scope requested in the documented token call.
+  flows:
+  - clientCredentials
+  kind: oidc-standard
+- scope: email
+  description: Standard OIDC scope requested in the documented token call.
+  flows:
+  - clientCredentials
+  kind: oidc-standard
+- scope: mcp
+  description: Scope advertised by the MCP authorization server metadata at https://kontakt.io/.well-known/oauth-authorization-server
+    for the WordPress-hosted MCP server. Unrelated to Kio Cloud APIs.
+  flows:
+  - authorizationCode
+  kind: mcp
+roles:
+- name: integration-api
+  kind: keycloak-client-role
+  description: Client role that grants an Integration API Client access to the Entity
+    Management Integration API. Assigned per client in Kio Cloud under Users > Integration
+    API.
+- name: integration-api (user role)
+  kind: keycloak-user-role
+  description: User Management role required for a person to create and manage Integration
+    API Clients. Assigning it requires the User Management Administrator role.

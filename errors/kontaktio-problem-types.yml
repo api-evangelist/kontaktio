@@ -1,0 +1,120 @@
+generated: '2026-08-23'
+method: searched
+source: https://developer.kontakt.io/docs/dev-ctr-device-api/15d26022023bf-responses-and-error-codes
+  and https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/ZG9jOjI5Njg5NTQ4-responses-and-error-codes,
+  cross-checked against the 4xx/5xx responses declared in openapi/
+format: custom-json
+rfc9457: false
+envelope:
+  media_type: application/json
+  shape: |-
+    {
+      "message": "<object name that failed validation>",
+      "errors": [
+        { "field": "<field name>", "error": "<error type>", "invalidValue": "<value that failed>" }
+      ]
+    }
+  fields:
+  - name: message
+    type: string
+    description: Object name that failed validation.
+  - name: errors[]
+    type: array
+    description: Array of field errors.
+  - name: errors[].field
+    type: string
+    description: Field name.
+  - name: errors[].error
+    type: string
+    description: Error type.
+  - name: errors[].invalidValue
+    type: string
+    description: The invalid value that did not pass validation.
+  note: 'Kontakt.io does NOT use RFC 9457 / RFC 7807 problem+json. No operation in
+    any of the four specs declares an application/problem+json response. The Device
+    Management API additionally returns an opaque incident envelope on 401 —
+    {"id":"API_ERROR_<epoch-ms>","status":401,"cause":"..."} — observed live on
+    dm-api.cloud.us.kontakt.io during probing.'
+problems:
+- status: 200
+  title: OK
+  description: Everything worked as expected.
+  kind: success
+- status: 201
+  title: Created
+  description: Entity successfully created.
+  kind: success
+- status: 303
+  title: Redirected
+  description: Request valid, but needed to be redirected elsewhere.
+  kind: redirect
+- status: 400
+  title: Bad Request
+  description: Several different error titles are returned for 400 errors; the response
+    body carries message + errors[] describing which fields failed validation.
+  remediation: Read errors[] and correct the named fields before retrying.
+  declared_in:
+  - openapi/kontaktio-device-management-openapi.yml
+  - openapi/kontaktio-entity-management-openapi.yml
+  - openapi/kontaktio-location-occupancy-openapi.yml
+- status: 401
+  title: Unauthorized
+  description: Authentication credentials are missing or invalid. Either the JWT Bearer
+    token or the legacy Api-Key is not present, expired, or disabled.
+  remediation: Request a fresh access token from the Keycloak token endpoint and retry
+    once. JWT lifetime is 300 seconds.
+  declared_in:
+  - openapi/kontaktio-device-management-openapi.yml
+  - openapi/kontaktio-entity-management-openapi.yml
+  occurrences: 20
+- status: 403
+  title: Forbidden
+  description: A user or device-model error. User error — the manager who created
+    the API credential no longer has access to the Kio Cloud account, or their role
+    does not allow the endpoint. Device error — the endpoint is not available for
+    that device model.
+  declared_in:
+  - openapi/kontaktio-device-management-openapi.yml
+  - openapi/kontaktio-entity-management-openapi.yml
+  occurrences: 3
+- status: 404
+  title: Resource not found
+  description: The requested resource could not be found — either no object exists
+    with the id in the path, or the path is wrong.
+  declared_in:
+  - openapi/kontaktio-device-management-openapi.yml
+  - openapi/kontaktio-entity-management-openapi.yml
+  - openapi/kontaktio-spaces-openapi.yml
+  occurrences: 23
+- status: 409
+  title: Conflict
+  description: Information provided includes the cause of the conflict.
+  declared_in:
+  - openapi/kontaktio-device-management-openapi.yml
+  - openapi/kontaktio-entity-management-openapi.yml
+  occurrences: 2
+- status: 415
+  title: Not found (version or media type)
+  description: Version or mediatype not found — raised when the Accept header requests
+    an unknown API version, e.g. application/vnd.com.kontakt+json;version=99.
+  remediation: Send a supported Accept version (current stable is version=10) or omit
+    the version parameter.
+- status: 422
+  title: Validation error
+  description: Parameter validation error.
+  declared_in:
+  - openapi/kontaktio-device-management-openapi.yml
+  occurrences: 22
+- status: 429
+  title: Too Many Requests
+  description: Rate limit exceeded. The response has no body.
+  remediation: Honour the Retry-After header; recommended backoff is one second.
+  declared_in:
+  - openapi/kontaktio-location-occupancy-openapi.yml
+  occurrences: 6
+  see_also: rate-limits/kontaktio-rate-limits.yml
+gaps:
+- No 5xx response is declared in ANY of the four specs, so an agent has no contract
+  for server-side failure.
+- The Device Management API declares no 429 response even though its docs publish a
+  60 req/s limit.

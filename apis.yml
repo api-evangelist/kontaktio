@@ -1,23 +1,193 @@
 aid: kontaktio
 name: Kontakt.io
-description: 'Kontakt.io is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: 'Kontakt.io is an AI-powered real-time location system (RTLS) and IoT
+  platform for healthcare operations, founded in 2013 with offices in New York and
+  Krakow. Its Kio Cloud platform combines BLE/UWB tags, badges, gateways and sensors
+  with software for asset tracking, staff safety, patient flow, room and seat occupancy,
+  and environmental telemetry. Developers integrate through the Kontakt.io Developer
+  Center, which publishes four OpenAPI contracts: a Device Management API for provisioning,
+  configuring and firmware-upgrading devices, a Location & Occupancy API for real-time
+  and historical positions, presences, occupancy and telemetry plus a Streams API for
+  event subscriptions, a Spaces API, and an Entity Management Integration API for
+  batch import of staff and asset entities. Kio Cloud runs in US and UK regions and
+  ships iOS and Android SDKs.'
 url: https://raw.githubusercontent.com/api-evangelist/kontaktio/refs/heads/main/apis.yml
+image: https://kontakt.io/app/uploads/2025/06/why-kontakt-hero-image-scaled-1.jpg
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-23'
 modified: '2026-08-23'
 tags:
 - Company
-apis: []
+- IoT
+- RTLS
+- Healthcare
+- Asset Tracking
+- Location
+- Occupancy
+- Bluetooth
+- Device Management
+- Telemetry
+- Sensors
+- Streaming
+apis:
+- name: Kontakt.io Device Management API
+  description: REST API for managing Kontakt.io devices in Kio Cloud — devices, configs,
+    firmware, firmware upgrade schedules, commands, orders, managers, namespaces,
+    proximity UUIDs, venues, device sharing and third-party (Meraki) device integrations.
+    Versioned through the Accept header (application/vnd.com.kontakt+json;version=10).
+  humanURL: https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  baseURL: https://dm-api.cloud.us.kontakt.io
+  tags:
+  - Device Management
+  - IoT
+  - Firmware
+  - Configuration
+  properties:
+  - type: OpenAPI
+    url: openapi/kontaktio-device-management-openapi.yml
+  - type: Documentation
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/40960a0b6f340-device-management-api
+  - type: Authentication
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  - type: RateLimits
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
+- name: Kontakt.io Location & Occupancy API
+  description: REST and streaming API for Kio Cloud location intelligence — campuses,
+    buildings, floors, rooms, footfall spaces, location images, room/seat/footfall/sensor
+    occupancy, telemetry, device positions and presences, colocations, gateways, and
+    Streams subscriptions and channels for telemetry, position and occupancy events.
+  humanURL: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
+  baseURL: https://apps.cloud.us.kontakt.io
+  tags:
+  - Location
+  - Occupancy
+  - Telemetry
+  - Streaming
+  properties:
+  - type: OpenAPI
+    url: openapi/kontaktio-location-occupancy-openapi.yml
+  - type: Documentation
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/c6bcb378b0df8-location-and-occupancy
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/da742c3fd5f69-changelog
+- name: Kontakt.io Spaces API
+  description: Smart Location Spaces API for Kio Cloud Apps, covering the spaces resource
+    used to group rooms and seats for occupancy reporting.
+  humanURL: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/yr2sakrpndb8n-spaces-api
+  baseURL: https://api.cloud.us.kontakt.io/spaces
+  tags:
+  - Spaces
+  - Location
+  properties:
+  - type: OpenAPI
+    url: openapi/kontaktio-spaces-openapi.yml
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/yr2sakrpndb8n-spaces-api
+- name: Kontakt.io Entity Management Integration API
+  description: Integration API for batch importing and updating Entities such as Staff
+    and Assets into the Kontakt.io Kio Apps platform, and retrieving their current
+    configuration. Secured with OAuth2 client credentials against the Kontakt.io Keycloak
+    identity provider.
+  humanURL: https://developer.kontakt.io/docs/entity-management-integration-api/tq7cg4bn8ch38-entity-management-integration-api
+  baseURL: https://api.cloud.us.kontakt.io/entity-management
+  tags:
+  - Entities
+  - Integration
+  - Staff
+  - Assets
+  properties:
+  - type: OpenAPI
+    url: openapi/kontaktio-entity-management-openapi.yml
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/entity-management-integration-api/tq7cg4bn8ch38-entity-management-integration-api
+  - type: Authentication
+    url: https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: DomainSecurity
+  url: security/kontaktio-domain-security.yml
+- type: Authentication
+  url: authentication/kontaktio-authentication.yml
 - type: Website
-  url: https://forgeglobal.com/kontaktio_stock/
+  url: https://kontakt.io/
+- type: DeveloperPortal
+  url: https://developer.kontakt.io/
+- type: Documentation
+  url: https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+- type: APIReference
+  url: https://developer.kontakt.io/docs/dev-ctr-device-api/40960a0b6f340-device-management-api
+- type: GettingStarted
+  url: https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication
+- type: Support
+  url: https://support.kontakt.io/hc/en-gb
+- type: Blog
+  url: https://kontakt.io/resources/content-hub/blog/
+- type: GitHubOrganization
+  url: https://github.com/kontaktio
+- type: SignUp
+  url: https://app.cloud.us.kontakt.io/signin
+- type: TermsOfService
+  url: https://kontakt.io/legal-documents/terms-of-sale-and-service/
+- type: PrivacyPolicy
+  url: https://kontakt.io/legal-documents/privacy-policy/
+- type: StatusPage
+  url: https://status.kontakt.io/
+- type: TrustCenter
+  url: https://trust.kontakt.io/
+- type: Compliance
+  url: https://kontakt.io/legal-documents/security/
+- type: Packages
+  url: packages/kontaktio-packages.yml
+- type: SDKs
+  url: packages/kontaktio-packages.yml
+- type: WellKnown
+  url: well-known/kontaktio-well-known.yml
+- type: MCPServer
+  url: mcp/kontaktio-mcp.yml
+- type: ToolCrosswalk
+  url: mcp/kontaktio-tool-crosswalk.yml
+- type: LLMsTxt
+  url: llms/kontaktio-llms.txt
+- type: Overlay
+  url: overlays/kontaktio-device-management-overlay.yaml
+- type: Conformance
+  url: conformance/kontaktio-conformance.yml
+- type: ErrorCatalog
+  url: errors/kontaktio-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/kontaktio-lifecycle.yml
+- type: OAuthScopes
+  url: scopes/kontaktio-scopes.yml
+- type: Sandbox
+  url: sandbox/kontaktio-sandbox.yml
+- type: Conventions
+  url: conventions/kontaktio-conventions.yml
+- type: ChangeLog
+  url: changelog/kontaktio-changelog.yml
+- type: DataModel
+  url: data-model/kontaktio-data-model.yml
+- type: Webhooks
+  url: asyncapi/kontaktio-streams-events.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: RateLimits
+  url: rate-limits/kontaktio-rate-limits.yml
+- type: Plans
+  url: plans/kontaktio-plans-pricing.yml
+x-enrichment:
+  date: '2026-08-23'
+  status: enriched
+  artifacts_added: 39
+  pass: local-v1

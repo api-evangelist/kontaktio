@@ -1,0 +1,60 @@
+generated: '2026-08-23'
+method: probed
+source: Stoplight project node links.mock_url for each published service, probed 2026-08-23
+note: 'Kontakt.io publishes NO test/sandbox tenant, no test-vs-live key prefixes, and
+  no magic test identifiers — Kio Cloud is production-only and every API host answers
+  401 without real credentials. What IS reachable without a Kontakt.io account is the
+  Prism mock server that Stoplight stands up for each published service in the
+  Developer Center. Each mock returns schema-shaped example payloads and enforces the
+  spec''s security scheme only for PRESENCE, so any placeholder credential unlocks
+  it. That makes the four contracts callable pre-sales, which is the only pre-account
+  execution surface this provider has. These are Stoplight infrastructure, published
+  by Kontakt.io''s own project configuration — they are NOT Kontakt.io-operated
+  sandboxes and return no real data.'
+test_credentials:
+  live_vs_test_keys: false
+  key_prefixes: null
+  magic_identifiers: null
+  test_clock: false
+  fixtures: false
+mock_servers:
+- api: Device Management API
+  url: https://stoplight.io/mocks/kontakt-api-docs/dev-ctr-device-api/242823726
+  transport: https
+  auth: 'any non-empty Authorization: Bearer value'
+  verified:
+    probed: '2026-08-23'
+    request: GET /device with Authorization Bearer placeholder
+    status: 200
+    note: Returns a schema-shaped device list. Sending no credential returns 401.
+- api: Location & Occupancy API
+  url: https://stoplight.io/mocks/kontakt-api-docs/dev-ctr-loc-occ-api/29456682
+  transport: https
+  auth: any non-empty Api-Key header value
+  verified:
+    probed: '2026-08-23'
+    request: GET /v2/locations/campuses with Api-Key placeholder
+    status: 200
+    bytes: 1210
+- api: Spaces API
+  url: https://stoplight.io/mocks/kontakt-api-docs/dev-ctr-loc-occ-api/153415993
+  transport: https
+  auth: any non-empty Api-Key header value
+  verified:
+    probed: '2026-08-23'
+    status: not-individually-probed
+- api: Entity Management Integration API
+  url: https://stoplight.io/mocks/kontakt-api-docs/entity-management-integration-api/1146406539
+  transport: https
+  auth: any non-empty bearer value
+  verified:
+    probed: '2026-08-23'
+    request: GET /v1/integration/entity/abc without credential
+    status: 401
+interactive_console:
+  url: https://developer.kontakt.io/docs/dev-ctr-device-api/40960a0b6f340-device-management-api
+  note: The Developer Center reference pages ship Stoplight's Try It console, which
+    can target either the mock server or the live Kio Cloud host.
+signup: https://app.cloud.us.kontakt.io/signin
+signup_note: Kio Cloud has no self-serve signup — the /signin route is a login for
+  existing customers; accounts are provisioned through sales.

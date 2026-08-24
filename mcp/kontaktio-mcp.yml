@@ -1,0 +1,62 @@
+generated: '2026-08-23'
+method: searched
+status: published
+source: https://kontakt.io/.well-known/oauth-protected-resource (RFC 9728) + https://kontakt.io/wp-json/mcp
+  (WordPress REST route index) — probed 2026-08-23
+deployment:
+  mode: remote
+  endpoint: https://kontakt.io/wp-json/mcp/mcp-oauth-server
+  auth: oauth
+  verified: probed
+server:
+  name: kontakt-io-mcp
+  transport: http
+  url: https://kontakt.io/wp-json/mcp/mcp-oauth-server
+  methods:
+  - POST
+  - GET
+  - DELETE
+  additional_endpoints:
+  - url: https://kontakt.io/wp-json/mcp/mcp-adapter-default-server
+    note: Second server registered under the same wp-json/mcp namespace; also returns
+      401 mcp_unauthorized to an anonymous tools/list.
+oauth:
+  protected_resource_metadata: https://kontakt.io/.well-known/oauth-protected-resource
+  authorization_server_metadata: https://kontakt.io/.well-known/oauth-authorization-server
+  issuer: https://kontakt.io
+  authorization_endpoint: https://kontakt.io/oauth/authorize
+  token_endpoint: https://kontakt.io/oauth/token
+  revocation_endpoint: https://kontakt.io/oauth/revoke
+  grant_types_supported:
+  - authorization_code
+  - refresh_token
+  code_challenge_methods_supported:
+  - S256
+  scopes_supported:
+  - mcp
+  token_endpoint_auth_methods_supported:
+  - none
+  client_id_metadata_document_supported: true
+  www_authenticate: 'Bearer realm="https://kontakt.io", resource_metadata="https://kontakt.io/.well-known/oauth-protected-resource"'
+tools: []
+x-evidence:
+  probed: '2026-08-23'
+  tools_list_request: POST https://kontakt.io/wp-json/mcp/mcp-oauth-server {"jsonrpc":"2.0","id":1,"method":"tools/list"}
+  tools_list_status: 401
+  tools_list_body: '{"code":"mcp_unauthorized","message":"MCP authentication required.","data":{"status":401}}'
+  initialize_status: 401
+notes:
+- The MCP server is REAL and REMOTE — a live https endpoint an MCP client can POST
+  to today, discoverable through RFC 9728 protected-resource metadata and RFC 8414
+  authorization-server metadata served from kontakt.io itself. That is a complete,
+  spec-correct OAuth discovery chain, which is rarer than the server.
+- The live tool list is AUTH-GATED. Anonymous `initialize` and `tools/list` both
+  return 401 mcp_unauthorized with a WWW-Authenticate challenge, so no tool names
+  or inputSchemas could be captured. NOTHING is listed under tools[] rather than
+  guessing; authenticated introspection is required to enumerate them.
+- 'Provenance caveat worth recording: this server is mounted on the WordPress
+  marketing site (kontakt.io/wp-json/mcp/...), NOT on Kio Cloud (dm-api /
+  apps.cloud.*.kontakt.io). Its tools are therefore most likely site/content tools
+  rather than a wrapper over the Device Management or Location & Occupancy APIs.
+  That could not be confirmed while the endpoint is gated, so no claim is made
+  either way.'

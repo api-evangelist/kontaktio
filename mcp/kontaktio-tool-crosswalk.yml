@@ -1,0 +1,247 @@
+generated: '2026-08-23'
+method: derived
+source: mcp/kontaktio-mcp.yml + openapi/ (4 specs)
+note: 'Kontakt.io publishes BOTH an OpenAPI surface (4 specs, 96 operations) and a remote MCP server,
+  but the two cannot be bound yet: the MCP server at https://kontakt.io/wp-json/mcp/mcp-oauth-server returns
+  401 mcp_unauthorized to an anonymous tools/list, so no tool names or inputSchemas exist to map. Every
+  crosswalk row would therefore be invented, and none is written. rest_only[] below is the real, complete
+  inventory of REST capability that an MCP tool COULD back; crosswalk[] stays empty until authenticated
+  introspection returns the tool list.'
+surfaces:
+  openapi:
+  - file: openapi/kontaktio-device-management-openapi.yml
+    api: Device Management API
+    gated: false
+  - file: openapi/kontaktio-location-occupancy-openapi.yml
+    api: Location & Occupancy API
+    gated: false
+  - file: openapi/kontaktio-spaces-openapi.yml
+    api: Spaces API
+    gated: false
+  - file: openapi/kontaktio-entity-management-openapi.yml
+    api: Entity Management Integration API
+    gated: false
+  graphql: null
+  mcp:
+    url: https://kontakt.io/wp-json/mcp/mcp-oauth-server
+    gated: true
+    gate: '401 mcp_unauthorized; OAuth bearer required (scope: mcp)'
+    probed: '2026-08-23'
+crosswalk: []
+mcp_only: []
+rest_only:
+- capability: Command
+  spec: openapi/kontaktio-device-management-openapi.yml
+  api: Device Management API
+  operations:
+  - GET /command/encrypt
+- capability: Config
+  spec: openapi/kontaktio-device-management-openapi.yml
+  api: Device Management API
+  operations:
+  - GET /config
+  - GET /config/encrypt
+  - GET /config/readall
+  - GET /config/{fileName}/csv
+  - POST /config/create
+  - POST /config/delete
+  - POST /config/export
+  - POST /config/import
+- capability: Device
+  spec: openapi/kontaktio-device-management-openapi.yml
+  api: Device Management API
+  operations:
+  - DELETE /device/{uniqueId}/access/{email}
+  - GET /device
+  - GET /device/unassigned/{managerId}
+  - GET /device/{uniqueId}/access
+  - POST /bulk/device-access
+  - POST /device/decrypt
+  - POST /device/sync
+  - POST /device/sync/token
+  - POST /device/update
+  - POST /device/{uniqueId}/access
+  - getBulkDeviceAccessStatus
+  - getBulkDeviceAccessStatusForAuthorizedManager
+- capability: Device (3rd party)
+  spec: openapi/kontaktio-device-management-openapi.yml
+  api: Device Management API
+  operations:
+  - POST /device/vendor/meraki/create
+  - POST /device/vendor/meraki/delete
+  - POST /device/vendor/meraki/update
+- capability: External Device
+  spec: openapi/kontaktio-device-management-openapi.yml
+  api: Device Management API
+  operations:
+  - DELETE /device/external/import/{jobKey}
+  - GET /device/external/import
+  - POST /device/delete
+  - POST /device/external
+  - POST /device/external/import
+- capability: Device tags
+  spec: openapi/kontaktio-device-management-openapi.yml
+  api: Device Management API
+  operations:
+  - GET /tags
+- capability: Device (Portal Beam)
+  spec: openapi/kontaktio-device-management-openapi.yml
+  api: Device Management API
+  operations:
+  - DELETE /portalbeam/stitching
+  - GET /portalbeam/image
+  - GET /portalbeam/stitching
+  - POST /portalbeam/image
+  - POST /portalbeam/stitching
+- capability: Eddystone
+  spec: openapi/kontaktio-device-management-openapi.yml
+  api: Device Management API
+  operations:
+  - GET /namespaces
+  - POST /eddystone
+- capability: Firmware
+  spec: openapi/kontaktio-device-management-openapi.yml
+  api: Device Management API
+  operations:
+  - GET /firmware
+  - GET /firmware/{firmwareVersion}
+  - GET /firmware/{firmwareVersion}/file
+- capability: Manager
+  spec: openapi/kontaktio-device-management-openapi.yml
+  api: Device Management API
+  operations:
+  - GET /manager
+- capability: Order
+  spec: openapi/kontaktio-device-management-openapi.yml
+  api: Device Management API
+  operations:
+  - GET /order
+  - GET /order/claim
+  - POST /order/claim
+- capability: Proximities
+  spec: openapi/kontaktio-device-management-openapi.yml
+  api: Device Management API
+  operations:
+  - GET /proximities
+- capability: Campuses
+  spec: openapi/kontaktio-location-occupancy-openapi.yml
+  api: Location & Occupancy API
+  operations:
+  - get-locations-campuses
+- capability: Buildings
+  spec: openapi/kontaktio-location-occupancy-openapi.yml
+  api: Location & Occupancy API
+  operations:
+  - get-locations-buildings
+  - get-v2-locations-buildings-id
+- capability: Rooms
+  spec: openapi/kontaktio-location-occupancy-openapi.yml
+  api: Location & Occupancy API
+  operations:
+  - get-locations-rooms
+  - get-v2-locations-room-sensors
+- capability: Floors
+  spec: openapi/kontaktio-location-occupancy-openapi.yml
+  api: Location & Occupancy API
+  operations:
+  - get-locations-floors
+- capability: Location Images
+  spec: openapi/kontaktio-location-occupancy-openapi.yml
+  api: Location & Occupancy API
+  operations:
+  - get-v3-locations-images
+- capability: Presences
+  spec: openapi/kontaktio-location-occupancy-openapi.yml
+  api: Location & Occupancy API
+  operations:
+  - get-presences
+  - get-presences-history
+- capability: Positions
+  spec: openapi/kontaktio-location-occupancy-openapi.yml
+  api: Location & Occupancy API
+  operations:
+  - get-positions
+  - get-positions-history
+- capability: Telemetry
+  spec: openapi/kontaktio-location-occupancy-openapi.yml
+  api: Location & Occupancy API
+  operations:
+  - get-telemetry
+- capability: Gateways
+  spec: openapi/kontaktio-location-occupancy-openapi.yml
+  api: Location & Occupancy API
+  operations:
+  - get-v2-locations-gateways
+- capability: 'Occupancy: Room'
+  spec: openapi/kontaktio-location-occupancy-openapi.yml
+  api: Location & Occupancy API
+  operations:
+  - get-v2-occupancy-roomId
+  - get-v3-occupancy-rooms
+- capability: 'Occupancy: Seats'
+  spec: openapi/kontaktio-location-occupancy-openapi.yml
+  api: Location & Occupancy API
+  operations:
+  - get-v3-occupancy-room-attributes
+  - get-v3-occupancy-room-attributes-history
+- capability: Footfall Spaces
+  spec: openapi/kontaktio-location-occupancy-openapi.yml
+  api: Location & Occupancy API
+  operations:
+  - get-v2-locations-spaces
+- capability: 'Occupancy: Footfall'
+  spec: openapi/kontaktio-location-occupancy-openapi.yml
+  api: Location & Occupancy API
+  operations:
+  - get-v3-occupancy-spaces
+  - get-v3-occupancy-spaces-history
+- capability: Untagged
+  spec: openapi/kontaktio-location-occupancy-openapi.yml
+  api: Location & Occupancy API
+  operations:
+  - GET /v3/occupancy
+- capability: Colocations
+  spec: openapi/kontaktio-location-occupancy-openapi.yml
+  api: Location & Occupancy API
+  operations:
+  - get-v3-novid-colocations
+- capability: Stream
+  spec: openapi/kontaktio-location-occupancy-openapi.yml
+  api: Location & Occupancy API
+  operations:
+  - delete-v3-channels-id
+  - delete-v3-streams-subscriptions-position
+  - delete-v3-streams-subscriptions-telemetry
+  - delete-v3-streams-subscriptions-type-channels
+  - get-v3-channels
+  - get-v3-channels-id
+  - get-v3-channels-state
+  - get-v3-streams-subscriptions-position
+  - get-v3-streams-subscriptions-telemetry
+  - patch-v3-channels-id
+  - patch-v3-streams-subscriptions-position
+  - patch-v3-streams-subscriptions-telemetry
+  - post-v3-channels
+  - post-v3-streams-subscriptions-position
+  - post-v3-streams-subscriptions-telemetry
+  - post-v3-streams-subscriptions-type-channels
+- capability: Untagged
+  spec: openapi/kontaktio-spaces-openapi.yml
+  api: Spaces API
+  operations:
+  - getSpace
+  - spacesList
+- capability: entity-integration
+  spec: openapi/kontaktio-entity-management-openapi.yml
+  api: Entity Management Integration API
+  operations:
+  - createUpdateEntities
+  - entityDetails
+coverage:
+  tools_named: 0
+  tools_bound: 0
+  mcp_only: 0
+  rest_operations_total: 96
+  rest_operations_with_tool: 0
+  note: tools_named is 0 because the live MCP tools/list is auth-gated, not because the server ships no
+    tools.

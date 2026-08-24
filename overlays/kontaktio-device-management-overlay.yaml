@@ -1,0 +1,32 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Kontakt.io Device Management API
+  version: 1.0.0
+extends: openapi/kontaktio-device-management-openapi.yml
+x-generated: '2026-08-23'
+x-method: generated
+x-source: Derived from the harvested spec plus the Kontakt.io Developer Center; the harvested spec in openapi/_original/
+  is never mutated.
+actions:
+- target: $.info
+  update:
+    x-apievangelist-repo: https://github.com/api-evangelist/kontaktio
+    x-apievangelist-artifacts:
+      authentication: authentication/kontaktio-authentication.yml
+      conventions: conventions/kontaktio-conventions.yml
+      errors: errors/kontaktio-problem-types.yml
+      lifecycle: lifecycle/kontaktio-lifecycle.yml
+      rate_limits: rate-limits/kontaktio-rate-limits.yml
+      data_model: data-model/kontaktio-data-model.yml
+      conformance: conformance/kontaktio-conformance.yml
+      sandbox: sandbox/kontaktio-sandbox.yml
+      changelog: changelog/kontaktio-changelog.yml
+    x-apievangelist-generated: '2026-08-23'
+    x-apievangelist-rate-limit:
+      limit: 60
+      window: 1s
+      scope: per-account
+      docs: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
+      note: Documented in the Developer Center; not declared in the spec, which has no 429 response.
+    x-apievangelist-spec-gap: 43 of 45 operations carry no operationId, so tools, SDK generators and agents have
+      no stable handle for them.

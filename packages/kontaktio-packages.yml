@@ -1,0 +1,65 @@
+generated: '2026-08-23'
+method: searched
+source: https://github.com/kontaktio + Maven Central (io.kontakt.mvn:sdk) + CocoaPods trunk (KontaktSDK) + https://developer.kontakt.io/docs/dev-ctr-sdks/e4ecea94e246f-what-are-kontakt-io-sd-ks
+note: Kontakt.io ships first-party MOBILE SDKs only (iOS + Android). No first-party
+  server-side client library (JavaScript, Python, Java, Go, Ruby, PHP, .NET) was found
+  on any registry; every server-side "kontakt" package on npm/PyPI is third-party.
+packages:
+- language: swift
+  registry: github-releases
+  name: KontaktSDK (kontaktio/kontakt-ios-sdk)
+  url: https://github.com/kontaktio/kontakt-ios-sdk
+  install: Swift Package Manager — https://github.com/kontaktio/kontakt-ios-sdk
+  official: true
+  version: 6.2.1
+  published: '2025-09-05'
+  note: Current distribution channel. Version and date read from the GitHub Releases
+    API for kontaktio/kontakt-ios-sdk.
+- language: swift
+  registry: cocoapods
+  name: KontaktSDK
+  url: https://cocoapods.org/pods/KontaktSDK
+  install: pod 'KontaktSDK'
+  official: true
+  version: 3.0.4
+  published: '2020-09-23'
+  note: 'DECAY SIGNAL — the CocoaPods channel is five years stale. Trunk''s latest
+    KontaktSDK release is 3.0.4 (2020-09-23) while the GitHub release line has moved
+    to 6.2.1 (2025-09-05). Pod owners are Kontakt.io engineers (Marek Serafin, Lukasz
+    Hlebowicz, Jacek Kurbiel), so the pod is first-party but abandoned in favour of
+    SPM/GitHub releases.'
+- language: kotlin
+  registry: maven
+  name: io.kontakt.mvn:sdk
+  url: https://central.sonatype.com/artifact/io.kontakt.mvn/sdk
+  install: implementation 'io.kontakt.mvn:sdk:7.2.22'
+  official: true
+  version: 7.2.22
+  published: '2025-06-16'
+  note: Android SDK. Version and date read from the Maven Central search API (gav
+    core). Prebuilt artifacts are also mirrored at https://github.com/kontaktio/kontakt-android-sdk.
+third_party:
+- language: javascript
+  registry: npm
+  name: react-native-kontaktio
+  url: https://www.npmjs.com/package/react-native-kontaktio
+  official: false
+  version: 4.1.0
+  published: '2022-10-21'
+  note: Community React Native wrapper published by Driversnote-Dev, not Kontakt.io.
+- language: javascript
+  registry: npm
+  name: node-red-contrib-kontakt-io
+  url: https://www.npmjs.com/package/node-red-contrib-kontakt-io
+  official: false
+  version: 1.1.0
+  published: '2018-06-04'
+  note: Community Node-RED nodes for Kio Cloud, not published by Kontakt.io.
+- language: javascript
+  registry: npm
+  name: kontakt-node
+  url: https://www.npmjs.com/package/kontakt-node
+  official: false
+  version: 1.0.3
+  published: '2015-05-11'
+  note: Abandoned community REST wrapper (wonderdogone), not published by Kontakt.io.

@@ -1,0 +1,44 @@
+generated: '2026-08-23'
+method: generated
+source: openapi/ (4 specs) + the Kontakt.io Developer Center guides (authentication, pagination,
+  rate limits, responses & error codes, streams) + conventions/ and errors/ in this repo
+note: 'Kontakt.io publishes no AGENTS.md and no provider-authored skills; these are generated
+  by API Evangelist. Every operationId and every METHOD+path referenced in the frontmatter
+  was verified against the published specs before writing. The Device Management skill
+  references METHOD+path rather than operationIds because 43 of that spec''s 45 operations
+  declare none.'
+skills:
+- name: kontaktio-track-device-location
+  file: kontaktio-track-device-location.md
+  api: Kontakt.io Location & Occupancy API
+  spec: openapi/kontaktio-location-occupancy-openapi.yml
+  operations: 9
+  summary: Current position, position history, presence and colocation for a tracked device,
+    resolved against the campus/building/floor/room tree.
+- name: kontaktio-monitor-room-occupancy
+  file: kontaktio-monitor-room-occupancy.md
+  api: Kontakt.io Location & Occupancy API
+  spec: openapi/kontaktio-location-occupancy-openapi.yml
+  operations: 10
+  summary: Current and historical occupancy at room, seat and footfall-space grain.
+- name: kontaktio-configure-realtime-stream
+  file: kontaktio-configure-realtime-stream.md
+  api: Kontakt.io Location & Occupancy API
+  spec: openapi/kontaktio-location-occupancy-openapi.yml
+  operations: 17
+  summary: Create channels and subscriptions so telemetry, position or occupancy events are
+    pushed to Kinesis, Event Hub or Watson, and tear them down in the right order.
+- name: kontaktio-import-staff-and-assets
+  file: kontaktio-import-staff-and-assets.md
+  api: Kontakt.io Entity Management Integration API
+  spec: openapi/kontaktio-entity-management-openapi.yml
+  operations: 2
+  summary: OAuth2 client-credentials setup plus batch import/update of Staff and Asset
+    entities from a system of record.
+- name: kontaktio-provision-and-configure-devices
+  file: kontaktio-provision-and-configure-devices.md
+  api: Kontakt.io Device Management API
+  spec: openapi/kontaktio-device-management-openapi.yml
+  operations: 16
+  summary: Claim orders, list devices, push and cancel pending configs, manage firmware, and
+    grant or revoke device access in bulk.

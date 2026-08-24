@@ -1,0 +1,102 @@
+generated: '2026-08-23'
+method: searched
+source: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  and https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/da742c3fd5f69-changelog
+scheme: dated-monthly
+cadence: 'Published monthly, and only when the public API changes in schema or behaviour
+  (stated policy on the Device Management changelog).'
+labels:
+- Breaking change
+- Change
+- Deprecation
+- New
+- Cosmetic
+changelogs:
+- api: Device Management API
+  url: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  current_version: '10'
+  latest_entry: '2026-05'
+  entries:
+  - version: '2026-05'
+    date: '2026-05'
+    breaking: false
+    additions:
+    - Added bleScan.size config field — maximum number of BLE-scanned items reported
+      per scan cycle (0–255, default 20); requires nrf52 firmware >= 2.5.88.
+    - Added protocol field to the virtual-attributes body of POST /device/update,
+      letting gateways switch between MQTT and HTTP without configuring desiredConfig
+      host/auth fields individually.
+    highlights:
+    - 'Cosmetic: clarified that POST /config/create creates or updates a pending config
+      for one or more devices, that unsupported customConfiguration PIDs are silently
+      dropped, and that a 201 with an empty array is returned when no submitted uniqueId
+      is accessible.'
+  - version: '2026-04'
+    date: '2026-04'
+    breaking: false
+    highlights:
+    - POST /device/update (Secure Response) now returns 204 No Content when there
+      are no pending secure configurations; previously only 200 was documented.
+  - version: '2025-08'
+    date: '2025-08'
+    breaking: false
+    additions:
+    - New monitor arming state HALTED in the localAlertingSettings object.
+  - version: '2025-06'
+    date: '2025-06'
+    breaking: false
+    additions:
+    - shortCompanyId is returned in the GET /management/device response.
+  - version: '2025-04'
+    date: '2025-04'
+    breaking: false
+    highlights:
+    - Added a locking mechanism for configs so some system configuration changes cannot
+      be cancelled (e.g. locks.roomNumber.confirmationId).
+  - version: '2025-01'
+    date: '2025-01'
+    breaking: false
+    highlights:
+    - POST /config/export deviceType parameter now includes all devices by default.
+    - Added releaseChannel field to the FirmwareInfo.upgrade object.
+  - version: '2024-10'
+    date: '2024-10'
+    breaking: true
+    highlights:
+    - 'BREAKING: airQualityInterval config option now only accepts discrete values.'
+    - 'BREAKING: removed searchMeta from the GET /device/range response.'
+    - Added deployment.status, category and productCode filters on GET /device/range,
+      plus experimental filtering and grouping by current location.
+- api: Location & Occupancy API
+  url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/da742c3fd5f69-changelog
+  current_version: v3
+  latest_entry: '2025-06'
+  entries:
+  - version: '2025-06'
+    date: '2025-06'
+    breaking: false
+    additions:
+    - Channel-level filters deviceModels and campusIds for Streams subscriptions.
+    - Six new endpoints to add/remove channels on telemetry, position and occupancy
+      subscriptions without overwriting the whole channelIds array.
+  - version: '2025-02'
+    date: '2025-02'
+    breaking: true
+    highlights:
+    - Added a 30 requests/minute rate limit to six historical-data endpoints, returning
+      429 with Retry-After on exhaustion.
+    - 'REMOVED: the Retrieve sensor occupancy history endpoint (no longer returns data).'
+  - version: '2024-10'
+    date: '2024-10'
+    breaking: false
+    highlights:
+    - Position History (/v2/positions/history) query window extended from 1 hour to
+      7 days.
+  - version: '2023-03'
+    date: '2023-03'
+    breaking: false
+    additions:
+    - Occupancy subscriptions can filter to Spaces via occupancyType zone.
+- api: Mobile SDKs
+  url: https://developer.kontakt.io/docs/dev-ctr-sdks/423dcaf4067cc-android-sdk-changelog
+  note: Separate dated changelogs are published for the Android and iOS SDKs.

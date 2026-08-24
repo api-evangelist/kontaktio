@@ -1,0 +1,495 @@
+generated: '2026-08-23'
+method: derived
+source: openapi/ (4 specs) — components.schemas $ref links and *Id reference fields
+note: 'Derived mechanically from the four published specs. Relationships are read from two signals only: a $ref
+  (has_one) or an array-of-$ref (has_many) between component schemas, and a scalar field named <entity>Id (belongs_to).
+  Nothing is inferred from prose. The Kio Cloud domain has two roots that do not join inside the contracts: the
+  DEVICE tree (device, config, firmware, order, manager) in the Device Management API, keyed on uniqueId/MAC, and
+  the LOCATION tree (campus > building > floor > room > seat/space) in the Location & Occupancy API, keyed on numeric
+  ids. Positions, presences, telemetry and occupancy are the join: they carry BOTH a trackingId (device MAC) and
+  campus/building/floor/room ids.'
+roots:
+- entity: Device
+  spec: openapi/kontaktio-device-management-openapi.yml
+  key: uniqueId
+  note: Identified by uniqueId; also carries mainMac/bleMac/wifiMac/eddystoneMac/ibeaconMac.
+- entity: Campus
+  spec: openapi/kontaktio-location-occupancy-openapi.yml
+  key: id
+  note: 'Root of the location hierarchy: campus > buildings > floors > rooms > room attributes (seats).'
+hierarchy:
+- parent: Campus
+  child: Building
+  type: has_many
+  via: buildings
+- parent: Building
+  child: Floor
+  type: has_many
+  via: floors
+- parent: Floor
+  child: Room
+  type: has_many
+  via: rooms
+- parent: Room
+  child: RoomAttribute (seat)
+  type: has_many
+  via: roomAttributes
+- parent: Campus
+  child: FootfallSpace
+  type: has_many
+  via: spaces
+join_entities:
+- entity: Position
+  device_key: trackingId
+  location_keys:
+  - campusId
+  - buildingId
+  - floorId
+  - roomId
+  operation: get-positions
+- entity: Presence
+  device_key: trackingId
+  location_keys:
+  - campusId
+  - buildingId
+  - floorId
+  - roomId
+  operation: get-presences
+- entity: Telemetry
+  device_key: trackingId
+  location_keys: []
+  operation: get-telemetry
+- entity: Occupancy
+  device_key: null
+  location_keys:
+  - locationId
+  operation: get-v3-occupancy-rooms
+entity_count: 61
+entities:
+- entity: TemperatureMonitorProbe
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 2
+  relationships:
+  - type: has_one
+    target: UniqueId
+    via: uniqueId
+  - type: has_one
+    target: TemperatureMonitorProbeCertificate
+    via: cert
+- entity: TemperatureMonitorProbes
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 1
+  relationships:
+  - type: has_many
+    target: TemperatureMonitorProbe
+    via: probes
+- entity: FirmwareUpgradeScheduleJobResetResponse
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 2
+  relationships:
+  - type: has_one
+    target: FirmwareUpgradeScheduleResponse
+    via: before
+  - type: has_one
+    target: FirmwareUpgradeScheduleResponse
+    via: after
+- entity: ExternalDeviceImportResponse
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 3
+  relationships:
+  - type: has_one
+    target: JobStatus
+    via: status
+  - type: has_one
+    target: ExternalDeviceImportResult
+    via: result
+- entity: ExternalDeviceImportResult
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 3
+  relationships:
+  - type: has_one
+    target: ExternalDeviceImportStatus
+    via: status
+- entity: ExternalDeviceImportJobResetResponse
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 2
+  relationships:
+  - type: has_one
+    target: ExternalDeviceImportResult
+    via: before
+  - type: has_one
+    target: ExternalDeviceImportResult
+    via: after
+- entity: NewExternalDevice
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 12
+  relationships:
+  - type: has_one
+    target: DeploymentStatus
+    via: deploymentStatus
+  - type: has_one
+    target: DeviceCategory
+    via: category
+- entity: StitchingConfig
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 2
+  relationships:
+  - type: has_many
+    target: StitchingPair
+    via: intersections
+- entity: StitchingPair
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 2
+  relationships:
+  - type: has_one
+    target: StitchedDevice
+    via: firstDevice
+  - type: has_one
+    target: StitchedDevice
+    via: secondDevice
+- entity: StitchedDevice
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 3
+  relationships:
+  - type: has_one
+    target: StitchingImage
+    via: image
+  - type: has_one
+    target: StitchingPose
+    via: pose
+- entity: StitchingPose
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 3
+  relationships:
+  - type: has_one
+    target: StitchingPivotLocal
+    via: pivotLocal
+  - type: has_one
+    target: StitchingPivotWorld
+    via: pivotWorld
+- entity: StitchingPairMinimal
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 2
+  relationships:
+  - type: has_one
+    target: StitchingPose
+    via: pose
+- entity: LockDetails
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 1
+  relationships:
+  - type: has_one
+    target: LockDetailsConfirmationId
+    via: confirmationId
+- entity: External
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 18
+  relationships:
+  - type: belongs_to
+    target: Manager
+    via: managerId
+  - type: has_one
+    target: DeviceDataRole
+    via: access
+- entity: DeploymentInfo
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 4
+  relationships:
+  - type: has_one
+    target: DeploymentStatus
+    via: status
+- entity: LocationInfo
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 8
+  relationships:
+  - type: belongs_to
+    target: Campus
+    via: campusId
+  - type: belongs_to
+    target: Building
+    via: buildingId
+  - type: belongs_to
+    target: Floor
+    via: floorId
+  - type: belongs_to
+    target: Room
+    via: roomId
+- entity: LocalAlertingSettings
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 9
+  relationships:
+  - type: has_one
+    target: TemperatureProbesSettings
+    via: temperatureProbes
+  - type: has_one
+    target: HumidityProbesSettings
+    via: humidityProbes
+- entity: TemperatureProbesSettings
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 3
+  relationships:
+  - type: has_one
+    target: TemperatureProbe
+    via: probe0
+  - type: has_one
+    target: TemperatureProbe
+    via: probe1
+  - type: has_one
+    target: TemperatureProbe
+    via: probe2
+- entity: HumidityProbesSettings
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 1
+  relationships:
+  - type: has_one
+    target: HumidityProbe
+    via: probe0
+- entity: DeviceFederationDetails
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 7
+  relationships:
+  - type: has_one
+    target: CreatedDate
+    via: created
+  - type: has_one
+    target: DeviceFederationStatus
+    via: status
+- entity: DeviceFederationSyncJobResponse
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 3
+  relationships:
+  - type: has_one
+    target: JobStatus
+    via: status
+  - type: has_one
+    target: DevicesSynchronizationResult
+    via: result
+- entity: DeviceAccessResponse
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 6
+  relationships:
+  - type: belongs_to
+    target: Manager
+    via: managerId
+- entity: DeviceAccessBulkJobResponse
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 5
+  relationships:
+  - type: has_one
+    target: JobStatus
+    via: status
+- entity: Stream-occupancy-data-model
+  spec: openapi/kontaktio-location-occupancy-openapi.yml
+  fields: 7
+  relationships:
+  - type: belongs_to
+    target: Company
+    via: companyId
+  - type: belongs_to
+    target: Location
+    via: locationId
+- entity: Stream-position-data-model
+  spec: openapi/kontaktio-location-occupancy-openapi.yml
+  fields: 19
+  relationships:
+  - type: belongs_to
+    target: Company
+    via: companyId
+  - type: belongs_to
+    target: User
+    via: userId
+  - type: belongs_to
+    target: Tracking
+    via: trackingId
+  - type: belongs_to
+    target: Campus
+    via: campusId
+  - type: belongs_to
+    target: Building
+    via: buildingId
+  - type: belongs_to
+    target: Floor
+    via: floorId
+  - type: belongs_to
+    target: Room
+    via: roomId
+- entity: Space
+  spec: openapi/kontaktio-spaces-openapi.yml
+  fields: 4
+  relationships:
+  - type: has_one
+    target: AppType
+    via: appType
+  - type: has_many
+    target: SpaceItem
+    via: items
+- entity: SpaceItem
+  spec: openapi/kontaktio-spaces-openapi.yml
+  fields: 3
+  relationships:
+  - type: has_one
+    target: SpaceItemType
+    via: type
+  - type: has_one
+    target: SpaceItemStatus
+    via: status
+- entity: EntityCreateUpdateDto
+  spec: openapi/kontaktio-entity-management-openapi.yml
+  fields: 7
+  relationships:
+  - type: belongs_to
+    target: Entity
+    via: entityId
+  - type: belongs_to
+    target: Tracking
+    via: trackingId
+  - type: has_one
+    target: EntityStatus
+    via: status
+  - type: has_many
+    target: Attribute
+    via: attributes
+- entity: EntityCreateUpdateResult
+  spec: openapi/kontaktio-entity-management-openapi.yml
+  fields: 3
+  relationships:
+  - type: has_many
+    target: ItemError
+    via: errors
+- entity: EntityDetails
+  spec: openapi/kontaktio-entity-management-openapi.yml
+  fields: 5
+  relationships:
+  - type: belongs_to
+    target: Entity
+    via: entityId
+  - type: has_one
+    target: EntityStatus
+    via: status
+  - type: has_many
+    target: Attribute
+    via: attributes
+- entity: LoraProvisionStatusResponse
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 4
+  relationships: []
+- entity: DeviceCommandResponse
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 8
+  relationships: []
+- entity: AlarmCommandBody
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 4
+  relationships: []
+- entity: ApiError
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 5
+  relationships: []
+- entity: Company
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 4
+  relationships: []
+- entity: ConfigBle
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 12
+  relationships: []
+- entity: ConfigIBeacon
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 4
+  relationships: []
+- entity: ConfigEddystone
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 5
+  relationships: []
+- entity: EddystoneDecrypted
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 5
+  relationships: []
+- entity: FirmwareUpgradeSettingsDto
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 4
+  relationships: []
+- entity: Firmware
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 12
+  relationships: []
+- entity: FirmwareCore
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 7
+  relationships: []
+- entity: OccupancyPhysicalSettings
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 7
+  relationships: []
+- entity: OccupancyImage
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 5
+  relationships: []
+- entity: SearchMeta
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 9
+  relationships: []
+- entity: DeviceEditableVirtualAttributes
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 7
+  relationships: []
+- entity: DeviceMacs
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 5
+  relationships: []
+- entity: AccelerometerSettings
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 6
+  relationships: []
+- entity: BleScanSettings
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 5
+  relationships: []
+- entity: PowerSavingSettings
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 9
+  relationships: []
+- entity: DisplaySettings
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 4
+  relationships: []
+- entity: TemperatureProbe
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 5
+  relationships: []
+- entity: HumidityProbe
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 5
+  relationships: []
+- entity: DevicesSynchronizationResult
+  spec: openapi/kontaktio-device-management-openapi.yml
+  fields: 5
+  relationships: []
+- entity: Campus
+  spec: openapi/kontaktio-location-occupancy-openapi.yml
+  fields: 8
+  relationships: []
+- entity: Stream-channel-kinesis
+  spec: openapi/kontaktio-location-occupancy-openapi.yml
+  fields: 7
+  relationships: []
+- entity: Stream-channel-eventHub
+  spec: openapi/kontaktio-location-occupancy-openapi.yml
+  fields: 7
+  relationships: []
+- entity: Stream-channel-watson
+  spec: openapi/kontaktio-location-occupancy-openapi.yml
+  fields: 7
+  relationships: []
+- entity: Stream-post-kinesis
+  spec: openapi/kontaktio-location-occupancy-openapi.yml
+  fields: 4
+  relationships: []
+- entity: Stream-post-eventhub
+  spec: openapi/kontaktio-location-occupancy-openapi.yml
+  fields: 4
+  relationships: []
+- entity: Stream-post-watson
+  spec: openapi/kontaktio-location-occupancy-openapi.yml
+  fields: 4
+  relationships: []

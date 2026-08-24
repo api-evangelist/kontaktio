@@ -1,0 +1,211 @@
+generated: '2026-08-23'
+method: searched
+source: https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication,
+  .../a5e41de8f361f-pagination, .../9792a18a42923-filtering, .../b08e0ba4a2a6f-caching-api-requests,
+  .../15d26022023bf-responses-and-error-codes, .../4875408e160dc-rate-limits,
+  https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow,
+  plus openapi/ (4 specs)
+auth:
+  style: oauth2-client-credentials -> JWT bearer
+  header: 'Authorization: Bearer <jwt>'
+  token_endpoint: https://kc.cloud.{region}.kontakt.io/realms/{tenant}/protocol/openid-connect/token
+  token_lifetime_seconds: 300
+  legacy: 'Api-Key header (deprecated, slated for removal). The Location & Occupancy
+    and Spaces specs still declare ONLY the Api-Key scheme, so the two auth models
+    are live simultaneously across the estate.'
+  see: authentication/kontaktio-authentication.yml
+media_type_versioning:
+  api: Device Management API
+  header: 'Accept: application/vnd.com.kontakt+json;version=10'
+  required: true
+  note: Version parameter optional; unsupported version returns 415.
+content_types:
+  request: 'application/x-www-form-urlencoded on Device Management POSTs (form-encoded,
+    NOT JSON — a real trap for agent clients); application/json elsewhere.'
+  response: application/json
+pagination:
+  style: offset
+  applies_to: Device Management API list endpoints (configs, devices, managers)
+  params:
+  - name: startIndex
+    type: integer
+    default: 0
+    description: Offset of first record, 0-based.
+  - name: maxResult
+    type: integer
+    default: 50
+    description: Number of records to return.
+  - name: orderBy
+    type: string
+    default: created
+    description: Field used for sorting; sortable fields vary per resource.
+  - name: order
+    type: string
+    default: ASC
+    enum:
+    - ASC
+    - DESC
+  response_envelope: searchMeta
+  response_fields:
+  - filter
+  - startIndex
+  - maxResult
+  - prevResults
+  - count
+  - orderBy
+  - nextResults
+  - queryType
+  - order
+  cursor_semantics: nextResults / prevResults carry a full URL for the next/previous
+    page; an empty nextResults string means the record set is exhausted. They are
+    response-only, never request parameters.
+  docs: https://developer.kontakt.io/docs/dev-ctr-device-api/a5e41de8f361f-pagination
+  note: The Location & Occupancy API documents pagination separately and does not
+    share the searchMeta envelope.
+filtering:
+  docs: https://developer.kontakt.io/docs/dev-ctr-device-api/9792a18a42923-filtering
+  note: Query-parameter filtering per resource; Streams adds channel-level filters
+    (deviceModels, campusIds) and occupancy-type filters (room, roomAttribute, space,
+    zone).
+caching:
+  supported: true
+  docs: https://developer.kontakt.io/docs/dev-ctr-device-api/b08e0ba4a2a6f-caching-api-requests
+  note: The Developer Center publishes a dedicated Caching API calls guide; conditional-request
+    header support is described there rather than in the spec.
+request_id_tracing:
+  supported: partial
+  note: No request-id request header is documented. Device Management error bodies
+    carry an opaque incident id (e.g. {"id":"API_ERROR_1787529624953"}) that support
+    can correlate, observed live on dm-api.cloud.us.kontakt.io. There is no documented
+    correlation header an agent can send.
+error_envelope:
+  format: custom-json
+  rfc9457: false
+  shape: '{message, errors[{field, error, invalidValue}]}'
+  see: errors/kontaktio-problem-types.yml
+rate_limit_signalling:
+  status: 429
+  headers:
+  - Retry-After
+  quota_headers: false
+  see: rate-limits/kontaktio-rate-limits.yml
+idempotency:
+  supported: false
+  key_header: null
+  scope: null
+  retention: null
+  note: 'No Idempotency-Key (or equivalent) header exists in any of the four specs
+    or anywhere in the Developer Center. The single idempotency statement in the whole
+    estate is on POST /order/claim — "This operation is idempotent: claiming an order
+    on the same account more than once has no effect" — which is natural operation
+    semantics, not a client-supplied retry key. Every other write (POST /config/create,
+    POST /device/update, POST /device/external, POST /v1/integration/entity) can be
+    double-applied by a retry with nothing to deduplicate it. NO Idempotency pointer
+    is emitted for this provider.'
+  naturally_idempotent_operations:
+  - openapi/kontaktio-device-management-openapi.yml#POST /order/claim
+dry_run_mode:
+  supported: false
+  note: No preview/validate/dry-run parameter or endpoint is documented on any write
+    operation.
+reversibility:
+  grade: documented
+  write_surface: true
+  note: 'Kontakt.io ships real reversal paths for its main write surfaces, but publishes
+    NO time window for any of them, so this grades `documented` rather than `verified`.
+    Every entry below is an operation that exists in a published spec; no window is
+    asserted because the docs state none.'
+  reversals:
+  - action: Create or update a pending device config
+    forward: openapi/kontaktio-device-management-openapi.yml#POST /config/create
+    reversal: openapi/kontaktio-device-management-openapi.yml#POST /config/delete
+    reversal_summary: Delete a Config
+    window: null
+    window_source: null
+    caveat: 'Reversal is bounded by state, not time: a pending config can be deleted
+      before the device applies it, and the 2025-04 changelog records a locking mechanism
+      under which some system configuration changes CANNOT be cancelled at all (e.g.
+      locks.roomNumber.confirmationId). Once a config has been applied to hardware,
+      deletion of the pending record does not roll the device back.'
+    docs: https://developer.kontakt.io/docs/dev-ctr-device-api/40960a0b6f340-device-management-api
+  - action: Grant access to a device
+    forward: openapi/kontaktio-device-management-openapi.yml#POST /device/{uniqueId}/access
+    reversal: openapi/kontaktio-device-management-openapi.yml#DELETE /device/{uniqueId}/access/{email}
+    reversal_summary: Revokes access to a device
+    window: null
+    window_source: null
+  - action: Bulk grant access to devices
+    forward: openapi/kontaktio-device-management-openapi.yml#POST /bulk/device-access
+    reversal: openapi/kontaktio-device-management-openapi.yml#POST /bulk/device-access
+    reversal_summary: The same bulk endpoint performs grant OR revoke, so a bulk grant
+      is reversed by a bulk revoke over the same device set.
+    window: null
+    window_source: null
+  - action: Import external devices (async job)
+    forward: openapi/kontaktio-device-management-openapi.yml#POST /device/external/import
+    reversal: openapi/kontaktio-device-management-openapi.yml#DELETE /device/external/import/{jobKey}
+    reversal_summary: Resets the status of the external-device import process started
+      by POST /device/external/import.
+    window: null
+    window_source: null
+    caveat: This resets the JOB status; it is not documented to delete devices the
+      job already created. Deleting an external device is a separate call (POST /device/delete).
+  - action: Create a single external device
+    forward: openapi/kontaktio-device-management-openapi.yml#POST /device/external
+    reversal: openapi/kontaktio-device-management-openapi.yml#POST /device/delete
+    reversal_summary: Delete an external device
+    window: null
+    window_source: null
+  - action: Add a Meraki integration
+    forward: openapi/kontaktio-device-management-openapi.yml#POST /device/vendor/meraki/create
+    reversal: openapi/kontaktio-device-management-openapi.yml#POST /device/vendor/meraki/delete
+    reversal_summary: Delete a Meraki Integration
+    window: null
+    window_source: null
+  - action: Store a Portal Beam calibration image
+    forward: openapi/kontaktio-device-management-openapi.yml#POST /portalbeam/image
+    reversal: openapi/kontaktio-device-management-openapi.yml#POST /portalbeam/image
+    reversal_summary: The same endpoint stores OR erases the calibration image.
+    window: null
+    window_source: null
+  - action: Create stitching between two Portal Beams
+    forward: openapi/kontaktio-device-management-openapi.yml#POST /portalbeam/stitching
+    reversal: openapi/kontaktio-device-management-openapi.yml#DELETE /portalbeam/stitching
+    reversal_summary: Delete stitching between two selected beams
+    window: null
+    window_source: null
+  - action: Create a stream channel
+    forward: openapi/kontaktio-location-occupancy-openapi.yml#post-v3-channels
+    reversal: openapi/kontaktio-location-occupancy-openapi.yml#delete-v3-channels-id
+    window: null
+    window_source: null
+  - action: Create a telemetry / position / occupancy stream subscription
+    forward: openapi/kontaktio-location-occupancy-openapi.yml#post-v3-streams-subscriptions-telemetry
+    reversal: openapi/kontaktio-location-occupancy-openapi.yml#delete-v3-streams-subscriptions-telemetry
+    reversal_summary: Delete subscription (position and occupancy have matching delete
+      operations).
+    window: null
+    window_source: null
+  - action: Add channels to a subscription
+    forward: openapi/kontaktio-location-occupancy-openapi.yml#post-v3-streams-subscriptions-type-channels
+    reversal: openapi/kontaktio-location-occupancy-openapi.yml#delete-v3-streams-subscriptions-type-channels
+    reversal_summary: Remove Channels from Subscription — added in the 2025-06 release
+      specifically so a channel change need not overwrite the whole list.
+    window: null
+    window_source: null
+  irreversible:
+  - action: Claim an order
+    operation: openapi/kontaktio-device-management-openapi.yml#POST /order/claim
+    note: No unclaim operation exists. The operation is idempotent, so re-running is
+      safe, but the claim cannot be undone through the API.
+  - action: Batch import or update entities
+    operation: openapi/kontaktio-entity-management-openapi.yml#createUpdateEntities
+    note: The Entity Management Integration API publishes only createUpdateEntities
+      and entityDetails. There is no delete or revert operation, so an incorrect batch
+      import cannot be rolled back through this API.
+cross_links:
+  errors: errors/kontaktio-problem-types.yml
+  lifecycle: lifecycle/kontaktio-lifecycle.yml
+  authentication: authentication/kontaktio-authentication.yml
+  rate_limits: rate-limits/kontaktio-rate-limits.yml
+  scopes: scopes/kontaktio-scopes.yml

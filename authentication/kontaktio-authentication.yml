@@ -1,0 +1,96 @@
+generated: '2026-08-23'
+method: searched
+source: https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication, https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/ZG9jOjE1NTkwMDU5-authentication,
+  https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow,
+  plus openapi/ (4 specs)
+summary:
+  types:
+  - apiKey
+  - http
+  api_key_in:
+  - header
+schemes:
+- name: bearer_token
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  description: 'Provide a JWT in the `Authorization: Bearer <token>` header. This is the standard authentication
+    method for all API requests.
+
+
+    Obtain a token via the OAuth2 Client Credentials flow from the Kontakt.io Keycloak identity provider.'
+  sources:
+  - openapi/kontaktio-device-management-openapi.yml
+  - openapi/kontaktio-entity-management-openapi.yml
+- name: api_key
+  type: apiKey
+  in: header
+  parameter: Api-Key
+  description: '**Deprecated — do not use for new integrations.** This method exists solely for backward compatibility
+    and will be removed in a future release. Use JWT Bearer token authentication instead.
+
+
+    If you still need an API Key: sign in to **Kio Cloud** > select **Users** > select **Security** > copy
+    your **Server API Key**.'
+  sources:
+  - openapi/kontaktio-device-management-openapi.yml
+  - openapi/kontaktio-location-occupancy-openapi.yml
+  - openapi/kontaktio-spaces-openapi.yml
+docs:
+- https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication
+- https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/ZG9jOjE1NTkwMDU5-authentication
+- https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+primary:
+  model: oauth2-client-credentials -> JWT bearer
+  idp: Keycloak (per-tenant realm)
+  token_endpoint: https://kc.cloud.{region}.kontakt.io/realms/{tenant}/protocol/openid-connect/token
+  grant_type: client_credentials
+  scope: profile email openid
+  token_type: Bearer
+  token_lifetime_seconds: 300
+  regions:
+  - us
+  - uk
+  tenant_note: '{tenant} is the account Tenant Name from the account URL https://{tenant}.app.cloud.{region}.kontakt.io'
+  authorization: Carried by the Keycloak client role integration-api, not by OAuth scopes. See scopes/kontaktio-scopes.yml.
+  client_provisioning: Integration API Clients are created in Kio Cloud under Users > Integration API by a
+    user holding the User Management integration-api role; Client ID is prefixed api-{companyId}-.
+  error_on_expiry: 401 Unauthorized. Refresh once and retry once; do not loop.
+  docs: https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+legacy:
+  model: api-key
+  header: Api-Key
+  status: deprecated
+  removal: Announced for removal in a future release; no date published.
+  provenance: Kio Cloud > Users > Security > Server API Key (one per account user).
+  note: The deprecation is NOT uniformly applied. Only the Device Management spec marks api_key deprecated
+    and offers bearer_token alongside it. The Location & Occupancy and Spaces specs declare Api-Key as their
+    ONLY scheme, so a client written against the current published contracts still has to use the deprecated
+    mechanism for two of the four APIs.
+required_headers:
+- api: Device Management API
+  header: Accept
+  value: application/vnd.com.kontakt+json;version=10
+  required: true
+  note: Media-type versioning. Optional in practice but strongly recommended; an unsupported version returns
+    415.
+- api: Device Management API
+  header: Content-Type
+  value: application/x-www-form-urlencoded
+  required: true
+  applies_to: POST requests only
+- api: Device Management API
+  header: User-Agent
+  value: client software version
+  required: false
+hosts:
+- api: Device Management API
+  host: https://dm-api.cloud.{region}.kontakt.io
+- api: Location & Occupancy API
+  host: https://apps.cloud.{region}.kontakt.io
+- api: Spaces API
+  host: https://api.cloud.{region}.kontakt.io/spaces
+- api: Entity Management Integration API
+  host: https://api.cloud.{region}.kontakt.io/entity-management
+mtls: false
+mfa_on_api: false

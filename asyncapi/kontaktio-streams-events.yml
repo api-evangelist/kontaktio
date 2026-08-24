@@ -1,0 +1,144 @@
+generated: '2026-08-23'
+method: searched
+source: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/07d6f990a7ca4-streams-introduction,
+  https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/ce35f8036d330-streams-configuration,
+  openapi/kontaktio-location-occupancy-openapi.yml
+asyncapi_published: false
+asyncapi_note: 'Kontakt.io publishes NO AsyncAPI document. It does run a real, first-class
+  event surface — the Kio Cloud Streams API — whose control plane (channels and
+  subscriptions) is fully described in the Location & Occupancy OpenAPI and whose
+  event payloads are declared as OpenAPI component schemas. This file captures that
+  event surface faithfully from the published material; nothing here is authored on
+  the provider''s behalf, and no AsyncAPI document has been generated for them.'
+delivery:
+  mechanism: managed-stream-channels
+  http_callbacks: false
+  note: 'Events are NOT delivered as HTTP webhooks to a customer URL. Kio Cloud pushes
+    into a third-party streaming service the customer registers as a "channel". An
+    agent cannot receive these by standing up an endpoint; it must own a Kinesis
+    stream, Event Hub or Watson instance.'
+  channel_types:
+  - id: kinesis
+    name: AWS Kinesis
+    schema: openapi/kontaktio-location-occupancy-openapi.yml#/components/schemas/Stream-channel-kinesis
+  - id: eventHub
+    name: Azure Event Hub
+    schema: openapi/kontaktio-location-occupancy-openapi.yml#/components/schemas/Stream-channel-eventHub
+  - id: watson
+    name: IBM Watson
+    schema: openapi/kontaktio-location-occupancy-openapi.yml#/components/schemas/Stream-channel-watson
+model:
+  note: One subscription per data type per company; one-to-many channels per subscription.
+  constraint: A company cannot create two Position subscriptions, nor two Telemetry
+    or two Occupancy subscriptions.
+events:
+- name: telemetry
+  subscription_type: Telemetry
+  trigger: Emitted whenever new telemetry data is received by Kio Cloud.
+  payload_schema: openapi/kontaktio-location-occupancy-openapi.yml#/components/schemas/Telemetry
+  required_fields:
+  - companyId
+  - userId
+  - sourceId
+  - timestamp
+  - beaconTimestamp
+  - gatewayTimestamp
+  - cloudTimestamp
+  - sourceType
+  - trackingId
+  - rssi
+  note: Optional fields appear only on beacons with the matching telemetry fields
+    enabled, managed through the Device Management API. Telemetry content varies by
+    device model.
+  operations:
+    read: get-v3-streams-subscriptions-telemetry
+    create: post-v3-streams-subscriptions-telemetry
+    update: patch-v3-streams-subscriptions-telemetry
+    delete: delete-v3-streams-subscriptions-telemetry
+    add_channels: post-v3-streams-subscriptions-type-channels
+    remove_channels: delete-v3-streams-subscriptions-type-channels
+- name: position
+  subscription_type: Position
+  trigger: Emitted whenever the position of a device changes.
+  payload_schema: openapi/kontaktio-location-occupancy-openapi.yml#/components/schemas/Stream-position-data-model
+  payload_fields:
+  - companyId
+  - userId
+  - trackingId
+  - campusId
+  - campusName
+  - buildingId
+  - buildingName
+  - floorId
+  - floorName
+  - roomId
+  - roomName
+  - x
+  - y
+  - origin
+  - lost
+  - irAssisted
+  - moving
+  - timestamp
+  - deviceModel
+  filters:
+  - deviceModels
+  operations:
+    read: get-v3-streams-subscriptions-position
+    create: post-v3-streams-subscriptions-position
+    update: patch-v3-streams-subscriptions-position
+    delete: delete-v3-streams-subscriptions-position
+- name: occupancy
+  subscription_type: Occupancy
+  trigger: Emitted whenever a new occupancy value is calculated for a room, room attribute
+    (seat) or footfall space.
+  payload_schema: openapi/kontaktio-location-occupancy-openapi.yml#/components/schemas/Stream-occupancy-data-model
+  payload_fields:
+  - type
+  - timestamp
+  - occupancyType
+  - occupancySource
+  - companyId
+  - occupancy
+  - locationId
+  filters:
+  - occupancyTypes
+  filter_values:
+  - room
+  - roomAttribute
+  - space
+  - zone
+  operations:
+    read: get-v3-streams-subscriptions-telemetry
+    create: post-v3-streams-subscriptions-telemetry
+    update: patch-v3-streams-subscriptions-telemetry
+    delete: delete-v3-streams-subscriptions-telemetry
+    note: 'DEFECT IN THE PUBLISHED SPEC: the four /v3/streams/subscriptions/occupancy
+      operations reuse the telemetry operationIds verbatim, so occupancy has no unique
+      operationId. Recorded as observed; not corrected here.'
+channel_filters:
+- name: deviceModels
+  type: array[integer]
+  description: Restrict events to specific Kontakt.io device model IDs (e.g. Smart
+    Badge models [30,48]).
+- name: campusIds
+  type: array[integer]
+  description: Restrict events to one or more campuses.
+filter_behaviour: No filters means the channel receives every subscription event;
+  both filters means only events matching device model AND campus are emitted.
+control_plane:
+  channels:
+    list: get-v3-channels
+    create: post-v3-channels
+    read: get-v3-channels-id
+    update: patch-v3-channels-id
+    delete: delete-v3-channels-id
+    connection_state: get-v3-channels-state
+  spec: openapi/kontaktio-location-occupancy-openapi.yml
+limits:
+  concurrent_connections: 5
+  source: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/0519f6b37f233-rate-limits
+status_page_components:
+- Telemetry Stream API
+- Positions Stream API
+- Violations Stream API

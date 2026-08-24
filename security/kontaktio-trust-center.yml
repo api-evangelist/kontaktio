@@ -1,0 +1,51 @@
+generated: '2026-08-23'
+method: searched
+source: https://trust.kontakt.io/ and https://kontakt.io/legal-documents/security/
+trust_center:
+  url: https://trust.kontakt.io/
+  platform: Vanta
+  http_status: 200
+  probed: '2026-08-23'
+  note: Canonical Vanta-hosted trust center (canonical link rel points at https://trust.kontakt.io;
+    assets served from assets.vanta.com). Document access is request-gated behind Vanta,
+    which is normal for this platform — the certification claims below are read from
+    Kontakt.io's own public security page, not from gated Vanta artifacts.
+security_page: https://kontakt.io/legal-documents/security/
+security_officer: Lemlem Kentiba, Security & Compliance Officer
+certifications:
+- name: SOC 2 Type II
+  status: compliant
+  source: https://kontakt.io/legal-documents/security/
+- name: HIPAA Security Rule / HITECH
+  status: compliant
+  source: https://kontakt.io/legal-documents/security/
+- name: GDPR
+  status: aligned
+  source: https://kontakt.io/legal-documents/security/
+- name: ISO 27001
+  status: not-claimed
+  source: Absent from the security page and the trust center landing page.
+controls:
+  encryption_in_transit: TLS 1.2+ across all external and internal communications.
+  encryption_at_rest: AWS S3 encryption, encrypted EBS volumes, encrypted RDS/Aurora
+    databases and encrypted backups.
+  key_management: AWS KMS with FIPS 140-2 validated hardware security modules; key
+    access is role-restricted and monitored.
+  penetration_testing: External penetration tests conducted regularly by independent
+    third parties; findings undergo formal tracking and remediation.
+vulnerability_disclosure:
+  program: false
+  note: 'No vulnerability disclosure program, bug bounty, or responsible-disclosure
+    contact was found. There is no /.well-known/security.txt on any Kontakt.io host,
+    no HackerOne/Bugcrowd/Intigriti presence, and the public security page names a
+    Security & Compliance Officer but publishes no security contact address. The only
+    reporting route is general support at https://support.kontakt.io/hc/en-gb/requests/new.
+    This is the single clearest security-posture gap for a vendor holding SOC 2 Type
+    II and HIPAA. No Security / VulnerabilityDisclosure pointer is emitted.'
+  evidence:
+  - url: https://kontakt.io/.well-known/security.txt
+    status: 404
+  - url: https://developer.kontakt.io/.well-known/security.txt
+    status: 404
+  - url: https://kontakt.io/legal-documents/security/
+    status: 200

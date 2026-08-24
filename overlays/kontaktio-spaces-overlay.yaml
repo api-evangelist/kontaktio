@@ -1,0 +1,26 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Kontakt.io Spaces API
+  version: 1.0.0
+extends: openapi/kontaktio-spaces-openapi.yml
+x-generated: '2026-08-23'
+x-method: generated
+x-source: Derived from the harvested spec plus the Kontakt.io Developer Center; the harvested spec in openapi/_original/
+  is never mutated.
+actions:
+- target: $.info
+  update:
+    x-apievangelist-repo: https://github.com/api-evangelist/kontaktio
+    x-apievangelist-artifacts:
+      authentication: authentication/kontaktio-authentication.yml
+      conventions: conventions/kontaktio-conventions.yml
+      errors: errors/kontaktio-problem-types.yml
+      lifecycle: lifecycle/kontaktio-lifecycle.yml
+      rate_limits: rate-limits/kontaktio-rate-limits.yml
+      data_model: data-model/kontaktio-data-model.yml
+      conformance: conformance/kontaktio-conformance.yml
+      sandbox: sandbox/kontaktio-sandbox.yml
+      changelog: changelog/kontaktio-changelog.yml
+    x-apievangelist-generated: '2026-08-23'
+    x-apievangelist-note: Tagged "INTERNAL only" by the provider in the published contract, though the project is
+      public in the Developer Center.

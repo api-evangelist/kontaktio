@@ -1,0 +1,24 @@
+generated: '2026-08-23'
+method: searched
+source: https://kontakt.io/ (site navigation + footer sweep, 2026-08-23)
+plan_count: 0
+plans: []
+note: 'Kontakt.io publishes NO public pricing. https://kontakt.io/pricing and
+  https://kontakt.io/pricing/ both return HTTP 404, and no pricing, plans or tier
+  page appears anywhere in the site navigation, footer, or the Developer Center.
+  The commercial motion is enterprise/quote-based, routed through
+  https://kontakt.io/why-kontakt-io/contact/ and an ROI calculator at
+  https://kontakt.io/roi-calculator/. The Location & Occupancy rate-limit
+  documentation confirms the tiering exists but is private: historical-data
+  endpoint limits are described as "configurable per company and can be customized
+  according to your subscription plan". So plans exist commercially; none are
+  published.'
+evidence:
+- url: https://kontakt.io/pricing/
+  status: 404
+- url: https://kontakt.io/pricing
+  status: 404
+- url: https://kontakt.io/roi-calculator/
+  status: 200
+- url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/0519f6b37f233-rate-limits
+  status: 200

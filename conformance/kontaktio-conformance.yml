@@ -1,0 +1,119 @@
+generated: '2026-08-23'
+method: derived
+source: openapi/ (4 specs) + https://developer.kontakt.io docs + https://kontakt.io/legal-documents/security/
+  + https://trust.kontakt.io/
+standards:
+- id: oauth2-client-credentials
+  conforms: true
+  evidence: 'Entity Management Integration API and Device Management API both authenticate
+    with OAuth2 client credentials against Keycloak: POST https://kc.cloud.{region}.kontakt.io/realms/{tenant}/protocol/openid-connect/token
+    with grant_type=client_credentials. Documented at https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow'
+- id: oidc
+  conforms: true
+  evidence: The token endpoint is a Keycloak openid-connect protocol endpoint and
+    the documented scope set is "profile email openid". No anonymous discovery document
+    is reachable because the realm is per-tenant.
+- id: rfc6750-bearer
+  conforms: true
+  evidence: 'securitySchemes bearer_token — type http, scheme bearer, bearerFormat
+    JWT, sent as Authorization: Bearer <jwt>.'
+- id: rfc8414-oauth-authorization-server-metadata
+  conforms: true
+  evidence: https://kontakt.io/.well-known/oauth-authorization-server returns 200
+    with issuer, authorization_endpoint, token_endpoint, revocation_endpoint, PKCE
+    S256. Serves the MCP server, not Kio Cloud.
+- id: rfc9728-oauth-protected-resource-metadata
+  conforms: true
+  evidence: https://kontakt.io/.well-known/oauth-protected-resource returns 200 naming
+    resource https://kontakt.io/wp-json/mcp/mcp-oauth-server, with a matching WWW-Authenticate
+    resource_metadata challenge on the 401.
+- id: mcp
+  conforms: true
+  evidence: Live remote MCP endpoint at https://kontakt.io/wp-json/mcp/mcp-oauth-server
+    (JSON-RPC over HTTP, OAuth-gated). See mcp/kontaktio-mcp.yml.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: No operation in any of the four specs declares application/problem+json;
+    the error envelope is a bespoke {message, errors[]} shape.
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: No Sunset or Deprecation response header is declared or documented; deprecations
+    are announced only in the dated changelog.
+- id: idempotency-key
+  conforms: false
+  evidence: No Idempotency-Key header anywhere in the estate. See conventions/kontaktio-conventions.yml.
+- id: pagination
+  conforms: true
+  evidence: Offset pagination with startIndex/maxResult/orderBy/order and a searchMeta
+    response envelope carrying nextResults/prevResults URLs.
+- id: rate-limit-429-retry-after
+  conforms: true
+  evidence: openapi/kontaktio-location-occupancy-openapi.yml#/components/responses/error-429
+    declares a required Retry-After header (HTTP-date and delay-seconds forms).
+- id: rfc9331-ratelimit-headers
+  conforms: false
+  evidence: No RateLimit-* or X-RateLimit-* quota headers are declared or documented.
+- id: json-api
+  conforms: false
+  evidence: Responses are plain JSON resource objects; no JSON:API document structure.
+- id: openapi-3
+  conforms: true
+  evidence: 'Four published OpenAPI documents: 3.0.0 (Device Management), 3.1.0 (Location
+    & Occupancy), 3.0.2 (Spaces), 3.0.1 (Entity Management).'
+- id: asyncapi
+  conforms: false
+  evidence: A real event surface exists (Streams — telemetry, position, occupancy)
+    but no AsyncAPI document is published for it. See asyncapi/kontaktio-streams-events.yml.
+- id: graphql
+  conforms: false
+  evidence: No GraphQL endpoint found on any host.
+- id: soap-wsdl
+  conforms: false
+  evidence: '?wsdl probes on dm-api.cloud.us.kontakt.io (404), api.cloud.us.kontakt.io
+    (404) and apps.cloud.us.kontakt.io (401) returned no SOAP contract.'
+domain_standards:
+- id: hl7-fhir
+  conforms: false
+  evidence: 'Kontakt.io sells into healthcare operations (patient flow, asset tracking,
+    staff safety) and integrates with Epic per its own marketing, but NO healthcare
+    interoperability standard is declared anywhere in the contracts: no FHIR resource
+    shapes, no HL7v2 message types, no SMART-on-FHIR scopes, no IHE profile. The four
+    specs model Kontakt.io''s own device/location/occupancy domain in proprietary
+    schemas. Recorded as a measured absence, not a penalty.'
+- id: ieee-11073-phd
+  conforms: false
+  evidence: No personal-health-device data model is referenced in the telemetry schemas.
+- id: omalwm2m
+  conforms: false
+  evidence: Device management is over Kontakt.io's own REST contract, not LwM2M/OMA-DM.
+- id: mqtt
+  conforms: true
+  evidence: 'Gateway devices can be switched between MQTT and HTTP transport via the
+    protocol field on the virtual-attributes body of POST /device/update (added 2026-05).
+    This is device-plane transport, not an API-plane contract.'
+compliance:
+  published: true
+  page: https://kontakt.io/legal-documents/security/
+  trust_center: https://trust.kontakt.io/
+  trust_center_platform: Vanta
+  certifications:
+  - id: soc2-type-ii
+    status: compliant
+    evidence: https://kontakt.io/legal-documents/security/
+  - id: hipaa
+    status: compliant
+    evidence: Stated compliance with the HIPAA Security Rule and HITECH at https://kontakt.io/legal-documents/security/
+  - id: gdpr
+    status: aligned
+    evidence: https://kontakt.io/legal-documents/security/
+  - id: iso-27001
+    status: not-claimed
+    evidence: No ISO 27001 certification is claimed on the security page or the trust
+      center landing page.
+  controls:
+  - 'Encryption in transit: TLS 1.2+ across all external and internal communications.'
+  - 'Encryption at rest: AWS S3 encryption, encrypted EBS volumes, encrypted RDS/Aurora
+    and backups.'
+  - 'Key management: AWS KMS with FIPS 140-2 validated HSMs, role-based key access.'
+  - External penetration tests conducted regularly by independent third parties, with
+    formal finding tracking and remediation.

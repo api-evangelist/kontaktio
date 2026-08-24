@@ -1,0 +1,101 @@
+generated: '2026-08-23'
+method: searched
+source: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog,
+  https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/da742c3fd5f69-changelog,
+  https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication,
+  https://status.kontakt.io/api/v2/summary.json, and openapi/ deprecated flags
+versioning:
+- api: Device Management API
+  scheme: media-type
+  current: '10'
+  header: 'Accept: application/vnd.com.kontakt+json;version=10'
+  note: Version is optional but strongly recommended; if omitted the request hits
+    the current stable version. An unsupported version returns 415.
+  docs: https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication
+- api: Location & Occupancy API
+  scheme: uri-path
+  current: v3
+  note: Paths carry /v2/ and /v3/ prefixes side by side; both are live. Locations,
+    positions and gateways sit on v2, occupancy/presences/telemetry/streams on v3.
+  docs: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
+- api: Spaces API
+  scheme: uri-path
+  current: v1
+- api: Entity Management Integration API
+  scheme: uri-path
+  current: v1
+deprecation:
+  policy_url: null
+  formal_policy: false
+  sunset_header: false
+  deprecation_header: false
+  note: 'Kontakt.io has NO published deprecation or sunset policy — no policy page,
+    no RFC 8594 Sunset/Deprecation header support, and no stated notice period. What
+    it does have is a disciplined changelog that labels each change Breaking change
+    / Change / Deprecation / New / Cosmetic, so deprecations ARE announced by date;
+    they are simply not governed by a written commitment. The one standing removal
+    commitment is auth: Api-Key authentication is marked "Deprecated — do not use
+    for new integrations ... will be removed in a future release" with no date.'
+  announced_deprecations:
+  - item: Api-Key header authentication
+    scope: Device Management API (and, in practice, every Kio Cloud API)
+    replacement: OAuth2 client-credentials JWT Bearer token via Keycloak
+    date_announced: null
+    removal_date: null
+    source: openapi/kontaktio-device-management-openapi.yml#/components/securitySchemes/api_key
+  - item: deviceType parameter on POST /device/update
+    date_announced: '2024-08'
+    source: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  - item: POST /device/assign
+    date_announced: '2024-05'
+    note: Deprecated and hidden, related to access-management changes.
+    source: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  - item: GET /device/unassigned/{managerId}
+    date_announced: '2024-03'
+    source: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  breaking_changes_announced:
+  - date: '2024-10'
+    change: airQualityInterval config option now only accepts discrete values.
+  - date: '2024-10'
+    change: Removed searchMeta from the GET /device/range response.
+  removals:
+  - date: '2025-02'
+    change: Retrieve sensor occupancy history endpoint removed from the Location &
+      Occupancy documentation (the endpoint no longer returns data).
+deprecated_operations:
+- openapi/kontaktio-device-management-openapi.yml#GET /device/unassigned/{managerId}
+- openapi/kontaktio-device-management-openapi.yml#GET /firmware/{firmwareVersion}
+- openapi/kontaktio-device-management-openapi.yml#GET /firmware/{firmwareVersion}/file
+sla:
+  url: null
+  uptime_target: null
+  note: No public SLA or uptime target is published; service commitments sit inside
+    the Terms of Sale and Service at https://kontakt.io/legal-documents/terms-of-sale-and-service/.
+status_page: https://status.kontakt.io/
+status_page_platform: Atlassian Statuspage
+status_page_api: https://status.kontakt.io/api/v2/summary.json
+status_page_components:
+- Device Management API
+- Telemetry REST API
+- Positions REST API
+- Violations REST API
+- Telemetry Stream API
+- Positions Stream API
+- Violations Stream API
+- Kio Apps
+- Smart Location
+- Device Management App
+- Policy Foundry App
+- User Management
+- Order Claiming
+- Order Management
+- Kio Setup Manager
+- Ephemeral ID Trusted Resolver
+- Asset Tracker
+- Workspace Insights
+- Mobile
+- DCC
+- IV Pump
+status_page_note: Component-level status is published per API surface (REST and Stream
+  are tracked separately), with a machine-readable Statuspage v2 API and an RSS incident
+  history at https://status.kontakt.io/history.rss.

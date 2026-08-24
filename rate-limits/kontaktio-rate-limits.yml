@@ -1,0 +1,74 @@
+generated: '2026-08-23'
+method: searched
+source: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
+  and https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/0519f6b37f233-rate-limits
+docs:
+- https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
+- https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/0519f6b37f233-rate-limits
+limit_count: 4
+rate_limits:
+- api: Device Management API
+  scope: per-account
+  method: request-based
+  limit: 60
+  unit: requests
+  window: 1s
+  burst: null
+  source: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
+- api: Location & Occupancy API
+  scope: per-account
+  method: request-based
+  limit: 40
+  unit: requests
+  window: 1s
+  burst: null
+  applies_to: All REST endpoints EXCEPT the historical-data endpoints listed below.
+  source: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/0519f6b37f233-rate-limits
+- api: Location & Occupancy API (historical data endpoints)
+  scope: per-account
+  method: request-based
+  limit: 30
+  unit: requests
+  window: 1m
+  configurable: true
+  configurable_note: Configurable per company according to subscription plan; contact
+    support.
+  operations:
+  - get-v2-occupancy-roomId
+  - get-v3-occupancy-room-attributes-history
+  - get-v3-occupancy-spaces-history
+  - get-telemetry
+  - get-positions-history
+  - get-presences-history
+  source: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/0519f6b37f233-rate-limits
+- api: Location & Occupancy Streams API
+  scope: per-account
+  method: connection-based
+  limit: 5
+  unit: concurrent connections
+  window: null
+  source: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/0519f6b37f233-rate-limits
+exhaustion:
+  status_code: 429
+  status_text: Too Many Requests
+  body: none
+  headers:
+  - name: Retry-After
+    description: 'Indicates how long to wait before making a new request. The response
+      includes this header TWICE: once in HTTP-date format (e.g. "Wed, 21 Oct 2015
+      07:28:00 GMT") and once in delay-seconds format (e.g. "120").'
+    required: true
+    evidence: openapi/kontaktio-location-occupancy-openapi.yml#/components/responses/error-429
+  window_reset: One minute after the first request in the current window, up to 30
+    requests may be sent again (historical-data endpoints).
+signalling:
+  x_ratelimit_headers: false
+  ratelimit_headers_rfc9331: false
+  note: No X-RateLimit-*/RateLimit-* quota headers are declared in any published spec
+    or documented anywhere; the only runtime rate-limit signal an agent gets is the
+    429 status plus Retry-After, and only the Location & Occupancy spec declares even
+    that. The Device Management API documents a 60 req/s ceiling in prose but its
+    OpenAPI declares no 429 response at all.
+guidance:
+  backoff: Recommended backoff time is one second; stagger requests and queue work.
+  source: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits

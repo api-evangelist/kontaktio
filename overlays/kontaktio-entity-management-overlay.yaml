@@ -1,0 +1,33 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Kontakt.io Entity Management Integration API
+  version: 1.0.0
+extends: openapi/kontaktio-entity-management-openapi.yml
+x-generated: '2026-08-23'
+x-method: generated
+x-source: Derived from the harvested spec plus the Kontakt.io Developer Center; the harvested spec in openapi/_original/
+  is never mutated.
+actions:
+- target: $.info
+  update:
+    x-apievangelist-repo: https://github.com/api-evangelist/kontaktio
+    x-apievangelist-artifacts:
+      authentication: authentication/kontaktio-authentication.yml
+      conventions: conventions/kontaktio-conventions.yml
+      errors: errors/kontaktio-problem-types.yml
+      lifecycle: lifecycle/kontaktio-lifecycle.yml
+      rate_limits: rate-limits/kontaktio-rate-limits.yml
+      data_model: data-model/kontaktio-data-model.yml
+      conformance: conformance/kontaktio-conformance.yml
+      sandbox: sandbox/kontaktio-sandbox.yml
+      changelog: changelog/kontaktio-changelog.yml
+    x-apievangelist-generated: '2026-08-23'
+    x-apievangelist-auth:
+      flow: clientCredentials
+      tokenUrl: https://kc.cloud.{region}.kontakt.io/realms/{tenant}/protocol/openid-connect/token
+      token_lifetime_seconds: 300
+      docs: https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+      note: The spec declares only http/bearer; the client-credentials flow that mints the bearer is documented
+        in prose only.
+    x-apievangelist-reversibility: No delete or revert operation is published — an incorrect batch import cannot
+      be rolled back through this API.

@@ -1,0 +1,112 @@
+generated: '2026-08-23'
+method: searched
+source: live probes of every apis.yml host and every OpenAPI servers[] host, 2026-08-23
+note: 'Two real documents are served, both on the marketing/WordPress host kontakt.io:
+  RFC 8414 OAuth authorization-server metadata and RFC 9728 OAuth protected-resource
+  metadata. They advertise the WordPress-hosted MCP server at
+  https://kontakt.io/wp-json/mcp/mcp-oauth-server (scope "mcp"). No security.txt,
+  api-catalog, openid-configuration or ai-plugin.json is served anywhere. The Kio
+  Cloud API hosts (dm-api / apps.cloud) answer 401 to every /.well-known/* path
+  because the whole host is authenticated, not because a document exists.'
+hit_count: 2
+hosts:
+- host: https://kontakt.io
+  documents:
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: kontaktio-oauth-authorization-server.json
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: kontaktio-oauth-protected-resource.json
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://developer.kontakt.io
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://dm-api.cloud.us.kontakt.io
+  documents:
+  - path: /.well-known/security.txt
+    status: 401
+  - path: /.well-known/openid-configuration
+    status: 401
+  - path: /.well-known/oauth-authorization-server
+    status: 401
+  - path: /.well-known/oauth-protected-resource
+    status: 401
+  - path: /.well-known/api-catalog
+    status: 401
+  - path: /.well-known/agent-card.json
+    status: 401
+  - path: /.well-known/agent.json
+    status: 401
+- host: https://apps.cloud.us.kontakt.io
+  documents:
+  - path: /.well-known/security.txt
+    status: 401
+  - path: /.well-known/openid-configuration
+    status: 401
+  - path: /.well-known/oauth-authorization-server
+    status: 401
+  - path: /.well-known/api-catalog
+    status: 401
+  - path: /.well-known/agent-card.json
+    status: 401
+  - path: /.well-known/agent.json
+    status: 401
+- host: https://api.cloud.us.kontakt.io
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://kc.cloud.us.kontakt.io
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 404
+    note: Keycloak serves OIDC discovery per realm at /realms/{tenant}/.well-known/openid-configuration;
+      the tenant realm name is customer-specific and not public, so no anonymous discovery
+      document exists at the host root.
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/security.txt
+    status: 404
+soft_404_control:
+  note: kontakt.io returns HTTP 404 with an 87,947-byte WordPress HTML body for every
+    unserved /.well-known/* path, and developer.kontakt.io returns 404 with a ~471KB
+    Stoplight SPA shell — both correctly signal absence with a 404 status, so no
+    catch-all 200 false positives were possible on this probe.
+security_txt: false
+api_catalog: false
