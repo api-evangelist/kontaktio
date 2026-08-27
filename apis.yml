@@ -32,23 +32,20 @@ tags:
 - Sensors
 - Streaming
 apis:
-- name: Kontakt.io Device Management API
-  description: REST API for managing Kontakt.io devices in Kio Cloud — devices, configs,
-    firmware, firmware upgrade schedules, commands, orders, managers, namespaces,
-    proximity UUIDs, venues, device sharing and third-party (Meraki) device integrations.
-    Versioned through the Accept header (application/vnd.com.kontakt+json;version=10).
-  humanURL: https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+- aid: kontaktio:kontaktio-buildings-api
+  name: Kontakt.io Buildings API
+  description: The Buildings API from Kontakt.io — 2 operation(s) for buildings.
+  humanURL: >-
+    https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
   baseURL: https://dm-api.cloud.us.kontakt.io
   tags:
-  - Device Management
-  - IoT
-  - Firmware
-  - Configuration
+  - Buildings
   properties:
   - type: OpenAPI
-    url: openapi/kontaktio-device-management-openapi.yml
+    url: openapi/kontaktio-buildings-api-openapi.yml
   - type: Documentation
-    url: https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
   - type: APIReference
     url: https://developer.kontakt.io/docs/dev-ctr-device-api/40960a0b6f340-device-management-api
   - type: Authentication
@@ -57,59 +54,1155 @@ apis:
     url: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
   - type: RateLimits
     url: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
-- name: Kontakt.io Location & Occupancy API
-  description: REST and streaming API for Kio Cloud location intelligence — campuses,
-    buildings, floors, rooms, footfall spaces, location images, room/seat/footfall/sensor
-    occupancy, telemetry, device positions and presences, colocations, gateways, and
-    Streams subscriptions and channels for telemetry, position and occupancy events.
-  humanURL: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
-  baseURL: https://apps.cloud.us.kontakt.io
-  tags:
-  - Location
-  - Occupancy
-  - Telemetry
-  - Streaming
-  properties:
-  - type: OpenAPI
-    url: openapi/kontaktio-location-occupancy-openapi.yml
   - type: Documentation
-    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
   - type: APIReference
-    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/c6bcb378b0df8-location-and-occupancy
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/c6bcb378b0df8-location-and-occupancy
   - type: ChangeLog
     url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/da742c3fd5f69-changelog
-- name: Kontakt.io Spaces API
-  description: Smart Location Spaces API for Kio Cloud Apps, covering the spaces resource
-    used to group rooms and seats for occupancy reporting.
-  humanURL: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/yr2sakrpndb8n-spaces-api
-  baseURL: https://api.cloud.us.kontakt.io/spaces
-  tags:
-  - Spaces
-  - Location
-  properties:
-  - type: OpenAPI
-    url: openapi/kontaktio-spaces-openapi.yml
   - type: APIReference
     url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/yr2sakrpndb8n-spaces-api
-- name: Kontakt.io Entity Management Integration API
-  description: Integration API for batch importing and updating Entities such as Staff
-    and Assets into the Kontakt.io Kio Apps platform, and retrieving their current
-    configuration. Secured with OAuth2 client credentials against the Kontakt.io Keycloak
-    identity provider.
-  humanURL: https://developer.kontakt.io/docs/entity-management-integration-api/tq7cg4bn8ch38-entity-management-integration-api
-  baseURL: https://api.cloud.us.kontakt.io/entity-management
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/tq7cg4bn8ch38-entity-management-integration-api
+  - type: Authentication
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+- aid: kontaktio:kontaktio-campuses-api
+  name: Kontakt.io Campuses API
+  description: The Campuses API from Kontakt.io — 2 operation(s) for campuses.
+  humanURL: >-
+    https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  baseURL: https://dm-api.cloud.us.kontakt.io
   tags:
-  - Entities
-  - Integration
-  - Staff
-  - Assets
+  - Campuses
   properties:
   - type: OpenAPI
-    url: openapi/kontaktio-entity-management-openapi.yml
+    url: openapi/kontaktio-campuses-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
   - type: APIReference
-    url: https://developer.kontakt.io/docs/entity-management-integration-api/tq7cg4bn8ch38-entity-management-integration-api
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/40960a0b6f340-device-management-api
   - type: Authentication
-    url: https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  - type: RateLimits
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/c6bcb378b0df8-location-and-occupancy
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/da742c3fd5f69-changelog
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/yr2sakrpndb8n-spaces-api
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/tq7cg4bn8ch38-entity-management-integration-api
+  - type: Authentication
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+- aid: kontaktio:kontaktio-colocations-api
+  name: Kontakt.io Colocations API
+  description: The Colocations API from Kontakt.io — 1 operation(s) for colocations.
+  humanURL: >-
+    https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  baseURL: https://dm-api.cloud.us.kontakt.io
+  tags:
+  - Colocations
+  properties:
+  - type: OpenAPI
+    url: openapi/kontaktio-colocations-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/40960a0b6f340-device-management-api
+  - type: Authentication
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  - type: RateLimits
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/c6bcb378b0df8-location-and-occupancy
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/da742c3fd5f69-changelog
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/yr2sakrpndb8n-spaces-api
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/tq7cg4bn8ch38-entity-management-integration-api
+  - type: Authentication
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+- aid: kontaktio:kontaktio-command-api
+  name: Kontakt.io Command API
+  description: >-
+    Commands are a special type of Configs used for initiating some management tasks, e.g. entering bootloader
+    mode
+  humanURL: >-
+    https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  baseURL: https://dm-api.cloud.us.kontakt.io
+  tags:
+  - Command
+  properties:
+  - type: OpenAPI
+    url: openapi/kontaktio-command-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/40960a0b6f340-device-management-api
+  - type: Authentication
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  - type: RateLimits
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/c6bcb378b0df8-location-and-occupancy
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/da742c3fd5f69-changelog
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/yr2sakrpndb8n-spaces-api
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/tq7cg4bn8ch38-entity-management-integration-api
+  - type: Authentication
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+- aid: kontaktio:kontaktio-config-api
+  name: Kontakt.io Config API
+  description: >-
+    Pending configs represent new values for beacon settings that should be applied to actual devices
+    via e.g. Kontakt.io Administration Apps. Creating a new config does not automatically change anything
+    on a real beacon.
+  humanURL: >-
+    https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  baseURL: https://dm-api.cloud.us.kontakt.io
+  tags:
+  - Config
+  properties:
+  - type: OpenAPI
+    url: openapi/kontaktio-config-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/40960a0b6f340-device-management-api
+  - type: Authentication
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  - type: RateLimits
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/c6bcb378b0df8-location-and-occupancy
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/da742c3fd5f69-changelog
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/yr2sakrpndb8n-spaces-api
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/tq7cg4bn8ch38-entity-management-integration-api
+  - type: Authentication
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+- aid: kontaktio:kontaktio-device-3rd-party-api
+  name: Kontakt.io Device (3rd party) API
+  description: >-
+    NOTE: this set of endpoints has been superseded by External Devices functionality.
+
+
+    These endpoints provide a way to integrate 3rd party Bluetooth-enabled scanning devices into Kontakt.io
+    platform. As of Summer 2018, Kontakt.io is working with manufacturers of enterprise-level networking
+    devices, like Cassia, Ruckus and Meraki, to seamlessly incorporate data collected by their routers
+    and/or WiFi access points into Kontakt.io Data Streams, and to improve Infrastructure Management capabilities.
+
+
+    Users wanting to take advantage of this feature, first need to provide proper authentication and integrate
+    Kontakt.io Panel account with a 3rd party vendor. Only after that, devices from that vendor can be
+    added into Kontakt.io platform.
+
+
+    At any given moment a Company can have **only one** integration per 3rd party Vendor, i.e. you can
+    have **one** Cassia *and* **one** Meraki integration, but you can't have e.g. two Meraki integrations.
+  humanURL: >-
+    https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  baseURL: https://dm-api.cloud.us.kontakt.io
+  tags:
+  - Device (3rd party)
+  properties:
+  - type: OpenAPI
+    url: openapi/kontaktio-device-3rd-party-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/40960a0b6f340-device-management-api
+  - type: Authentication
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  - type: RateLimits
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/c6bcb378b0df8-location-and-occupancy
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/da742c3fd5f69-changelog
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/yr2sakrpndb8n-spaces-api
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/tq7cg4bn8ch38-entity-management-integration-api
+  - type: Authentication
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+- aid: kontaktio:kontaktio-device-api
+  name: Kontakt.io Device API
+  description: >-
+    The Device resource represents Kontakt.io devices assigned to a particular Kontakt.io Panel account,
+    as well as devices shared with that account from different accounts.
+  humanURL: >-
+    https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  baseURL: https://dm-api.cloud.us.kontakt.io
+  tags:
+  - Device
+  properties:
+  - type: OpenAPI
+    url: openapi/kontaktio-device-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/40960a0b6f340-device-management-api
+  - type: Authentication
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  - type: RateLimits
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/c6bcb378b0df8-location-and-occupancy
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/da742c3fd5f69-changelog
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/yr2sakrpndb8n-spaces-api
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/tq7cg4bn8ch38-entity-management-integration-api
+  - type: Authentication
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+- aid: kontaktio:kontaktio-device-portal-beam-api
+  name: Kontakt.io Device (Portal Beam) API
+  description: >-
+    These endpoints are designed to assist with storing metadata associated with Portal Beams
+  humanURL: >-
+    https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  baseURL: https://dm-api.cloud.us.kontakt.io
+  tags:
+  - Device (Portal Beam)
+  properties:
+  - type: OpenAPI
+    url: openapi/kontaktio-device-portal-beam-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/40960a0b6f340-device-management-api
+  - type: Authentication
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  - type: RateLimits
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/c6bcb378b0df8-location-and-occupancy
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/da742c3fd5f69-changelog
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/yr2sakrpndb8n-spaces-api
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/tq7cg4bn8ch38-entity-management-integration-api
+  - type: Authentication
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+- aid: kontaktio:kontaktio-device-tags-api
+  name: Kontakt.io Device tags API
+  description: The device tags
+  humanURL: >-
+    https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  baseURL: https://dm-api.cloud.us.kontakt.io
+  tags:
+  - Device tags
+  properties:
+  - type: OpenAPI
+    url: openapi/kontaktio-device-tags-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/40960a0b6f340-device-management-api
+  - type: Authentication
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  - type: RateLimits
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/c6bcb378b0df8-location-and-occupancy
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/da742c3fd5f69-changelog
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/yr2sakrpndb8n-spaces-api
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/tq7cg4bn8ch38-entity-management-integration-api
+  - type: Authentication
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+- aid: kontaktio:kontaktio-eddystone-api
+  name: Kontakt.io Eddystone API
+  description: Helper resources for working with Eddystone beacons
+  humanURL: >-
+    https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  baseURL: https://dm-api.cloud.us.kontakt.io
+  tags:
+  - Eddystone
+  properties:
+  - type: OpenAPI
+    url: openapi/kontaktio-eddystone-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/40960a0b6f340-device-management-api
+  - type: Authentication
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  - type: RateLimits
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/c6bcb378b0df8-location-and-occupancy
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/da742c3fd5f69-changelog
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/yr2sakrpndb8n-spaces-api
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/tq7cg4bn8ch38-entity-management-integration-api
+  - type: Authentication
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+- aid: kontaktio:kontaktio-entity-integration-api
+  name: Kontakt.io Entity Integration API
+  description: The entity-integration API from Kontakt.io — 2 operation(s) for entity-integration.
+  humanURL: >-
+    https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  baseURL: https://dm-api.cloud.us.kontakt.io
+  tags:
+  - entity-integration
+  properties:
+  - type: OpenAPI
+    url: openapi/kontaktio-entity-integration-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/40960a0b6f340-device-management-api
+  - type: Authentication
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  - type: RateLimits
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/c6bcb378b0df8-location-and-occupancy
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/da742c3fd5f69-changelog
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/yr2sakrpndb8n-spaces-api
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/tq7cg4bn8ch38-entity-management-integration-api
+  - type: Authentication
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+- aid: kontaktio:kontaktio-external-device-api
+  name: Kontakt.io External Device API
+  description: >-
+    External Device feature is a method of adding arbitrary external devices to the system. Such devices
+    have MAC, unique id, and other virtual attributes, but they cannot be managed (configured).
+  humanURL: >-
+    https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  baseURL: https://dm-api.cloud.us.kontakt.io
+  tags:
+  - External Device
+  properties:
+  - type: OpenAPI
+    url: openapi/kontaktio-external-device-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/40960a0b6f340-device-management-api
+  - type: Authentication
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  - type: RateLimits
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/c6bcb378b0df8-location-and-occupancy
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/da742c3fd5f69-changelog
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/yr2sakrpndb8n-spaces-api
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/tq7cg4bn8ch38-entity-management-integration-api
+  - type: Authentication
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+- aid: kontaktio:kontaktio-firmware-api
+  name: Kontakt.io Firmware API
+  description: Firmware resources
+  humanURL: >-
+    https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  baseURL: https://dm-api.cloud.us.kontakt.io
+  tags:
+  - Firmware
+  properties:
+  - type: OpenAPI
+    url: openapi/kontaktio-firmware-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/40960a0b6f340-device-management-api
+  - type: Authentication
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  - type: RateLimits
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/c6bcb378b0df8-location-and-occupancy
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/da742c3fd5f69-changelog
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/yr2sakrpndb8n-spaces-api
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/tq7cg4bn8ch38-entity-management-integration-api
+  - type: Authentication
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+- aid: kontaktio:kontaktio-floors-api
+  name: Kontakt.io Floors API
+  description: The Floors API from Kontakt.io — 1 operation(s) for floors.
+  humanURL: >-
+    https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  baseURL: https://dm-api.cloud.us.kontakt.io
+  tags:
+  - Floors
+  properties:
+  - type: OpenAPI
+    url: openapi/kontaktio-floors-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/40960a0b6f340-device-management-api
+  - type: Authentication
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  - type: RateLimits
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/c6bcb378b0df8-location-and-occupancy
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/da742c3fd5f69-changelog
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/yr2sakrpndb8n-spaces-api
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/tq7cg4bn8ch38-entity-management-integration-api
+  - type: Authentication
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+- aid: kontaktio:kontaktio-footfall-spaces-api
+  name: Kontakt.io Footfall Spaces API
+  description: The Footfall Spaces API from Kontakt.io — 1 operation(s) for footfall spaces.
+  humanURL: >-
+    https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  baseURL: https://dm-api.cloud.us.kontakt.io
+  tags:
+  - Footfall Spaces
+  properties:
+  - type: OpenAPI
+    url: openapi/kontaktio-footfall-spaces-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/40960a0b6f340-device-management-api
+  - type: Authentication
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  - type: RateLimits
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/c6bcb378b0df8-location-and-occupancy
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/da742c3fd5f69-changelog
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/yr2sakrpndb8n-spaces-api
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/tq7cg4bn8ch38-entity-management-integration-api
+  - type: Authentication
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+- aid: kontaktio:kontaktio-gateways-api
+  name: Kontakt.io Gateways API
+  description: The Gateways API from Kontakt.io — 1 operation(s) for gateways.
+  humanURL: >-
+    https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  baseURL: https://dm-api.cloud.us.kontakt.io
+  tags:
+  - Gateways
+  properties:
+  - type: OpenAPI
+    url: openapi/kontaktio-gateways-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/40960a0b6f340-device-management-api
+  - type: Authentication
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  - type: RateLimits
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/c6bcb378b0df8-location-and-occupancy
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/da742c3fd5f69-changelog
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/yr2sakrpndb8n-spaces-api
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/tq7cg4bn8ch38-entity-management-integration-api
+  - type: Authentication
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+- aid: kontaktio:kontaktio-location-images-api
+  name: Kontakt.io Location Images API
+  description: The Location Images API from Kontakt.io — 1 operation(s) for location images.
+  humanURL: >-
+    https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  baseURL: https://dm-api.cloud.us.kontakt.io
+  tags:
+  - Location Images
+  properties:
+  - type: OpenAPI
+    url: openapi/kontaktio-location-images-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/40960a0b6f340-device-management-api
+  - type: Authentication
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  - type: RateLimits
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/c6bcb378b0df8-location-and-occupancy
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/da742c3fd5f69-changelog
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/yr2sakrpndb8n-spaces-api
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/tq7cg4bn8ch38-entity-management-integration-api
+  - type: Authentication
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+- aid: kontaktio:kontaktio-manager-api
+  name: Kontakt.io Manager API
+  description: >-
+    Managers represent user accounts that can manage Kontakt.io Devices. Everyone can freely create an
+    account on [Kontakt.io Web Panel](https://panel.kontakt.io) and then use it to work with this API.
+  humanURL: >-
+    https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  baseURL: https://dm-api.cloud.us.kontakt.io
+  tags:
+  - Manager
+  properties:
+  - type: OpenAPI
+    url: openapi/kontaktio-manager-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/40960a0b6f340-device-management-api
+  - type: Authentication
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  - type: RateLimits
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/c6bcb378b0df8-location-and-occupancy
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/da742c3fd5f69-changelog
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/yr2sakrpndb8n-spaces-api
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/tq7cg4bn8ch38-entity-management-integration-api
+  - type: Authentication
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+- aid: kontaktio:kontaktio-occupancy-api
+  name: Kontakt.io Occupancy API
+  description: The Occupancy API from Kontakt.io — 1 operation(s) for occupancy.
+  humanURL: >-
+    https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  baseURL: https://dm-api.cloud.us.kontakt.io
+  tags:
+  - Occupancy
+  properties:
+  - type: OpenAPI
+    url: openapi/kontaktio-occupancy-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/40960a0b6f340-device-management-api
+  - type: Authentication
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  - type: RateLimits
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/c6bcb378b0df8-location-and-occupancy
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/da742c3fd5f69-changelog
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/yr2sakrpndb8n-spaces-api
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/tq7cg4bn8ch38-entity-management-integration-api
+  - type: Authentication
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+- aid: kontaktio:kontaktio-occupancy-footfall-api
+  name: 'Kontakt.io Occupancy: Footfall API'
+  description: 'The Occupancy: Footfall API from Kontakt.io — 2 operation(s) for occupancy: footfall.'
+  humanURL: >-
+    https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  baseURL: https://dm-api.cloud.us.kontakt.io
+  tags:
+  - 'Occupancy: Footfall'
+  properties:
+  - type: OpenAPI
+    url: openapi/kontaktio-occupancy-footfall-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/40960a0b6f340-device-management-api
+  - type: Authentication
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  - type: RateLimits
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/c6bcb378b0df8-location-and-occupancy
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/da742c3fd5f69-changelog
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/yr2sakrpndb8n-spaces-api
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/tq7cg4bn8ch38-entity-management-integration-api
+  - type: Authentication
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+- aid: kontaktio:kontaktio-occupancy-room-api
+  name: 'Kontakt.io Occupancy: Room API'
+  description: 'The Occupancy: Room API from Kontakt.io — 2 operation(s) for occupancy: room.'
+  humanURL: >-
+    https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  baseURL: https://dm-api.cloud.us.kontakt.io
+  tags:
+  - 'Occupancy: Room'
+  properties:
+  - type: OpenAPI
+    url: openapi/kontaktio-occupancy-room-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/40960a0b6f340-device-management-api
+  - type: Authentication
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  - type: RateLimits
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/c6bcb378b0df8-location-and-occupancy
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/da742c3fd5f69-changelog
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/yr2sakrpndb8n-spaces-api
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/tq7cg4bn8ch38-entity-management-integration-api
+  - type: Authentication
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+- aid: kontaktio:kontaktio-occupancy-seats-api
+  name: 'Kontakt.io Occupancy: Seats API'
+  description: 'The Occupancy: Seats API from Kontakt.io — 2 operation(s) for occupancy: seats.'
+  humanURL: >-
+    https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  baseURL: https://dm-api.cloud.us.kontakt.io
+  tags:
+  - 'Occupancy: Seats'
+  properties:
+  - type: OpenAPI
+    url: openapi/kontaktio-occupancy-seats-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/40960a0b6f340-device-management-api
+  - type: Authentication
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  - type: RateLimits
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/c6bcb378b0df8-location-and-occupancy
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/da742c3fd5f69-changelog
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/yr2sakrpndb8n-spaces-api
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/tq7cg4bn8ch38-entity-management-integration-api
+  - type: Authentication
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+- aid: kontaktio:kontaktio-order-api
+  name: Kontakt.io Order API
+  description: >-
+    An Order represents all devices that have been purchased in Kontakt.io Web Store in a single transaction.
+    Before these devices can be used with Kontakt.io platform, they need to be added to Kontakt.io Manager
+    Account.
+  humanURL: >-
+    https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  baseURL: https://dm-api.cloud.us.kontakt.io
+  tags:
+  - Order
+  properties:
+  - type: OpenAPI
+    url: openapi/kontaktio-order-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/40960a0b6f340-device-management-api
+  - type: Authentication
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  - type: RateLimits
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/c6bcb378b0df8-location-and-occupancy
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/da742c3fd5f69-changelog
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/yr2sakrpndb8n-spaces-api
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/tq7cg4bn8ch38-entity-management-integration-api
+  - type: Authentication
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+- aid: kontaktio:kontaktio-positions-api
+  name: Kontakt.io Positions API
+  description: The Positions API from Kontakt.io — 2 operation(s) for positions.
+  humanURL: >-
+    https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  baseURL: https://dm-api.cloud.us.kontakt.io
+  tags:
+  - Positions
+  properties:
+  - type: OpenAPI
+    url: openapi/kontaktio-positions-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/40960a0b6f340-device-management-api
+  - type: Authentication
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  - type: RateLimits
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/c6bcb378b0df8-location-and-occupancy
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/da742c3fd5f69-changelog
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/yr2sakrpndb8n-spaces-api
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/tq7cg4bn8ch38-entity-management-integration-api
+  - type: Authentication
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+- aid: kontaktio:kontaktio-presences-api
+  name: Kontakt.io Presences API
+  description: The Presences API from Kontakt.io — 2 operation(s) for presences.
+  humanURL: >-
+    https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  baseURL: https://dm-api.cloud.us.kontakt.io
+  tags:
+  - Presences
+  properties:
+  - type: OpenAPI
+    url: openapi/kontaktio-presences-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/40960a0b6f340-device-management-api
+  - type: Authentication
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  - type: RateLimits
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/c6bcb378b0df8-location-and-occupancy
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/da742c3fd5f69-changelog
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/yr2sakrpndb8n-spaces-api
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/tq7cg4bn8ch38-entity-management-integration-api
+  - type: Authentication
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+- aid: kontaktio:kontaktio-proximities-api
+  name: Kontakt.io Proximities API
+  description: List of iBeacon Proximity UUIDs used on beacons belonging to a Manager
+  humanURL: >-
+    https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  baseURL: https://dm-api.cloud.us.kontakt.io
+  tags:
+  - Proximities
+  properties:
+  - type: OpenAPI
+    url: openapi/kontaktio-proximities-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/40960a0b6f340-device-management-api
+  - type: Authentication
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  - type: RateLimits
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/c6bcb378b0df8-location-and-occupancy
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/da742c3fd5f69-changelog
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/yr2sakrpndb8n-spaces-api
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/tq7cg4bn8ch38-entity-management-integration-api
+  - type: Authentication
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+- aid: kontaktio:kontaktio-rooms-api
+  name: Kontakt.io Rooms API
+  description: The Rooms API from Kontakt.io — 2 operation(s) for rooms.
+  humanURL: >-
+    https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  baseURL: https://dm-api.cloud.us.kontakt.io
+  tags:
+  - Rooms
+  properties:
+  - type: OpenAPI
+    url: openapi/kontaktio-rooms-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/40960a0b6f340-device-management-api
+  - type: Authentication
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  - type: RateLimits
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/c6bcb378b0df8-location-and-occupancy
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/da742c3fd5f69-changelog
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/yr2sakrpndb8n-spaces-api
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/tq7cg4bn8ch38-entity-management-integration-api
+  - type: Authentication
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+- aid: kontaktio:kontaktio-spaces-api
+  name: Kontakt.io Spaces API
+  description: The Spaces API from Kontakt.io — 2 operation(s) for spaces.
+  humanURL: >-
+    https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  baseURL: https://dm-api.cloud.us.kontakt.io
+  tags:
+  - Spaces
+  properties:
+  - type: OpenAPI
+    url: openapi/kontaktio-spaces-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/40960a0b6f340-device-management-api
+  - type: Authentication
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  - type: RateLimits
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/c6bcb378b0df8-location-and-occupancy
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/da742c3fd5f69-changelog
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/yr2sakrpndb8n-spaces-api
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/tq7cg4bn8ch38-entity-management-integration-api
+  - type: Authentication
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+- aid: kontaktio:kontaktio-stream-api
+  name: Kontakt.io Stream API
+  description: The Stream API from Kontakt.io — 9 operation(s) for stream.
+  humanURL: >-
+    https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  baseURL: https://dm-api.cloud.us.kontakt.io
+  tags:
+  - Stream
+  properties:
+  - type: OpenAPI
+    url: openapi/kontaktio-stream-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/40960a0b6f340-device-management-api
+  - type: Authentication
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  - type: RateLimits
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/c6bcb378b0df8-location-and-occupancy
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/da742c3fd5f69-changelog
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/yr2sakrpndb8n-spaces-api
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/tq7cg4bn8ch38-entity-management-integration-api
+  - type: Authentication
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
+- aid: kontaktio:kontaktio-telemetry-api
+  name: Kontakt.io Telemetry API
+  description: The Telemetry API from Kontakt.io — 1 operation(s) for telemetry.
+  humanURL: >-
+    https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  baseURL: https://dm-api.cloud.us.kontakt.io
+  tags:
+  - Telemetry
+  properties:
+  - type: OpenAPI
+    url: openapi/kontaktio-telemetry-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/40960a0b6f340-device-management-api
+  - type: Authentication
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/e1e3f6ec0e943-authentication
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/787c75c1e3d4a-changelog
+  - type: RateLimits
+    url: https://developer.kontakt.io/docs/dev-ctr-device-api/4875408e160dc-rate-limits
+  - type: Documentation
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/b2851eca9f1a7-location-and-occupancy-api-introduction
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/c6bcb378b0df8-location-and-occupancy
+  - type: ChangeLog
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/da742c3fd5f69-changelog
+  - type: APIReference
+    url: https://developer.kontakt.io/docs/dev-ctr-loc-occ-api/yr2sakrpndb8n-spaces-api
+  - type: APIReference
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/tq7cg4bn8ch38-entity-management-integration-api
+  - type: Authentication
+    url: >-
+      https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
