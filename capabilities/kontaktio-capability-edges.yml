@@ -1,0 +1,67 @@
+slug: kontaktio
+provider: Kontakt.io
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Healthcare Providers
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 5
+edges:
+- tag: Device
+  spec_file: kontaktio-device-api-openapi.yml
+  capability_id: BC-600.50
+  capability_id_l1: BC-600
+  capability_name: IT Infrastructure Management
+  confidence: 0.72
+  evidence: GET /device    Get Devices; POST /device/update    Update a Device; POST /device/sync    Synchronize
+    device
+  reason: CRUD, access control and synchronisation over the fleet of BLE/UWB tags, badges and gateways
+    is device estate administration — IT infrastructure management. The vendor sells into healthcare but
+    the API surface itself is device management.
+- tag: Config
+  spec_file: kontaktio-config-api-openapi.yml
+  capability_id: BC-600.50
+  capability_id_l1: BC-600
+  capability_name: IT Infrastructure Management
+  confidence: 0.7
+  evidence: 'POST /config/create    Create a Config; GET /config/readall    Read raw device configuration;
+    schemas: NewGatewayConfig, PendingBeaconConfig'
+  reason: Lifecycle management of beacon/gateway device configurations is administration of deployed IoT
+    infrastructure, a Cross-Industry IT capability rather than any clinical capability.
+- tag: 'Occupancy: Footfall'
+  spec_file: kontaktio-occupancy-footfall-api-openapi.yml
+  capability_id: BC-700.40
+  capability_id_l1: BC-700
+  capability_name: Space Management
+  confidence: 0.7
+  evidence: GET /v3/occupancy/spaces  Retrieve current footfall occupancy; GET /v3/occupancy/spaces/history  Retrieve
+    footfall occupancy history
+  reason: Current and historical footfall occupancy per space — utilisation measurement of physical space,
+    which is the occupancy-management aspect of Space Management. Not patient flow per se; the objects
+    are spaces, not patients.
+- tag: 'Occupancy: Room'
+  spec_file: kontaktio-occupancy-room-api-openapi.yml
+  capability_id: BC-700.40
+  capability_id_l1: BC-700
+  capability_name: Space Management
+  confidence: 0.7
+  evidence: GET /v3/occupancy/rooms  Retrieve current room occupancy; schemas Occupancy-Room-Current,
+    Occupancy-Room-History
+  reason: Real-time and historical room occupancy sensing. Room utilisation/occupancy monitoring is Space
+    Management within Facilities Management; no clinical documentation or patient identity is involved.
+- tag: 'Occupancy: Seats'
+  spec_file: kontaktio-occupancy-seats-api-openapi.yml
+  capability_id: BC-700.40
+  capability_id_l1: BC-700
+  capability_name: Space Management
+  confidence: 0.7
+  evidence: GET /v3/occupancy/room-attributes  Retrieve current seat occupancy; GET /v3/occupancy/room-attributes/history  Retrieve
+    seat occupancy history by room
+  reason: Seat-level occupancy sensing and history within rooms — desk/seat utilisation measurement, squarely
+    Space Management (occupancy management) rather than any healthcare-specific capability.
