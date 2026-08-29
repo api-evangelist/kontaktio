@@ -12,6 +12,18 @@ description: 'Kontakt.io is an AI-powered real-time location system (RTLS) and I
   batch import of staff and asset entities. Kio Cloud runs in US and UK regions and
   ships iOS and Android SDKs.'
 url: https://raw.githubusercontent.com/api-evangelist/kontaktio/refs/heads/main/apis.yml
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://kontakt.io/app/uploads/2025/06/why-kontakt-hero-image-scaled-1.jpg
 x-type: company
 x-source: harvest:secondary-market
