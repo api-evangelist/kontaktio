@@ -379,6 +379,8 @@ apis:
     https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
   baseURL: https://dm-api.cloud.us.kontakt.io
   tags:
+  - Device Tags
+  tags_raw:
   - Device tags
   properties:
   - type: OpenAPI
@@ -725,6 +727,8 @@ apis:
     https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
   baseURL: https://dm-api.cloud.us.kontakt.io
   tags:
+  - Managers
+  tags_raw:
   - Manager
   properties:
   - type: OpenAPI
