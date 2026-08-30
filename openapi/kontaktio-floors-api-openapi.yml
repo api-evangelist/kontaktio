@@ -1,0 +1,569 @@
+openapi: 3.2.0
+info:
+  title: Location & Occupancy Floors API
+  version: '1.0'
+  description: Real-time and historical Kio Cloud apps data including location tracking, occupancy, and telemetry.
+  contact:
+    name: Kontakt.io Support
+    url: https://support.kontakt.io
+    email: support@kontakt.io
+  termsOfService: https://kontakt.io/terms-of-service
+  summary: Real-time and historical Kio Cloud apps data including location tracking, occupancy, and telemetry.
+servers:
+- url: https://apps.cloud.us.kontakt.io
+  description: 'Kio Cloud US '
+- url: https://apps.cloud.uk.kontakt.io
+  description: Kio Cloud UK
+security:
+- API Key - 1: []
+tags:
+- name: Floors
+paths:
+  /v2/locations/floors:
+    parameters: []
+    get:
+      summary: List all floors
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Floors'
+      operationId: get-locations-floors
+      parameters:
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/size'
+      - $ref: '#/components/parameters/sort'
+      - schema:
+          type: string
+        in: query
+        name: id
+        description: Filter by one or more floor IDs
+      - schema:
+          type: string
+        in: query
+        name: name
+        description: Filter by one or more floor names
+      - schema:
+          type: string
+        in: query
+        name: locationId
+        description: Filter by one or more floor location IDs
+      - schema:
+          type: string
+        in: query
+        name: locationName
+        description: Filter by one or more floor names
+      - schema:
+          type: string
+        in: query
+        name: exceptId
+        description: Filter out one or more floor IDs
+      - schema:
+          type: string
+        in: query
+        name: sourceId
+        description: Filter by one or more sourceIds of attached gateways
+      description: Retrieve a floor list. Resource supports pagination through request parameters.
+      tags:
+      - Floors
+      security:
+      - api_key: []
+components:
+  parameters:
+    size:
+      name: size
+      in: query
+      schema:
+        type: string
+        default: '20'
+      description: Size of the page to retrieve.
+    page:
+      name: page
+      in: query
+      schema:
+        type: integer
+        default: '0'
+      description: Page you want to retrieve; 0 indexed.
+    sort:
+      name: sort
+      in: query
+      schema:
+        type: string
+        default: asc
+        example: ?sort=firstname&sort=lastname,asc
+        enum:
+        - asc
+        - desc
+      description: 'Sort objects returned in the response. Format property,property '
+  schemas:
+    Floors:
+      description: Smart Location Floor. Includes floor building and gateways located in the floor's rooms.
+      type: object
+      x-examples:
+        example-1:
+          links:
+          - rel: self
+            href: https://apps.cloud.us.kontakt.io/v2/locations/floors?page=0&size=50&sort=name,asc
+          content:
+          - id: 25203
+            name: ELVUmRtTjTvW
+            height: 179.34872537961294
+            width: 234.50623721743375
+            anchorLat: 76.07157323757079
+            anchorLng: -138.5452830219088
+            rotation: -2.496032768118737
+            properties:
+              XYQBEfNXvyCH: VcPxwfNDhHgK
+              aTOExKSzKweg: OJiIepLbnRyV
+              tWaUaNAquRxX: StMOTJqbecsz
+            building:
+              id: 25163
+              name: lsDFvSwIHlnZ
+            level: 0
+            latLngGeojson:
+              type: Feature
+              geometry:
+                type: Polygon
+                coordinates:
+                - - - -5.694644093951581
+                    - 30.199731245416217
+                  - - 46.18775884946787
+                    - 30.199731245416217
+                  - - 46.18775884946787
+                    - -85.33180342550678
+                  - - -5.694644093951581
+                    - -85.33180342550678
+                  - - -5.694644093951581
+                    - 30.199731245416217
+            xyGeojson:
+              type: Feature
+              geometry:
+                type: Polygon
+                coordinates:
+                - - - 307.69642793337164
+                    - 22.021093544317356
+                  - - 377.215774283525
+                    - 22.021093544317356
+                  - - 377.215774283525
+                    - 15.879742164800136
+                  - - 307.69642793337164
+                    - 15.879742164800136
+                  - - 307.69642793337164
+                    - 22.021093544317356
+            imageLatLngGeojson:
+              type: Feature
+              geometry:
+                type: Polygon
+                coordinates:
+                - - - 58.399156417857455
+                    - 57.62309094807654
+                  - - 60.35302196087972
+                    - 57.62309094807654
+                  - - 60.35302196087972
+                    - 30.786639579997782
+                  - - 58.399156417857455
+                    - 30.786639579997782
+                  - - 58.399156417857455
+                    - 57.62309094807654
+            imageXyGeojson:
+              type: Feature
+              geometry:
+                type: Polygon
+                coordinates:
+                - - - 939.0122755640365
+                    - 567.8607444767731
+                  - - 995.5483849035827
+                    - 567.8607444767731
+                  - - 995.5483849035827
+                    - 297.3015429375699
+                  - - 939.0122755640365
+                    - 297.3015429375699
+                  - - 939.0122755640365
+                    - 567.8607444767731
+            gateways:
+            - id: 25294
+              lat: 9.999865942487375
+              lng: 6.131390665417172
+              altitude: 95.62394895808218
+              x: 73992.60560972721
+              y: -86353.34083455568
+              z: 0.25012509857208043
+              verticalOrientation: 51
+              range: -4
+              virtual: false
+              sourceId: CnYyryUbPgdAjQbU
+            - id: 25295
+              lat: 28.242358653184425
+              lng: -117.54749891262719
+              altitude: 5.671039402527834
+              x: 81175.2018499095
+              y: 56223.64079178771
+              z: 7.308871298075218
+              verticalOrientation: 29
+              range: -150
+              virtual: false
+              sourceId: SqKXDvjqWuYYojEW
+          page:
+            size: 50
+            totalElements: 1
+            totalPages: 1
+            number: 0
+      properties:
+        content:
+          type: array
+          uniqueItems: true
+          minItems: 1
+          items:
+            type: object
+            properties:
+              id:
+                type: number
+                description: Floor Id.
+              name:
+                type: string
+                minLength: 1
+                description: Floor name.
+              height:
+                type: number
+                description: Floor’s height in meters.
+              width:
+                type: number
+                description: Floor’s width in meters.
+              anchorLat:
+                type: number
+                description: Latitude of floor’s bottom right corner.
+              anchorLng:
+                type: number
+                description: Longitude of floor’s bottom right corner.
+              rotation:
+                type: number
+                description: Rotation of floor boundary rectangle on earth map. In radians.
+              properties:
+                type: object
+                properties:
+                  XYQBEfNXvyCH:
+                    type: string
+                    minLength: 1
+                  aTOExKSzKweg:
+                    type: string
+                    minLength: 1
+                  tWaUaNAquRxX:
+                    type: string
+                    minLength: 1
+                required:
+                - XYQBEfNXvyCH
+                - aTOExKSzKweg
+                - tWaUaNAquRxX
+              building:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    description: Building Id.
+                  name:
+                    type: string
+                    minLength: 1
+                    description: Building name.
+                required:
+                - id
+                - name
+              level:
+                type: number
+                description: Floor’s level.
+              latLngGeojson:
+                type: object
+                description: GeoJSON format description of floor boundary vertices (using latitude and longitude coordinates).
+                properties:
+                  type:
+                    type: string
+                    minLength: 1
+                  geometry:
+                    type: object
+                    required:
+                    - type
+                    - coordinates
+                    properties:
+                      type:
+                        type: string
+                        minLength: 1
+                      coordinates:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            '0':
+                              type: array
+                              uniqueItems: true
+                              items:
+                                type: object
+                                properties:
+                                  '0':
+                                    type: array
+                                    uniqueItems: true
+                                    items:
+                                      type: object
+                                  '1':
+                                    type: array
+                                    uniqueItems: true
+                                    items:
+                                      type: object
+                                  '2':
+                                    type: array
+                                    uniqueItems: true
+                                    items:
+                                      type: object
+                                  '3':
+                                    type: array
+                                    uniqueItems: true
+                                    items:
+                                      type: object
+                                  '4':
+                                    type: array
+                                    uniqueItems: true
+                                    items:
+                                      type: object
+                required:
+                - type
+                - geometry
+              xyGeojson:
+                type: object
+                description: GeoJSON format description of floor boundary vertices (using meters, bottom left point should always be [0, 0]).
+                properties:
+                  type:
+                    type: string
+                    minLength: 1
+                  geometry:
+                    type: object
+                    required:
+                    - type
+                    - coordinates
+                    properties:
+                      type:
+                        type: string
+                        minLength: 1
+                      coordinates:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            '0':
+                              type: array
+                              uniqueItems: true
+                              items:
+                                type: object
+                                properties:
+                                  '0':
+                                    type: array
+                                    uniqueItems: true
+                                    items:
+                                      type: object
+                                  '1':
+                                    type: array
+                                    uniqueItems: true
+                                    items:
+                                      type: object
+                                  '2':
+                                    type: array
+                                    uniqueItems: true
+                                    items:
+                                      type: object
+                                  '3':
+                                    type: array
+                                    uniqueItems: true
+                                    items:
+                                      type: object
+                                  '4':
+                                    type: array
+                                    uniqueItems: true
+                                    items:
+                                      type: object
+                required:
+                - type
+                - geometry
+              imageLatLngGeojson:
+                type: object
+                description: GeoJSON format description of floor plan boundary vertices (using latitude and longitude coordinates).
+                properties:
+                  type:
+                    type: string
+                    minLength: 1
+                  geometry:
+                    type: object
+                    required:
+                    - type
+                    - coordinates
+                    properties:
+                      type:
+                        type: string
+                        minLength: 1
+                      coordinates:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            '0':
+                              type: array
+                              uniqueItems: true
+                              items:
+                                type: object
+                                properties:
+                                  '0':
+                                    type: array
+                                    uniqueItems: true
+                                    items:
+                                      type: object
+                                  '1':
+                                    type: array
+                                    uniqueItems: true
+                                    items:
+                                      type: object
+                                  '2':
+                                    type: array
+                                    uniqueItems: true
+                                    items:
+                                      type: object
+                                  '3':
+                                    type: array
+                                    uniqueItems: true
+                                    items:
+                                      type: object
+                                  '4':
+                                    type: array
+                                    uniqueItems: true
+                                    items:
+                                      type: object
+                required:
+                - type
+                - geometry
+              imageXyGeojson:
+                type: object
+                description: GeoJSON format description of floor plan boundary vertices (using meters relative to baseline of floor).
+                properties:
+                  type:
+                    type: string
+                    minLength: 1
+                  geometry:
+                    type: object
+                    required:
+                    - type
+                    - coordinates
+                    properties:
+                      type:
+                        type: string
+                        minLength: 1
+                      coordinates:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            '0':
+                              type: array
+                              uniqueItems: true
+                              items:
+                                type: object
+                                properties:
+                                  '0':
+                                    type: array
+                                    uniqueItems: true
+                                    items:
+                                      type: object
+                                  '1':
+                                    type: array
+                                    uniqueItems: true
+                                    items:
+                                      type: object
+                                  '2':
+                                    type: array
+                                    uniqueItems: true
+                                    items:
+                                      type: object
+                                  '3':
+                                    type: array
+                                    uniqueItems: true
+                                    items:
+                                      type: object
+                                  '4':
+                                    type: array
+                                    uniqueItems: true
+                                    items:
+                                      type: object
+                required:
+                - type
+                - geometry
+              gateways:
+                type: array
+                uniqueItems: true
+                minItems: 1
+                description: Gateways placed in room.
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                      description: Id of the gateway.
+                    lat:
+                      type: number
+                      description: Latitude of a gateway.
+                    lng:
+                      type: number
+                      description: Longitude of a gateway.
+                    altitude:
+                      type: number
+                      description: Height in meters above sea level.
+                    x:
+                      type: number
+                      description: Horizontal coordinate of a gateway (in meters relative to baseline of floor).
+                    y:
+                      type: number
+                      description: Vertical coordinate of a gateway (in meters relative to baseline of floor).
+                    z:
+                      type: number
+                      description: Height coordinate of a gateway. (in meters relative to baseline of floor).
+                    verticalOrientation:
+                      type: number
+                      description: Rotation in degrees on the horizontal plane. 0 = parallel to the ground facing up, 90 = on the wall, 180 = parallel to the ground facing down.
+                    range:
+                      type: number
+                      description: Minimum RSSI. When calculating position, if strongest signal will have less RSSI than range, that result will be rejected, and beacon considered lost.
+                    virtual:
+                      type: boolean
+                      description: Virtual gateway will be used to map lat, lng to sourceId. There should be one virtual gateway in each floor. Virtual gateway is created automatically when creating floor.
+                    sourceId:
+                      type: string
+                      minLength: 1
+                      description: SourceId of the gateway.
+                  required:
+                  - id
+                  - lat
+                  - lng
+                  - altitude
+                  - x
+                  - y
+                  - z
+                  - verticalOrientation
+                  - range
+                  - virtual
+                  - sourceId
+            required:
+            - id
+            - name
+            - height
+            - width
+            - anchorLat
+            - anchorLng
+            - rotation
+            - level
+      required:
+      - content
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      description: 'Your Kio Cloud API Key is required to be provided in the `Api-Key` header in each API call.
+
+
+        Get your API Key: sign in to **Kio Cloud** > select **Users** > select **Security** > copy your **Server API Key**.'
+      name: Api-Key
+x-: null

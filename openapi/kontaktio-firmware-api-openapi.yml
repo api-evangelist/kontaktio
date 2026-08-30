@@ -1,0 +1,311 @@
+openapi: 3.2.0
+info:
+  title: Device Management Firmware API
+  x-logo:
+    url: https://kontakt.io/wp-content/themes/kontakt/dist/img/site-header/logo.svg
+    backgroundColor: '#FFFFFF'
+  version: '10'
+  description: 'This Kontakt.io API provides direct access to all Kio Cloud Device Management resources. It allows integrating device administration functionality into 3rd-party applications without the need to build all underlying logic from the ground up.
+
+
+    ## Authentication
+
+
+    All requests must include a **JWT Bearer token** in the `Authorization` header, obtained via the [OAuth2 Client Credentials flow](https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow).
+
+
+    > **Deprecated:** The `Api-Key` header is still accepted for backward compatibility but is deprecated and will be removed. Do not use it for new integrations.
+
+
+    Each API call requires the `Accept` header with the API version. **By default, set to the current stable version:** `application/vnd.com.kontakt+json;version=10`
+
+    '
+  contact:
+    name: Support
+    url: https://support.kontakt.io
+    email: support@kontakt.io
+  termsOfService: https://kontakt.io/legal-documents/terms-of-sale-and-service/
+servers:
+- url: https://dm-api.cloud.us.kontakt.io
+  description: Kio Cloud US region
+- url: https://dm-api.cloud.uk.kontakt.io
+  description: Kio Cloud UK region
+security:
+- bearer_token: []
+- api_key: []
+tags:
+- name: Firmware
+  description: Firmware resources
+paths:
+  /firmware:
+    get:
+      tags:
+      - Firmware
+      summary: Get Firmwares
+      description: Returns firmware for specified devices.
+      parameters:
+      - name: uniqueId
+        in: query
+        description: List of Unique IDs of device for which Firmwares should be returned.
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: type
+        in: query
+        description: Filtering parameter that allows to return only scheduled or not scheduled Firmwares. If not specified, both types will be returned.
+        required: false
+        schema:
+          type: string
+          enum:
+          - ALL
+          - SCHEDULED
+          - NONSCHEDULED
+          default: ALL
+      - $ref: '#/components/parameters/accept'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/vnd.com.kontakt+json;version=10:
+              schema:
+                type: object
+                properties:
+                  firmwares:
+                    description: List of Firmwares
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Firmware'
+                  searchMeta:
+                    $ref: '#/components/schemas/SearchMeta'
+      security:
+      - bearer_token: []
+      - api_key: []
+  /firmware/{firmwareVersion}:
+    get:
+      tags:
+      - Firmware
+      summary: Get a Firmware
+      description: Returns a single Firmware version.
+      parameters:
+      - name: firmwareVersion
+        in: path
+        description: Firmware version
+        required: true
+        schema:
+          type: string
+      - name: deviceType
+        in: query
+        description: Device type
+        required: true
+        schema:
+          type: string
+          enum:
+          - BEACON
+          - GATEWAY
+      - $ref: '#/components/parameters/accept'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/vnd.com.kontakt+json;version=10:
+              schema:
+                $ref: '#/components/schemas/FirmwareCore'
+      security:
+      - bearer_token: []
+      - api_key: []
+      deprecated: true
+  /firmware/{firmwareVersion}/file:
+    get:
+      tags:
+      - Firmware
+      summary: Get a Firmware file
+      description: Redirects to a specific Firmware file
+      parameters:
+      - name: firmwareVersion
+        in: path
+        description: Firmware version
+        required: true
+        schema:
+          type: string
+      - name: deviceType
+        in: query
+        description: Device type
+        required: true
+        schema:
+          type: string
+          enum:
+          - BEACON
+          - GATEWAY
+      - $ref: '#/components/parameters/accept'
+      responses:
+        '303':
+          description: See Other
+      security:
+      - bearer_token: []
+      - api_key: []
+      deprecated: true
+components:
+  schemas:
+    SearchMeta:
+      type: object
+      title: Search Metadata
+      description: Additional information, pagination and metadata about an API response
+      externalDocs:
+        description: Pagination model description
+        url: /backend/management/pagination/
+      properties:
+        filter:
+          type: string
+          description: Filter query used in the API call
+        startIndex:
+          type: integer
+          description: Start index for the results array
+        maxResult:
+          type: integer
+          description: Maximum numbers of results in a single response
+        prevResults:
+          type: string
+          description: URL for the previous page of results
+          format: URL
+        count:
+          type:
+          - integer
+          - 'null'
+          description: Number of results. Not `null` only when the `queryType` is set to `COUNTED` or `SEARCH_META`.
+        orderBy:
+          type: string
+          enum:
+          - CREATED
+        nextResults:
+          type: string
+          format: URL
+          description: URL for the next page of results
+        queryType:
+          description: Query type. `COUNTED` - returns a number of results in the `count` field. `SEARCH_META` - returns only the `searchMeta` object, but with a number of results in the `count` field.
+          type: string
+          enum:
+          - NORMAL
+          - COUNTED
+          - SEARCH_META
+          default: NORMAL
+        order:
+          type: string
+          description: Sorting order - `ASC`ending (default) or `DESC`ending
+          enum:
+          - ASC
+          - DESC
+          default: ASC
+    FirmwareCore:
+      title: Firmware (Core Parameters)
+      properties:
+        id:
+          type: string
+          format: UUID
+          description: Firmware identificator
+        name:
+          type: string
+          description: Firmware name
+        description:
+          type:
+          - string
+          - 'null'
+          description: Optional Firmware description
+        deviceType:
+          type: string
+          description: Type of a device that the Firmware applies to
+          enum:
+          - BEACON
+          - GATEWAY
+        validVersions:
+          description: List of Firmware versions from which it's possible to update to the returned Firmware
+          type: string
+        important:
+          type: boolean
+          description: Flag indicating whether this Firmware should be considered important (`true`) or just a minor update (`false`)
+        url:
+          type: string
+          format: URL
+          description: Link to a binary file with the Firmware
+    Firmware:
+      type: object
+      properties:
+        id:
+          type: string
+          format: UUID
+          description: Firmware id.
+        name:
+          type: string
+          description: Firmware name
+        description:
+          type:
+          - string
+          - 'null'
+          description: Optional Firmware description
+        deviceType:
+          type: string
+          description: Type of a device that the Firmware applies to
+          enum:
+          - BEACON
+          - GATEWAY
+        uniqueId:
+          type: array
+          description: List of Unique IDs of beacons that this Firmware can be applied to
+          items:
+            type: string
+        validVersions:
+          description: List of Firmware versions from which it's possible to update to the returned Firmware
+          type: string
+        scheduled:
+          type: boolean
+          description: Flag indicating whether an optional firmware should be made available for upgrading beacons (`true`) or not (`false`)
+        important:
+          type: boolean
+          description: Flag indicating whether this Firmware should be considered important (`true`) or just a minor update (`false`)
+        optional:
+          type: boolean
+          description: Flag indicating whether this Firmware is optional (`true`) or not ('false')
+        url:
+          type: string
+          format: URL
+          description: Link to a binary file with the Firmware
+        fileExtension:
+          type: string
+          description: Extension of the Firmware file
+        crc32:
+          type: string
+          description: Checksum
+  parameters:
+    accept:
+      name: Accept
+      in: header
+      required: true
+      schema:
+        type: string
+        default: application/vnd.com.kontakt+json;version=10
+      description: Accept header is required.
+  securitySchemes:
+    bearer_token:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Provide a JWT in the `Authorization: Bearer <token>` header. This is the standard authentication method for all API requests.
+
+
+        Obtain a token via the OAuth2 Client Credentials flow from the Kontakt.io Keycloak identity provider.'
+    api_key:
+      type: apiKey
+      name: Api-Key
+      in: header
+      description: '**Deprecated — do not use for new integrations.** This method exists solely for backward compatibility and will be removed in a future release. Use JWT Bearer token authentication instead.
+
+
+        If you still need an API Key: sign in to **Kio Cloud** > select **Users** > select **Security** > copy your **Server API Key**.'
+    management_api_key:
+      name: Api-Key
+      type: apiKey
+      in: header
+      description: Special management API Key with additional privileges used by authorized users.
+externalDocs:
+  url: https://developer.kontakt.io

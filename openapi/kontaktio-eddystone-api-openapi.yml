@@ -1,0 +1,231 @@
+openapi: 3.2.0
+info:
+  title: Device Management Eddystone API
+  x-logo:
+    url: https://kontakt.io/wp-content/themes/kontakt/dist/img/site-header/logo.svg
+    backgroundColor: '#FFFFFF'
+  version: '10'
+  description: 'This Kontakt.io API provides direct access to all Kio Cloud Device Management resources. It allows integrating device administration functionality into 3rd-party applications without the need to build all underlying logic from the ground up.
+
+
+    ## Authentication
+
+
+    All requests must include a **JWT Bearer token** in the `Authorization` header, obtained via the [OAuth2 Client Credentials flow](https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow).
+
+
+    > **Deprecated:** The `Api-Key` header is still accepted for backward compatibility but is deprecated and will be removed. Do not use it for new integrations.
+
+
+    Each API call requires the `Accept` header with the API version. **By default, set to the current stable version:** `application/vnd.com.kontakt+json;version=10`
+
+    '
+  contact:
+    name: Support
+    url: https://support.kontakt.io
+    email: support@kontakt.io
+  termsOfService: https://kontakt.io/legal-documents/terms-of-sale-and-service/
+servers:
+- url: https://dm-api.cloud.us.kontakt.io
+  description: Kio Cloud US region
+- url: https://dm-api.cloud.uk.kontakt.io
+  description: Kio Cloud UK region
+security:
+- bearer_token: []
+- api_key: []
+tags:
+- name: Eddystone
+  description: Helper resources for working with Eddystone beacons
+paths:
+  /eddystone:
+    post:
+      tags:
+      - Eddystone
+      summary: Decrypt Eddystone Encrypted Telemetry packet
+      description: 'Decrypts Eddystone Telemetry data from an Eddystone Encrypted Telemetry frame. This information can be extracted by specifying one of the two sets of information in the request''s parameters:
+
+
+        * Beacon''s Unique ID (`uniqueId`) and its Eddystone Encrypted Telemetry frame (`frame`)
+
+        * Eddystone Ephemeral ID (`eid`) and corresponding Eddystone Encrypted Telemetry frame (`frame`)
+
+        '
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              properties:
+                uniqueId:
+                  description: Unique ID. Should be used only if `eid` is not specified.
+                  type: string
+                eid:
+                  description: Eddystone Ephemeral ID. Should be used only if `uniqueId` is not specified.
+                  type: string
+                frame:
+                  description: Base64-encoded Eddystone Encrypted Telemetry frame payload
+                  type: string
+                  format: byte
+              required:
+              - frame
+      responses:
+        '200':
+          description: OK
+          content:
+            application/vnd.com.kontakt+json;version=10:
+              schema:
+                $ref: '#/components/schemas/EddystoneDecrypted'
+      security:
+      - bearer_token: []
+      - api_key: []
+      parameters:
+      - $ref: '#/components/parameters/accept'
+  /namespaces:
+    get:
+      tags:
+      - Eddystone
+      summary: Get Namespaces
+      description: Returns a list of Eddystone UID Namespaces broadcasted by beacons assigned to the current Manager and their Subordinate Managers.
+      parameters:
+      - name: namespace
+        in: query
+        description: List of Eddystone UID Namespaces (non-Secure). Response will contain only Namespaces from this list.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - $ref: '#/components/parameters/accept'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/vnd.com.kontakt+json;version=10:
+              schema:
+                type: object
+                properties:
+                  namespaces:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        namespace:
+                          type: string
+                          description: Eddystone UID Namespace set by a Manager of a beacon.
+                        secureNamespace:
+                          type: string
+                          description: Secure Eddystone UID Namespace advertised by a beacon. Same as `proximity` if a beacon is not shuffled.
+                        shuffled:
+                          type: boolean
+                          description: Flag indicating whether `secureNamespace` is a shuffled Eddystone UID Namespace.
+                        shared:
+                          type: boolean
+                          description: Flag indicating whether `namespace` comes from a shared beacon.
+                  searchMeta:
+                    $ref: '#/components/schemas/SearchMeta'
+      security:
+      - bearer_token: []
+      - api_key: []
+components:
+  schemas:
+    SearchMeta:
+      type: object
+      title: Search Metadata
+      description: Additional information, pagination and metadata about an API response
+      externalDocs:
+        description: Pagination model description
+        url: /backend/management/pagination/
+      properties:
+        filter:
+          type: string
+          description: Filter query used in the API call
+        startIndex:
+          type: integer
+          description: Start index for the results array
+        maxResult:
+          type: integer
+          description: Maximum numbers of results in a single response
+        prevResults:
+          type: string
+          description: URL for the previous page of results
+          format: URL
+        count:
+          type:
+          - integer
+          - 'null'
+          description: Number of results. Not `null` only when the `queryType` is set to `COUNTED` or `SEARCH_META`.
+        orderBy:
+          type: string
+          enum:
+          - CREATED
+        nextResults:
+          type: string
+          format: URL
+          description: URL for the next page of results
+        queryType:
+          description: Query type. `COUNTED` - returns a number of results in the `count` field. `SEARCH_META` - returns only the `searchMeta` object, but with a number of results in the `count` field.
+          type: string
+          enum:
+          - NORMAL
+          - COUNTED
+          - SEARCH_META
+          default: NORMAL
+        order:
+          type: string
+          description: Sorting order - `ASC`ending (default) or `DESC`ending
+          enum:
+          - ASC
+          - DESC
+          default: ASC
+    EddystoneDecrypted:
+      title: Decrypted Eddystone-TLM packet
+      type: object
+      properties:
+        advertisementCount:
+          type: integer
+          description: Number of Bluetooth advertising packets broadcasted since the last reboot of a beacon
+        batteryVoltage:
+          type: number
+          description: Battery voltage
+        raw:
+          type: string
+          format: byte
+          description: Base64-encoded Eddystone Encrypted Telemetry frame
+        temperature:
+          type: number
+          description: Temperature of a beacon (**not** an ambient temperature, although it might be similar) in °C
+        uptime:
+          type: integer
+          description: Number of seconds since the last reboot of a beacon
+  parameters:
+    accept:
+      name: Accept
+      in: header
+      required: true
+      schema:
+        type: string
+        default: application/vnd.com.kontakt+json;version=10
+      description: Accept header is required.
+  securitySchemes:
+    bearer_token:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Provide a JWT in the `Authorization: Bearer <token>` header. This is the standard authentication method for all API requests.
+
+
+        Obtain a token via the OAuth2 Client Credentials flow from the Kontakt.io Keycloak identity provider.'
+    api_key:
+      type: apiKey
+      name: Api-Key
+      in: header
+      description: '**Deprecated — do not use for new integrations.** This method exists solely for backward compatibility and will be removed in a future release. Use JWT Bearer token authentication instead.
+
+
+        If you still need an API Key: sign in to **Kio Cloud** > select **Users** > select **Security** > copy your **Server API Key**.'
+    management_api_key:
+      name: Api-Key
+      type: apiKey
+      in: header
+      description: Special management API Key with additional privileges used by authorized users.
+externalDocs:
+  url: https://developer.kontakt.io

@@ -1,0 +1,451 @@
+openapi: 3.2.0
+info:
+  title: Device Management Device (Portal Beam) API
+  x-logo:
+    url: https://kontakt.io/wp-content/themes/kontakt/dist/img/site-header/logo.svg
+    backgroundColor: '#FFFFFF'
+  version: '10'
+  description: 'This Kontakt.io API provides direct access to all Kio Cloud Device Management resources. It allows integrating device administration functionality into 3rd-party applications without the need to build all underlying logic from the ground up.
+
+
+    ## Authentication
+
+
+    All requests must include a **JWT Bearer token** in the `Authorization` header, obtained via the [OAuth2 Client Credentials flow](https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow).
+
+
+    > **Deprecated:** The `Api-Key` header is still accepted for backward compatibility but is deprecated and will be removed. Do not use it for new integrations.
+
+
+    Each API call requires the `Accept` header with the API version. **By default, set to the current stable version:** `application/vnd.com.kontakt+json;version=10`
+
+    '
+  contact:
+    name: Support
+    url: https://support.kontakt.io
+    email: support@kontakt.io
+  termsOfService: https://kontakt.io/legal-documents/terms-of-sale-and-service/
+servers:
+- url: https://dm-api.cloud.us.kontakt.io
+  description: Kio Cloud US region
+- url: https://dm-api.cloud.uk.kontakt.io
+  description: Kio Cloud UK region
+security:
+- bearer_token: []
+- api_key: []
+tags:
+- name: Device (Portal Beam)
+  description: 'These endpoints are designed to assist with storing metadata associated with Portal Beams
+
+    '
+paths:
+  /portalbeam/image:
+    post:
+      tags:
+      - Device (Portal Beam)
+      summary: Store or erase Portal Beam calibration image
+      description: 'If an empty string is sent, the calibration image associated with this Portal Beam is erased.
+
+
+        The value sent to API is validated according to schema below before it''s accepted.'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              properties:
+                uniqueId:
+                  type: string
+                  description: Unique ID of the Portal Beam.
+                image:
+                  allOf:
+                  - $ref: '#/components/schemas/OccupancyImage'
+              required:
+              - uniqueId
+              - image
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      security:
+      - bearer_token: []
+      - api_key: []
+    get:
+      tags:
+      - Device (Portal Beam)
+      summary: List images for one or more Portal Beams
+      description: Fetches all image data associated with a list of Portal Beams.
+      parameters:
+      - name: uniqueId
+        in: query
+        description: List of Unique IDs of Portal Beams.
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/vnd.com.kontakt+json; version=10:
+              schema:
+                type: array
+                description: Images per uniqueId
+                items:
+                  type: object
+                  properties:
+                    uniqueId:
+                      type: string
+                    image:
+                      allOf:
+                      - $ref: '#/components/schemas/OccupancyImage'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      security:
+      - bearer_token: []
+      - api_key: []
+  /portalbeam/stitching:
+    post:
+      tags:
+      - Device (Portal Beam)
+      summary: Create or update stitching between two devices
+      description: 'Creates or updates a stitching definition between two devices.
+
+        The relationship is treated as undirected (order does not matter).'
+      requestBody:
+        required: true
+        content:
+          application/vnd.com.kontakt+json; version=10:
+            schema:
+              $ref: '#/components/schemas/StitchingPair'
+      responses:
+        '204':
+          description: Stitching accepted (created or updated)
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      security:
+      - bearer_token: []
+      - api_key: []
+    get:
+      tags:
+      - Device (Portal Beam)
+      summary: Get stitching by uniqueIds
+      parameters:
+      - name: uniqueIds
+        in: query
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: Stitching config
+          content:
+            application/vnd.com.kontakt+json; version=10:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StitchingConfig'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      security:
+      - bearer_token: []
+      - api_key: []
+    delete:
+      tags:
+      - Device (Portal Beam)
+      summary: Delete stitching between two selected beams
+      description: 'Deletes stitching between two devices identified by their uniqueIds.
+
+        The pair is treated as undirected: (A,B) is the same as (B,A).'
+      parameters:
+      - name: firstUniqueId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Unique ID of one device in the stitched pair.
+      - name: secondUniqueId
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Unique ID of the other device in the stitched pair.
+      responses:
+        '204':
+          description: Stitching pair deleted (or did not exist)
+        '400':
+          description: Invalid request (e.g., identical IDs)
+      security:
+      - bearer_token: []
+      - api_key: []
+components:
+  schemas:
+    ApiError:
+      type: object
+      title: API Error
+      properties:
+        id:
+          type: string
+          description: Internal API error code
+          example: API_ERROR_1693477316246
+        status:
+          type: number
+          description: HTTP response status code
+          example: 422
+        cause:
+          type: string
+          description: General cause of the error
+          example: ValidationError
+        message:
+          type: string
+          description: Error message with an explanation of the problem
+          example: Invalid value for field name
+        details:
+          type:
+          - array
+          - 'null'
+          description: Optional details
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                example: name
+              error:
+                type: string
+                description: Error name
+                example: INVALID_VALUE
+              message:
+                type: string
+                description: Error message
+                example: Invalid value for field name
+    Polygon:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        polygon:
+          type: array
+          items:
+            type: object
+            properties:
+              x:
+                type: integer
+              y:
+                type: integer
+    StitchingPair:
+      type: object
+      required:
+      - firstDevice
+      - secondDevice
+      properties:
+        firstDevice:
+          $ref: '#/components/schemas/StitchedDevice'
+        secondDevice:
+          $ref: '#/components/schemas/StitchedDevice'
+    StitchingPose:
+      type: object
+      required:
+      - pivotLocal
+      - pivotWorld
+      - rotationDeg
+      properties:
+        pivotLocal:
+          $ref: '#/components/schemas/StitchingPivotLocal'
+        pivotWorld:
+          $ref: '#/components/schemas/StitchingPivotWorld'
+        rotationDeg:
+          type: number
+          format: decimal
+          description: Clockwise rotation in degrees around pivot point.
+          example: 25
+    StitchingPivotLocal:
+      description: Pivot (rotation point) of the image in the device image's local coordinates.
+      type: object
+      required:
+      - x
+      - y
+      properties:
+        x:
+          description: X coordinate in local coordinates, between 0 and 1. Where 0 is leftmost and 1 is rightmost.
+          type: number
+          format: decimal
+          minimum: 0
+          maximum: 1
+          example: 0.5
+        y:
+          description: Y coordinate in local coordinates, between 0 and 1. Where 0 is top and 1 is bottom.
+          type: number
+          format: decimal
+          minimum: 0
+          maximum: 1
+          example: 0.5
+    StitchingImage:
+      type: object
+      required:
+      - captured
+      - original
+      - corrected
+      properties:
+        captured:
+          type: string
+          format: date-time
+          example: '2026-01-09T12:09:30.726Z'
+        original:
+          type: string
+          format: byte
+          description: Base64-encoded image bytes (no data URL prefix).
+          example: iVBORw0KGgoAAAANSUhEUgAAAAUA...
+        corrected:
+          type: string
+          format: byte
+          description: Base64-encoded image bytes (no data URL prefix).
+          example: iVBORw0KGgoAAAANSUhEUgAAAAUA...
+    StitchingPivotWorld:
+      description: 'Pivot (rotation point) of the image in the world coordinates that are shared between stitched devices.
+
+        Origin is top left corner.'
+      type: object
+      required:
+      - x
+      - y
+      properties:
+        x:
+          description: X coordinate in world coordinates.
+          type: integer
+          example: 420
+        y:
+          description: Y coordinate in world coordinates.
+          type: integer
+          example: 160
+    StitchingConfig:
+      type: object
+      required:
+      - uniqueId
+      - intersections
+      properties:
+        uniqueId:
+          type: string
+          description: Unique identifier of a beam/device.
+        intersections:
+          type: array
+          items:
+            $ref: '#/components/schemas/StitchingPair'
+    OccupancyImage:
+      type: object
+      x-stoplight:
+        id: blcpt1fqfd6zh
+      description: Occupancy image taken from occupancy-capable device.
+      properties:
+        captured:
+          type: string
+          format: date-time
+          description: Timestamp when image was captured. If present in POST request, will be accounted for, otherwise defaults to now()
+        raw:
+          type: string
+          format: byte
+          description: Raw Base64-encoded bytes received from device.
+        content:
+          type: string
+          format: byte
+          description: Base64-encoded PNG image.
+        calibration:
+          type: string
+          format: byte
+          description: Base64-encoded calibration mask received from device.
+        recognitionBoxes:
+          type: array
+          description: Objects recognized as humans by occupancy model on the device.
+          items:
+            allOf:
+            - $ref: '#/components/schemas/Polygon'
+    StitchedDevice:
+      type: object
+      required:
+      - uniqueId
+      - image
+      - pose
+      properties:
+        uniqueId:
+          type: string
+          description: Unique identifier of a beam/device.
+        image:
+          $ref: '#/components/schemas/StitchingImage'
+        pose:
+          $ref: '#/components/schemas/StitchingPose'
+  securitySchemes:
+    bearer_token:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Provide a JWT in the `Authorization: Bearer <token>` header. This is the standard authentication method for all API requests.
+
+
+        Obtain a token via the OAuth2 Client Credentials flow from the Kontakt.io Keycloak identity provider.'
+    api_key:
+      type: apiKey
+      name: Api-Key
+      in: header
+      description: '**Deprecated — do not use for new integrations.** This method exists solely for backward compatibility and will be removed in a future release. Use JWT Bearer token authentication instead.
+
+
+        If you still need an API Key: sign in to **Kio Cloud** > select **Users** > select **Security** > copy your **Server API Key**.'
+    management_api_key:
+      name: Api-Key
+      type: apiKey
+      in: header
+      description: Special management API Key with additional privileges used by authorized users.
+externalDocs:
+  url: https://developer.kontakt.io

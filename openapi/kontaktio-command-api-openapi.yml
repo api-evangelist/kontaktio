@@ -1,0 +1,259 @@
+openapi: 3.2.0
+info:
+  title: Device Management Command API
+  x-logo:
+    url: https://kontakt.io/wp-content/themes/kontakt/dist/img/site-header/logo.svg
+    backgroundColor: '#FFFFFF'
+  version: '10'
+  description: 'This Kontakt.io API provides direct access to all Kio Cloud Device Management resources. It allows integrating device administration functionality into 3rd-party applications without the need to build all underlying logic from the ground up.
+
+
+    ## Authentication
+
+
+    All requests must include a **JWT Bearer token** in the `Authorization` header, obtained via the [OAuth2 Client Credentials flow](https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow).
+
+
+    > **Deprecated:** The `Api-Key` header is still accepted for backward compatibility but is deprecated and will be removed. Do not use it for new integrations.
+
+
+    Each API call requires the `Accept` header with the API version. **By default, set to the current stable version:** `application/vnd.com.kontakt+json;version=10`
+
+    '
+  contact:
+    name: Support
+    url: https://support.kontakt.io
+    email: support@kontakt.io
+  termsOfService: https://kontakt.io/legal-documents/terms-of-sale-and-service/
+servers:
+- url: https://dm-api.cloud.us.kontakt.io
+  description: Kio Cloud US region
+- url: https://dm-api.cloud.uk.kontakt.io
+  description: Kio Cloud UK region
+security:
+- bearer_token: []
+- api_key: []
+tags:
+- name: Command
+  description: Commands are a special type of Configs used for initiating some management tasks, e.g. entering bootloader mode
+paths:
+  /command/encrypt:
+    get:
+      tags:
+      - Command
+      summary: Create Encrypted Commands
+      description: Returns a list of Base64-encoded configs with encrypted commands for each of devices specified in a request
+      parameters:
+      - $ref: '#/components/parameters/UniqueIdList'
+      - name: command
+        in: query
+        required: true
+        description: 'A Command that should be encrypted in configs for each of devices specified in a request
+
+
+          * `RESET` - Reboots the device
+
+          * `NONCONNECTABLE` - Connectable BLE packets will be non-connectable until a next reboot
+
+          * `SLEEP` - Device enters a sleep mode (stops broadcasting all packets)
+
+          * `BLINK_10S` - Primary LED blinks for 10 seconds or LED blinks with the primary colour for 10 seconds
+
+          * `BLINK_30S` - Primary LED blinks for 30 seconds or LED blinks with the primary colour for 30 seconds
+
+          * `BLINK2_10S` - Secondary LED blinks for 10 seconds or LED blinks with the secondary colour for 10 seconds
+
+          * `BLINK2_30S` - Secondary LED blinks for 30 seconds or LED blinks with the secondary colour for 30 seconds
+
+
+          Please keep in mind that not all devices can support all of these commands. Refer to device specification to learn more.
+
+          '
+        schema:
+          type: string
+          enum:
+          - RESET
+          - NONCONNECTBLE
+          - SLEEP
+          - BLINK_10S
+          - BLINK_30S
+          - BLINK2_10S
+          - BLINK2_30S
+      - $ref: '#/components/parameters/accept'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/vnd.com.kontakt+json;version=10:
+              schema:
+                type: object
+                properties:
+                  commands:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EncryptedConfig'
+                  searchMeta:
+                    $ref: '#/components/schemas/SearchMeta'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      security:
+      - bearer_token: []
+      - api_key: []
+components:
+  schemas:
+    ApiError:
+      type: object
+      title: API Error
+      properties:
+        id:
+          type: string
+          description: Internal API error code
+          example: API_ERROR_1693477316246
+        status:
+          type: number
+          description: HTTP response status code
+          example: 422
+        cause:
+          type: string
+          description: General cause of the error
+          example: ValidationError
+        message:
+          type: string
+          description: Error message with an explanation of the problem
+          example: Invalid value for field name
+        details:
+          type:
+          - array
+          - 'null'
+          description: Optional details
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                example: name
+              error:
+                type: string
+                description: Error name
+                example: INVALID_VALUE
+              message:
+                type: string
+                description: Error message
+                example: Invalid value for field name
+    EncryptedConfig:
+      title: Encrypted Config/Command
+      x-stoplight:
+        id: yvjpgdrc5gygd
+      type: object
+      properties:
+        uniqueId:
+          type: string
+          description: Unique ID of the device that can consume this Encrypted Config/Command.
+        config:
+          type: string
+          format: byte
+          description: Base64-encoded data with a new Config/Command for a Device with an Unique ID specified in the `uniqueId` field.
+    SearchMeta:
+      type: object
+      title: Search Metadata
+      description: Additional information, pagination and metadata about an API response
+      externalDocs:
+        description: Pagination model description
+        url: /backend/management/pagination/
+      properties:
+        filter:
+          type: string
+          description: Filter query used in the API call
+        startIndex:
+          type: integer
+          description: Start index for the results array
+        maxResult:
+          type: integer
+          description: Maximum numbers of results in a single response
+        prevResults:
+          type: string
+          description: URL for the previous page of results
+          format: URL
+        count:
+          type:
+          - integer
+          - 'null'
+          description: Number of results. Not `null` only when the `queryType` is set to `COUNTED` or `SEARCH_META`.
+        orderBy:
+          type: string
+          enum:
+          - CREATED
+        nextResults:
+          type: string
+          format: URL
+          description: URL for the next page of results
+        queryType:
+          description: Query type. `COUNTED` - returns a number of results in the `count` field. `SEARCH_META` - returns only the `searchMeta` object, but with a number of results in the `count` field.
+          type: string
+          enum:
+          - NORMAL
+          - COUNTED
+          - SEARCH_META
+          default: NORMAL
+        order:
+          type: string
+          description: Sorting order - `ASC`ending (default) or `DESC`ending
+          enum:
+          - ASC
+          - DESC
+          default: ASC
+  parameters:
+    UniqueIdList:
+      name: uniqueId
+      in: query
+      description: List of devices' unique ids
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+        example:
+        - 11P10AvW
+        - 11S13AhY
+    accept:
+      name: Accept
+      in: header
+      required: true
+      schema:
+        type: string
+        default: application/vnd.com.kontakt+json;version=10
+      description: Accept header is required.
+  securitySchemes:
+    bearer_token:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Provide a JWT in the `Authorization: Bearer <token>` header. This is the standard authentication method for all API requests.
+
+
+        Obtain a token via the OAuth2 Client Credentials flow from the Kontakt.io Keycloak identity provider.'
+    api_key:
+      type: apiKey
+      name: Api-Key
+      in: header
+      description: '**Deprecated — do not use for new integrations.** This method exists solely for backward compatibility and will be removed in a future release. Use JWT Bearer token authentication instead.
+
+
+        If you still need an API Key: sign in to **Kio Cloud** > select **Users** > select **Security** > copy your **Server API Key**.'
+    management_api_key:
+      name: Api-Key
+      type: apiKey
+      in: header
+      description: Special management API Key with additional privileges used by authorized users.
+externalDocs:
+  url: https://developer.kontakt.io

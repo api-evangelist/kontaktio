@@ -1,0 +1,87 @@
+openapi: 3.2.0
+info:
+  title: Device Management Device tags API
+  x-logo:
+    url: https://kontakt.io/wp-content/themes/kontakt/dist/img/site-header/logo.svg
+    backgroundColor: '#FFFFFF'
+  version: '10'
+  description: 'This Kontakt.io API provides direct access to all Kio Cloud Device Management resources. It allows integrating device administration functionality into 3rd-party applications without the need to build all underlying logic from the ground up.
+
+
+    ## Authentication
+
+
+    All requests must include a **JWT Bearer token** in the `Authorization` header, obtained via the [OAuth2 Client Credentials flow](https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow).
+
+
+    > **Deprecated:** The `Api-Key` header is still accepted for backward compatibility but is deprecated and will be removed. Do not use it for new integrations.
+
+
+    Each API call requires the `Accept` header with the API version. **By default, set to the current stable version:** `application/vnd.com.kontakt+json;version=10`
+
+    '
+  contact:
+    name: Support
+    url: https://support.kontakt.io
+    email: support@kontakt.io
+  termsOfService: https://kontakt.io/legal-documents/terms-of-sale-and-service/
+servers:
+- url: https://dm-api.cloud.us.kontakt.io
+  description: Kio Cloud US region
+- url: https://dm-api.cloud.uk.kontakt.io
+  description: Kio Cloud UK region
+security:
+- bearer_token: []
+- api_key: []
+tags:
+- name: Device tags
+  description: The device tags
+paths:
+  /tags:
+    get:
+      tags:
+      - Device tags
+      summary: Get device tags
+      description: Returns list of tags of all devices the user has access to
+      responses:
+        '200':
+          description: OK
+          content:
+            application/vnd.com.kontakt+json; version=10:
+              schema:
+                properties:
+                  tags:
+                    type: array
+                    description: List of tags
+                    example:
+                    - beacon
+                    - hospital
+                    - important
+                    items:
+                      type: string
+                      description: Tag value
+components:
+  securitySchemes:
+    bearer_token:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Provide a JWT in the `Authorization: Bearer <token>` header. This is the standard authentication method for all API requests.
+
+
+        Obtain a token via the OAuth2 Client Credentials flow from the Kontakt.io Keycloak identity provider.'
+    api_key:
+      type: apiKey
+      name: Api-Key
+      in: header
+      description: '**Deprecated — do not use for new integrations.** This method exists solely for backward compatibility and will be removed in a future release. Use JWT Bearer token authentication instead.
+
+
+        If you still need an API Key: sign in to **Kio Cloud** > select **Users** > select **Security** > copy your **Server API Key**.'
+    management_api_key:
+      name: Api-Key
+      type: apiKey
+      in: header
+      description: Special management API Key with additional privileges used by authorized users.
+externalDocs:
+  url: https://developer.kontakt.io

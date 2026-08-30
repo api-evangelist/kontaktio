@@ -1,0 +1,38 @@
+openapi: 3.2.0
+info:
+  title: Location Occupancy API
+  version: '1.0'
+  description: Real-time and historical Kio Cloud apps data including location tracking, occupancy, and telemetry.
+  contact:
+    name: Kontakt.io Support
+    url: https://support.kontakt.io
+    email: support@kontakt.io
+  termsOfService: https://kontakt.io/terms-of-service
+  summary: Real-time and historical Kio Cloud apps data including location tracking, occupancy, and telemetry.
+servers:
+- url: https://apps.cloud.us.kontakt.io
+  description: 'Kio Cloud US '
+- url: https://apps.cloud.uk.kontakt.io
+  description: Kio Cloud UK
+security:
+- API Key - 1: []
+tags:
+- name: Occupancy
+paths:
+  /v3/occupancy:
+    parameters: []
+    get:
+      description: ''
+      tags:
+      - Occupancy
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      description: 'Your Kio Cloud API Key is required to be provided in the `Api-Key` header in each API call.
+
+
+        Get your API Key: sign in to **Kio Cloud** > select **Users** > select **Security** > copy your **Server API Key**.'
+      name: Api-Key
+x-: null

@@ -1,0 +1,282 @@
+openapi: 3.2.0
+info:
+  title: Spaces API
+  version: '1.0'
+  description: Smart Location Spaces
+  contact:
+    name: Kontakt.io
+    url: https://kontakt.io/contact-us/
+    email: kontakt@kontakt.io
+  termsOfService: https://kontakt.io/terms-of-service
+servers:
+- url: https://api.cloud.us.kontakt.io/spaces
+  description: Kio Cloud Apps
+security:
+- ApiKeyAuth: []
+tags:
+- name: Spaces
+paths:
+  /v1/spaces:
+    get:
+      summary: List Spaces
+      description: 'Returns a list of spaces.
+
+
+        A space is a virtual location element defined within Kio Cloud Smart Location, which is a logical collection of rooms and or seats that is not part of the Smart Location physical location topology. A space is treated as a virtual single entity for the purposes of stream occupancy filtering, aggregating room and seat occupancy measurements, and aggregating data for the purposes of data visualization and/or analytics.'
+      operationId: spacesList
+      parameters:
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/appType'
+      responses:
+        '200':
+          description: Result page.
+          content:
+            application/json:
+              schema:
+                type: object
+                title: SpacesPage
+                properties:
+                  page:
+                    $ref: '#/components/schemas/Page'
+                  content:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Space'
+                required:
+                - page
+                - content
+              examples:
+                SpacesPage:
+                  $ref: '#/components/examples/SpacePage'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Spaces
+  /v1/spaces/{id}:
+    get:
+      summary: Retrieve a Space by id
+      description: 'Returns a single space details by id.
+
+
+        A space is a virtual location element defined within Kio Cloud Smart Location, which is a logical collection of rooms and or seats that is not part of the Smart Location physical location topology. A space is treated as a virtual single entity for the purposes of stream occupancy filtering, aggregating room and seat occupancy measurements, and aggregating data for the purposes of data visualization and/or analytics.'
+      operationId: getSpace
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        examples:
+          SpaceId:
+            $ref: '#/components/examples/SpaceId'
+      - $ref: '#/components/parameters/appType'
+      responses:
+        '200':
+          description: Space object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Space'
+              examples:
+                SpaceObject:
+                  $ref: '#/components/examples/SpaceObject'
+        '404':
+          description: Space not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Spaces
+components:
+  examples:
+    SpaceId:
+      summary: Space `id` taken from GET spaces list
+      value: 63a334433b96464465766198
+    SpaceObject:
+      summary: Single Space details
+      value:
+        id: 63a334433b96464465766198
+        name: Product Software Department
+        appType: SMART_LOCATION
+        items:
+        - id: d7794ace-80a2-4ed5-93d7-7856781134ff
+          type: SEAT
+          status: ACTIVE
+        - id: '187303'
+          type: ROOM
+          status: ACTIVE
+        - id: 5d505b93-3f3b-42c5-be08-2e3507937728
+          type: SEAT
+          status: ACTIVE
+        - id: faf02b7e-2b38-4d33-a91e-33097424af8a
+          type: SEAT
+          status: ACTIVE
+        - id: 20963ff0-cdcd-4372-b4f8-47171250c7be
+          type: SEAT
+          status: ACTIVE
+        - id: 8e851c87-6819-4136-9d80-c6ac8c56e48e
+          type: SEAT
+          status: ACTIVE
+        - id: 4df0f61d-5cab-40d4-b9c2-237f60bffa04
+          type: SEAT
+          status: ACTIVE
+    SpacePage:
+      summary: Page of Spaces objects
+      value:
+        page:
+          number: 0
+          size: 50
+          totalElements: 1
+          totalPages: 1
+        content:
+        - id: 63a334433b96464465766198
+          name: Software Department
+          appType: SMART_LOCATION
+          items:
+          - id: '187303'
+            type: ROOM
+            status: ACTIVE
+          - id: 5d505b93-3f3b-42c5-be08-2e3507937728
+            type: SEAT
+            status: ACTIVE
+          - id: faf02b7e-2b38-4d33-a91e-33097424af8a
+            type: SEAT
+            status: ACTIVE
+          - id: 20963ff0-cdcd-4372-b4f8-47171250c7be
+            type: SEAT
+            status: ACTIVE
+          - id: 8e851c87-6819-4136-9d80-c6ac8c56e48e
+            type: SEAT
+            status: ACTIVE
+          - id: 4df0f61d-5cab-40d4-b9c2-237f60bffa04
+            type: SEAT
+            status: ACTIVE
+  schemas:
+    Space:
+      type: object
+      x-stoplight:
+        id: zq0hm9au4ezzl
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        appType:
+          $ref: '#/components/schemas/AppType'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SpaceItem'
+      required:
+      - id
+      - name
+      - appType
+      - items
+    PageFilter:
+      type: object
+      properties:
+        size:
+          description: The size of the page to be returned
+          type: integer
+          default: 20
+          minimum: 1
+        page:
+          description: Zero-based page index (0..N)
+          minimum: 0
+          type: integer
+          default: 0
+      x-stoplight:
+        id: wd6sdemxmqx2r
+    Page:
+      x-stoplight:
+        id: runkht3gb0bn7
+      __ERROR__: "Error: Error getting file \"/domain-common/schemas/paging/Page.yaml\". \n'/domain-common/schemas/paging/Page.yaml' not found."
+    SpaceItem:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          $ref: '#/components/schemas/SpaceItemType'
+        status:
+          $ref: '#/components/schemas/SpaceItemStatus'
+      required:
+      - id
+      - type
+      - status
+      x-stoplight:
+        id: 3jvxvrcedw16o
+    SpaceItemType:
+      type: string
+      enum:
+      - ROOM
+      - SEAT
+      - FOOTFALL
+      x-stoplight:
+        id: 2mqtd27sei0fb
+    AppType:
+      x-stoplight:
+        id: muig4i86za48p
+      x-internal: false
+      type: string
+      example: SMART_LOCATION
+    SpaceItemStatus:
+      type: string
+      enum:
+      - ACTIVE
+      - SL_REMOVED
+      x-stoplight:
+        id: bkh8vmwluk3ur
+    ApiErrorResponse:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: string
+      x-stoplight:
+        id: ydm0aiasec7sz
+  parameters:
+    page:
+      name: page
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/PageFilter'
+      examples:
+        firstPage:
+          summary: Get first result page
+          value:
+            page: 0
+        secondPage:
+          summary: Get second result page and increase default page size
+          value:
+            page: 1
+            size: 100
+    appType:
+      name: appType
+      in: query
+      explode: false
+      required: true
+      schema:
+        uniqueItems: true
+        type: string
+        items:
+          $ref: '#/components/schemas/AppType'
+        example: SMART_LOCATION
+      example: SMART_LOCATION
+      description: Required to be SMART_LOCATION
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Api-Key
+      description: 'Your Kio Cloud API Key is required to be provided in the `Api-Key` header in each API call.
+
+
+        Get your API Key: sign in to **Kio Cloud** > select **Users** > select **Security** > copy your **Server API Key**.'
+x-stoplight:
+  id: yr2sakrpndb8n

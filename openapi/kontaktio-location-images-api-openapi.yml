@@ -1,0 +1,99 @@
+openapi: 3.2.0
+info:
+  title: Location & Occupancy Location Images API
+  version: '1.0'
+  description: Real-time and historical Kio Cloud apps data including location tracking, occupancy, and telemetry.
+  contact:
+    name: Kontakt.io Support
+    url: https://support.kontakt.io
+    email: support@kontakt.io
+  termsOfService: https://kontakt.io/terms-of-service
+  summary: Real-time and historical Kio Cloud apps data including location tracking, occupancy, and telemetry.
+servers:
+- url: https://apps.cloud.us.kontakt.io
+  description: 'Kio Cloud US '
+- url: https://apps.cloud.uk.kontakt.io
+  description: Kio Cloud UK
+security:
+- API Key - 1: []
+tags:
+- name: Location Images
+paths:
+  /v3/locations/images/{type}/{id}:
+    parameters:
+    - schema:
+        type: string
+        enum:
+        - CAMPUS
+        - BUILDING
+        - FLOOR
+      name: type
+      in: path
+      description: Type of topology item.
+      required: true
+    - schema:
+        type: integer
+        example: 177214, 187564
+      name: id
+      in: path
+      required: true
+      description: Comma-separated list of each topology identifier (id).
+    get:
+      summary: Retrieve location image
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    topologyType:
+                      type: string
+                    id:
+                      type: integer
+                    presignedUrl:
+                      type: string
+                x-examples:
+                  example-1:
+                  - topologyType: CAMPUS
+                    id: 27857
+                    presignedUrl: http://localhost/images/campus/test1234test/27857
+                  - topologyType: CAMPUS
+                    id: 27858
+                    presignedUrl: http://localhost/images/campus/test1234test/27858
+              examples:
+                example-1:
+                  value:
+                  - topologyType: CAMPUS
+                    id: 27857
+                    presignedUrl: http://localhost/images/campus/test1234test/27857
+                  - topologyType: CAMPUS
+                    id: 27858
+                    presignedUrl: http://localhost/images/campus/test1234test/27858
+      operationId: get-v3-locations-images
+      description: 'Returns a target URL to download the images of the ids requested by topology type (Smart Location campus, building, floor). Floor type results in the floor plan image.
+
+
+        URL is valid for 24 hours.
+
+
+        Whenever possible, request multiple ids to limit the number of calls and decrease your latency.'
+      security:
+      - api_key: []
+      parameters: []
+      tags:
+      - Location Images
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      description: 'Your Kio Cloud API Key is required to be provided in the `Api-Key` header in each API call.
+
+
+        Get your API Key: sign in to **Kio Cloud** > select **Users** > select **Security** > copy your **Server API Key**.'
+      name: Api-Key
+x-: null

@@ -1,0 +1,160 @@
+openapi: 3.2.0
+info:
+  title: Location & Occupancy Footfall Spaces API
+  version: '1.0'
+  description: Real-time and historical Kio Cloud apps data including location tracking, occupancy, and telemetry.
+  contact:
+    name: Kontakt.io Support
+    url: https://support.kontakt.io
+    email: support@kontakt.io
+  termsOfService: https://kontakt.io/terms-of-service
+  summary: Real-time and historical Kio Cloud apps data including location tracking, occupancy, and telemetry.
+servers:
+- url: https://apps.cloud.us.kontakt.io
+  description: 'Kio Cloud US '
+- url: https://apps.cloud.uk.kontakt.io
+  description: Kio Cloud UK
+security:
+- API Key - 1: []
+tags:
+- name: Footfall Spaces
+paths:
+  /v2/locations/spaces:
+    get:
+      summary: List all footfall spaces
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                x-examples:
+                  example-1:
+                    links:
+                    - rel: self
+                      href: http://apps.cloud.us.kontakt.io/v2/locations/spaces?page=0&size=20
+                    content:
+                    - id: 619e418cd272f240e3d00518
+                      name: Conference and Spaces
+                      roomIds:
+                      - 127236
+                      - 126956
+                      - 94110
+                      links: []
+                    page:
+                      size: 20
+                      totalElements: 1
+                      totalPages: 1
+                      number: 0
+                properties:
+                  content:
+                    type: array
+                    uniqueItems: true
+                    minItems: 1
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          minLength: 1
+                          description: ID of the footfall space.
+                        name:
+                          type: string
+                          minLength: 1
+                          description: Name of the footfall space.
+                        roomIds:
+                          type: array
+                          description: IDs of rooms contained in the footfall space.
+                          items: {}
+                      required:
+                      - id
+                      - name
+                required:
+                - content
+              examples:
+                example-1:
+                  value:
+                    links:
+                    - rel: self
+                      href: http://apps.cloud.us.kontakt.io/v2/locations/spaces?page=0&size=20
+                    content:
+                    - id: 619e418cd272f240e3d00518
+                      name: Conference and Spaces
+                      roomIds:
+                      - 127236
+                      - 126956
+                      - 94110
+                      links: []
+                    page:
+                      size: 20
+                      totalElements: 1
+                      totalPages: 1
+                      number: 0
+        '201':
+          description: Created
+      operationId: get-v2-locations-spaces
+      description: 'Returns a list of footfall spaces including the roomIds assigned to the space.
+
+
+        A footfall space is a user-defined virtual location that identifies where a Traffic Portal Beam measures the inbound (entering) and outbound (exiting) people traffic. The Portal Beam uses an invisible threshold line to detect people entering and exiting at its installation location.
+
+
+        Endpoint supports pagination and filtering.'
+      parameters:
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/size'
+      - $ref: '#/components/parameters/sort'
+      - schema:
+          type: string
+        in: query
+        name: name
+        description: Footfall space name or beginning of part name to search. Only one of the filters can be used.
+      - schema:
+          type: string
+        in: query
+        description: ID of multiple IDs of rooms contained by footfall locations to search. Only one of the filters can be used.
+        name: roomId
+      security:
+      - api_key: []
+      requestBody:
+        content: {}
+      tags:
+      - Footfall Spaces
+components:
+  parameters:
+    size:
+      name: size
+      in: query
+      schema:
+        type: string
+        default: '20'
+      description: Size of the page to retrieve.
+    page:
+      name: page
+      in: query
+      schema:
+        type: integer
+        default: '0'
+      description: Page you want to retrieve; 0 indexed.
+    sort:
+      name: sort
+      in: query
+      schema:
+        type: string
+        default: asc
+        example: ?sort=firstname&sort=lastname,asc
+        enum:
+        - asc
+        - desc
+      description: 'Sort objects returned in the response. Format property,property '
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      description: 'Your Kio Cloud API Key is required to be provided in the `Api-Key` header in each API call.
+
+
+        Get your API Key: sign in to **Kio Cloud** > select **Users** > select **Security** > copy your **Server API Key**.'
+      name: Api-Key
+x-: null

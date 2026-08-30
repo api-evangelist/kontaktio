@@ -1,0 +1,385 @@
+openapi: 3.2.0
+info:
+  title: Location & Occupancy Presences API
+  version: '1.0'
+  description: Real-time and historical Kio Cloud apps data including location tracking, occupancy, and telemetry.
+  contact:
+    name: Kontakt.io Support
+    url: https://support.kontakt.io
+    email: support@kontakt.io
+  termsOfService: https://kontakt.io/terms-of-service
+  summary: Real-time and historical Kio Cloud apps data including location tracking, occupancy, and telemetry.
+servers:
+- url: https://apps.cloud.us.kontakt.io
+  description: 'Kio Cloud US '
+- url: https://apps.cloud.uk.kontakt.io
+  description: Kio Cloud UK
+security:
+- API Key - 1: []
+tags:
+- name: Presences
+paths:
+  /v3/presences:
+    parameters: []
+    get:
+      summary: Retrieve devices present in a location
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Presence-Device'
+      operationId: get-presences
+      description: Returns the devices currently present in a location (campus, building, floor, or room).
+      parameters:
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/size'
+      - $ref: '#/components/parameters/sort'
+      - $ref: '#/components/parameters/floorId'
+      - $ref: '#/components/parameters/buildingId'
+      - $ref: '#/components/parameters/trackingId'
+      - schema:
+          type: number
+        in: query
+        name: roomId
+        description: Filter by one or more Room Ids (separated by comma).
+      - $ref: '#/components/parameters/campusId'
+      tags:
+      - Presences
+      security:
+      - api_key: []
+  /v3/presences/history:
+    parameters: []
+    get:
+      summary: Retrieve device presence history for a location
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Presence-History-Devices'
+        '429':
+          $ref: '#/components/responses/error-429'
+      operationId: get-presences-history
+      description: 'Returns the history of devices present in a location. '
+      parameters:
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/size'
+      - $ref: '#/components/parameters/sort'
+      - $ref: '#/components/parameters/floorId'
+      - $ref: '#/components/parameters/buildingId'
+      - $ref: '#/components/parameters/startTime'
+      - $ref: '#/components/parameters/endTime'
+      - schema:
+          type: string
+        in: query
+        name: roomId
+        description: Filter by room ID(s).
+      - schema:
+          type: string
+          example: d6:3c:5d:b2:7c:a9
+        in: query
+        name: trackingId
+        description: 'Filter by one or more tracking IDs (device MAC address) <br> alpha characters: lowercase required'
+        required: true
+      tags:
+      - Presences
+      security:
+      - api_key: []
+components:
+  parameters:
+    startTime:
+      name: startTime
+      in: query
+      schema:
+        type: string
+        example: '2020-11-27T08:00:00.000000Z'
+        format: date-time
+      description: 'Filter by start time. <br> Values are always expressed in UTC (equivalent to an offset of +00:00). <br> The timezone designator is always Z. <br> The hours component must be specified as two digits in 24-hour format. '
+    size:
+      name: size
+      in: query
+      schema:
+        type: string
+        default: '20'
+      description: Size of the page to retrieve.
+    campusId:
+      name: campusId
+      in: query
+      required: false
+      schema:
+        type: number
+      description: 'Filter by one or multiple campus ID(s) '
+    sort:
+      name: sort
+      in: query
+      schema:
+        type: string
+        default: asc
+        example: ?sort=firstname&sort=lastname,asc
+        enum:
+        - asc
+        - desc
+      description: 'Sort objects returned in the response. Format property,property '
+    trackingId:
+      name: trackingId
+      in: query
+      schema:
+        type: string
+        example: c9:39:37:9a:12:bc
+      description: 'Filter by one or more tracking IDs (device MAC address) <br> alpha characters: lowercase required'
+    page:
+      name: page
+      in: query
+      schema:
+        type: integer
+        default: '0'
+      description: Page you want to retrieve; 0 indexed.
+    buildingId:
+      name: buildingId
+      in: query
+      required: false
+      schema:
+        type: number
+      description: 'Filter by one or multiple building ID(s) '
+    floorId:
+      name: floorId
+      in: query
+      required: false
+      schema:
+        type: number
+      description: Filter by one or multiple floor ID(s)
+    endTime:
+      name: endTime
+      in: query
+      schema:
+        type: string
+        example: ' 2020-11-29T08:00:00.000000Z'
+        format: date-time
+      description: 'Filter by end time. <br> Values are always expressed in UTC (equivalent to an offset of +00:00). <br> The timezone designator is always Z. <br> The hours component must be specified as two digits in 24-hour format. '
+  schemas:
+    Presence-Device:
+      type: object
+      x-examples:
+        example-1:
+          links:
+          - rel: self
+            href: https://apps.cloud.us.kontakt.io/v3/presences?page=0&size=2&sort=entityId,asc
+          content:
+          - companyId: test1234test
+            trackingId: zWUCCm
+            roomName: HmRzRAEetBjB
+            roomId: 25231
+            floorId: 25462
+            floorName: SMgRTPbUvMKe
+            buildingId: 25444
+            buildingName: ylIaJhUSwWxa
+            campusId: 25368
+            campusName: SopczoUhvNDa
+            startTime: 2021-10-06T21:15:46.945+0000
+            endTime: 2021-10-07T11:40:44.946+0000
+            entityId: 25617
+            entityName: UyoUbmwfZfNy
+            entityTypeId: 25537
+            entityTypeName: axOKDoQcQvju
+          page:
+            size: 2
+            totalElements: 1
+            totalPages: 1
+            number: 0
+      properties:
+        content:
+          type: array
+          uniqueItems: true
+          minItems: 1
+          items:
+            type: object
+            properties:
+              companyId:
+                type: string
+                minLength: 1
+                description: ID of user’s company. You can only view information with your company’s id.
+              trackingId:
+                type: string
+                minLength: 1
+                description: Tracking ID of device for which presence was created.
+              roomName:
+                type: string
+                minLength: 1
+                description: Room name.
+              roomId:
+                type: number
+                description: Room Id.
+              floorId:
+                type: number
+                description: Floor Id.
+              floorName:
+                type: string
+                minLength: 1
+                description: Floor name.
+              buildingId:
+                type: number
+                description: Building Id.
+              buildingName:
+                type: string
+                minLength: 1
+                description: Building name.
+              campusId:
+                type: number
+                description: 'Campus Id.
+
+                  '
+              campusName:
+                type: string
+                minLength: 1
+                description: Campus name.
+              startTime:
+                type: string
+                minLength: 1
+                description: Start time.
+              endTime:
+                type: string
+                minLength: 1
+                description: End time.
+              entityId:
+                type: number
+                deprecated: true
+              entityName:
+                type: string
+                minLength: 1
+                deprecated: true
+              entityTypeId:
+                type: number
+                deprecated: true
+              entityTypeName:
+                type: string
+                minLength: 1
+                deprecated: true
+    Presence-History-Devices:
+      description: ''
+      type: object
+      x-examples:
+        example-1:
+          links:
+          - rel: self
+            href: https://apps.cloud.us.kontakt.io/v3/presences/history?page=0&size=2&sort=entityId&entityId=25616&entityName=ZcHyvIOFBrDq&entityTypeId=25536&entityTypeName=MiiXhbNDSamu&attribute=trGgZirxUeJk&trackingId=Hpvrys&roomId=25230&floorId=25461&buildingId=25443&startTime=2021-10-07T07:40:44.588051Z%5BEtc/UTC%5D&endTime=2021-10-07T12:40:44.588051Z%5BEtc/UTC%5D
+          content:
+          - companyId: test1234test
+            trackingId: Hpvrys
+            roomName: XxfyTLeRQykB
+            roomId: 25230
+            floorId: 25461
+            floorName: GKrZKmRKhNJM
+            buildingId: 25443
+            buildingName: pXgeEEGBqlJC
+            campusId: 25367
+            campusName: UoMaZogTqxeP
+            startTime: 2021-10-07T08:40:44.588+0000
+            endTime: 2021-10-07T09:40:44.588+0000
+          - companyId: test1234test
+            trackingId: Hpvrys
+            roomName: XxfyTLeRQykB
+            roomId: 25230
+            floorId: 25461
+            floorName: GKrZKmRKhNJM
+            buildingId: 25443
+            buildingName: pXgeEEGBqlJC
+            campusId: 25367
+            campusName: UoMaZogTqxeP
+            startTime: 2021-10-07T10:40:44.588+0000
+            endTime: 2021-10-07T11:40:44.588+0000
+          page:
+            size: 2
+            totalElements: 2
+            totalPages: 1
+            number: 0
+      properties:
+        content:
+          type: array
+          uniqueItems: true
+          minItems: 1
+          items:
+            type: object
+            properties:
+              companyId:
+                type: string
+                minLength: 1
+                description: ID of user’s company. You can only view information with your company’s id.
+              trackingId:
+                type: string
+                minLength: 1
+                description: Tracking ID of device for which presence was created.
+              roomName:
+                type: string
+                minLength: 1
+                description: Room name.
+              roomId:
+                type: number
+                description: Room Id.
+              floorId:
+                type: number
+                description: Floor Id.
+              floorName:
+                type: string
+                minLength: 1
+                description: Floor name.
+              buildingId:
+                type: number
+                description: Building Id.
+              buildingName:
+                type: string
+                minLength: 1
+                description: Building Name.
+              campusId:
+                type: number
+                description: Campus Id.
+              campusName:
+                type: string
+                minLength: 1
+                description: Campus name.
+              startTime:
+                type: string
+                minLength: 1
+                description: Start time.
+              endTime:
+                type: string
+                minLength: 1
+                description: End time.
+            required:
+            - companyId
+            - trackingId
+            - roomName
+            - roomId
+            - floorId
+            - floorName
+            - buildingId
+            - buildingName
+            - campusId
+            - campusName
+            - startTime
+            - endTime
+      required:
+      - content
+  responses:
+    error-429:
+      description: Rate limit exceeded. The response has no body.
+      headers:
+        Retry-After:
+          description: 'Indicates how long to wait before making a new request. The response includes this header twice: once with an HTTP-date format (e.g., "Wed, 21 Oct 2015 07:28:00 GMT") and once with delay-seconds format (e.g., "120").'
+          schema:
+            type: string
+          required: true
+      content:
+        text/plain: null
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      description: 'Your Kio Cloud API Key is required to be provided in the `Api-Key` header in each API call.
+
+
+        Get your API Key: sign in to **Kio Cloud** > select **Users** > select **Security** > copy your **Server API Key**.'
+      name: Api-Key
+x-: null

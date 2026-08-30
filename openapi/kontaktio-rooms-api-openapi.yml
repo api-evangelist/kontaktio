@@ -1,0 +1,1082 @@
+openapi: 3.2.0
+info:
+  title: Location & Occupancy Rooms API
+  version: '1.0'
+  description: Real-time and historical Kio Cloud apps data including location tracking, occupancy, and telemetry.
+  contact:
+    name: Kontakt.io Support
+    url: https://support.kontakt.io
+    email: support@kontakt.io
+  termsOfService: https://kontakt.io/terms-of-service
+  summary: Real-time and historical Kio Cloud apps data including location tracking, occupancy, and telemetry.
+servers:
+- url: https://apps.cloud.us.kontakt.io
+  description: 'Kio Cloud US '
+- url: https://apps.cloud.uk.kontakt.io
+  description: Kio Cloud UK
+security:
+- API Key - 1: []
+tags:
+- name: Rooms
+paths:
+  /v2/locations/rooms:
+    parameters: []
+    get:
+      summary: List all rooms
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rooms'
+      operationId: get-locations-rooms
+      description: Returns a list of rooms. Resource supports pagination through request parameters.
+      parameters:
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/size'
+      - $ref: '#/components/parameters/sort'
+      - $ref: '#/components/parameters/name'
+      - schema:
+          type: string
+        in: query
+        name: campusName
+        description: Filter by the campus name or one of multiple names
+      - schema:
+          type: string
+        in: query
+        description: Filter by room id or one of multiple roomIds
+        name: id
+      - schema:
+          type: string
+        in: query
+        name: buildingName
+        description: Filter by the building name or one of multiple names
+      x-extension-2: null
+      tags:
+      - Rooms
+      security:
+      - api_key: []
+  /v2/locations/room-sensors:
+    get:
+      summary: List all room sensors
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Room-Sensors'
+              examples:
+                example-1:
+                  value:
+                    “links”:
+                    - “rel”: “first”
+                      “href”: “https://apps-api.test.kontakt.io/v2/locations/room-sensors?page=0&size=20”
+                    - “rel”: “self”
+                      “href”: “https://apps-api.test.kontakt.io/v2/locations/room-sensors?page=0&size=20”
+                    - “rel”: “next”
+                      “href”: “https://apps-api.test.kontakt.io/v2/locations/room-sensors?page=1&size=20”
+                    - “rel”: “last”
+                      “href”: “https://apps-api.test.kontakt.io/v2/locations/room-sensors?page=1&size=20”
+                    “content”:
+                    - “id”: 2542804
+                      “x”: 2.25
+                      “y”: 1.65625
+                      “name”: “XXX”
+                      “inbounds”: []
+                      “outbounds”: []
+                      “type”: “Traffic”
+                      “room”:
+                        “id”: 2542666
+                      “status”: “Unassigned”
+                    - “id”: 2542800
+                      “x”: 2.90625
+                      “y”: 12.171875
+                      “name”: “XXXX”
+                      “inbounds”: []
+                      “outbounds”: []
+                      “type”: “Traffic”
+                      “room”:
+                        “id”: 2541937
+                      “status”: “Unassigned”
+                    - “id”: 2448055
+                      “x”: 11.4375
+                      “y”: 11.375
+                      “trackingId”: “ef:d1:f5:e3:fb:cf”
+                      “inbounds”: []
+                      “outbounds”: []
+                      “type”: “Static”
+                      “room”:
+                        “id”: 2448035
+                      “status”: “Assigned”
+                    - “id”: 2542797
+                      “x”: 6.34375
+                      “y”: 1.046875
+                      “name”: “Test XXX1"
+                      “inbounds”: []
+                      “outbounds”: []
+                      “type”: “Traffic”
+                      “room”:
+                        “id”: 2447764
+                      “status”: “Unassigned”
+                    - “id”: 2447779
+                      “x”: 2.600747
+                      “y”: 9.630371
+                      “trackingId”: “f1:cf:09:22:dd:1f”
+                      “type”: “Static”
+                      “room”:
+                        “id”: 2447763
+                      “status”: “Assigned”
+                    - “id”: 2542796
+                      “x”: 3.4217899999999997
+                      “y”: 5.67749
+                      “trackingId”: “f6:02:58:91:04:ab”
+                      “name”: “Test 3"
+                      “inbounds”: []
+                      “outbounds”: []
+                      “type”: “Traffic”
+                      “room”:
+                        “id”: 2446879
+                      “status”: “Assigned”
+                    - “id”: 2542795
+                      “x”: 2.8748800495754185
+                      “y”: 5.75
+                      “name”: “TEST1 EMPTY BEAM”
+                      “inbounds”: []
+                      “outbounds”: []
+                      “room”:
+                        “id”: 2446879
+                      “status”: “Unassigned”
+                    - “id”: 2542775
+                      “x”: 4.099009622190768
+                      “y”: 5.949553771661555
+                      “name”: “Test”
+                      “inbounds”: []
+                      “outbounds”: []
+                      “room”:
+                        “id”: 2446879
+                      “status”: “Unassigned”
+                    - “id”: 2542794
+                      “name”: “Test”
+                      “inbounds”: []
+                      “outbounds”: []
+                      “room”:
+                        “id”: 2446879
+                      “status”: “Unassigned”
+                    - “id”: 2542774
+                      “name”: “Test”
+                      “inbounds”: []
+                      “outbounds”: []
+                      “room”:
+                        “id”: 2446878
+                      “status”: “Unassigned”
+                    - “id”: 2447186
+                      “x”: 10.125
+                      “y”: 8.58374
+                      “trackingId”: “fd:5b:1e:06:70:14”
+                      “inbounds”: []
+                      “outbounds”: []
+                      “type”: “Static”
+                      “room”:
+                        “id”: 2446878
+                      “status”: “Assigned”
+                    - “id”: 2542801
+                      “x”: 9.46875
+                      “y”: 2.067871
+                      “name”: “RRRR 123"
+                      “inbounds”: []
+                      “outbounds”: []
+                      “type”: “Traffic”
+                      “room”:
+                        “id”: 2446875
+                      “status”: “Unassigned”
+                    - “id”: 2542799
+                      “x”: 10.375
+                      “y”: 1.21875
+                      “name”: “Test 4444 XXX”
+                      “inbounds”: []
+                      “outbounds”: []
+                      “type”: “Traffic”
+                      “room”:
+                        “id”: 2446875
+                      “status”: “Unassigned”
+                    - “id”: 2542798
+                      “x”: 6.1764405
+                      “y”: 17.031886
+                      “name”: “XXX 123123 sadf asdf “
+                      “inbounds”: []
+                      “outbounds”: []
+                      “type”: “Traffic”
+                      “room”:
+                        “id”: 2441277
+                      “status”: “Unassigned”
+                    - “id”: 2447155
+                      “x”: 8.40625
+                      “y”: 15.125071803066383
+                      “trackingId”: “be:a2:80:01:02:03”
+                      “type”: “Static”
+                      “room”:
+                        “id”: 2441276
+                      “status”: “Assigned”
+                    - “id”: 2540974
+                      “x”: 9.982244
+                      “y”: 16.8439795
+                      “trackingId”: “cc:b4:5d:db:51:49"
+                      “type”: “Static”
+                      “room”:
+                        “id”: 2441276
+                      “status”: “Assigned”
+                    - “id”: 2446559
+                      “x”: 11.688361592803698
+                      “y”: 18.875
+                      “trackingId”: “c5:0d:7f:1b:97:27”
+                      “type”: “Static”
+                      “room”:
+                        “id”: 2441276
+                      “status”: “Assigned”
+                    - “id”: 2447175
+                      “x”: 8.8125
+                      “y”: 18.90625
+                      “trackingId”: “f0:1b:f7:e0:d3:e9"
+                      “type”: “Static”
+                      “room”:
+                        “id”: 2441276
+                      “status”: “Assigned”
+                    - “id”: 2542776
+                      “x”: 3.9375
+                      “y”: 18.65625
+                      “type”: “Traffic”
+                      “room”:
+                        “id”: 2441275
+                      “status”: “Unassigned”
+                    - “id”: 2436974
+                      “x”: 19.4
+                      “y”: 27.1
+                      “trackingId”: “cb:68:7b:d9:b3:c7"
+                      “inbounds”: []
+                      “outbounds”: []
+                      “type”: “Static”
+                      “room”:
+                        “id”: 2436755
+                      “status”: “Assigned”
+                    “page”:
+                      “size”: 20
+                      “totalElements”: 32
+                      “totalPages”: 2
+                      “number”: 0
+      operationId: get-v2-locations-room-sensors
+      description: Returns a list of sensors located in all rooms.
+      tags:
+      - Rooms
+      security:
+      - api_key: []
+      parameters:
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/size'
+      - $ref: '#/components/parameters/sort'
+components:
+  schemas:
+    Room-Sensors:
+      description: ''
+      type: object
+      x-examples:
+        example-1:
+          links:
+          - rel: self
+            href: http://apps.cloud.us.kontakt.io/v2/locations/room-sensors?page=0&size=20
+          content:
+          - id: 128059
+            x: 8.650711325863393
+            y: 2.969598029016233
+            z: 3
+            trackingId: c4:0a:ef:9e:71:03
+            inbounds: []
+            outbounds: []
+            type: Static
+            room:
+              id: 127236
+            status: Assigned
+          - id: 128058
+            x: 8.591470391603178
+            y: 7.2133787526002004
+            z: 3.1
+            trackingId: c9:39:37:9a:12:bc
+            inbounds: []
+            outbounds: []
+            type: Static
+            room:
+              id: 127236
+            status: Assigned
+          - id: 128075
+            x: 12.2430005
+            y: 8.021051
+            z: 3.2
+            trackingId: eb:90:e8:f4:b4:8b
+            type: Static
+            room:
+              id: 126956
+            status: Assigned
+          - id: 128594
+            x: 11.35313563325963
+            y: 13.668869216741786
+            trackingId: fa:bf:dc:81:9d:9e
+            name: ''
+            inbounds:
+            - id: 619e418cd272f240e3d00518
+              name: Conference and Spaces
+            outbounds: []
+            type: Traffic
+            room:
+              id: 94110
+            status: Assigned
+          - id: 106814
+            x: 12.399999999999999
+            y: 12.85
+            trackingId: d7:23:8e:76:44:65
+            inbounds: []
+            outbounds: []
+            type: Static
+            room:
+              id: 94110
+            status: Assigned
+          - id: 102894
+            x: 3.8124449255128443
+            y: 7.53125
+            trackingId: d6:3c:5d:b2:7c:a9
+            type: Static
+            room:
+              id: 94108
+            status: Assigned
+          - id: 127099
+            x: 2.7
+            y: 10.399999999999999
+            trackingId: f2:24:0f:2f:82:4f
+            type: Static
+            room:
+              id: 94107
+            status: Assigned
+          - id: 94055
+            x: 11.412103845330275
+            y: 15.893985791575489
+            trackingId: e0:91:1b:d7:42:07
+            inbounds: []
+            outbounds: []
+            type: Static
+            room:
+              id: 94105
+            status: Assigned
+          page:
+            size: 20
+            totalElements: 8
+            totalPages: 1
+            number: 0
+      properties:
+        content:
+          type: array
+          uniqueItems: true
+          minItems: 1
+          items:
+            type: object
+            properties:
+              id:
+                type: number
+              x:
+                type: number
+              y:
+                type: number
+              z:
+                type: number
+              trackingId:
+                type: string
+                minLength: 1
+              inbounds:
+                type: array
+                items:
+                  type: object
+              outbounds:
+                type: array
+                items:
+                  type: object
+              type:
+                type: string
+                minLength: 1
+              room:
+                type: object
+                properties:
+                  id:
+                    type: number
+                required:
+                - id
+              status:
+                type: string
+                minLength: 1
+            required:
+            - id
+            - x
+            - y
+            - z
+            - trackingId
+            - type
+            - status
+      required:
+      - content
+    Rooms:
+      type: object
+      x-examples:
+        example-1:
+          links:
+          - rel: self
+            href: http://apps.cloud.us.kontakt.io/v2/locations/rooms?page=0&size=200
+          content:
+          - id: 94105
+            name: Hospital Lab
+            roomType: ROOM
+            floor:
+              id: 94215
+              name: Lab_floor_prod1
+              height: 17.8
+              width: 14.6
+              properties:
+                gridWidth: 4
+                gridBounds:
+                  boundsLat:
+                    north: 22.2
+                    south: -4.3
+                  boundsLng:
+                    east: 23
+                    west: -8.4
+                gridDensity: 1
+                outlineCreated: true
+              building:
+                id: 94194
+                name: Lab
+              level: 0
+              xyGeojson:
+                type: Feature
+                geometry:
+                  type: Polygon
+                  coordinates:
+                  - - - 0
+                      - 17.8
+                    - - 14.6
+                      - 17.8
+                    - - 14.6
+                      - 0
+                    - - 0
+                      - 0
+                    - - 0
+                      - 17.8
+                properties: {}
+              imageXyGeojson:
+                type: Feature
+                geometry:
+                  type: Polygon
+                  coordinates:
+                  - - - -0.4
+                      - 18.2
+                    - - 14.9
+                      - 18.2
+                    - - 14.9
+                      - -0.3
+                    - - -0.4
+                      - -0.3
+                    - - -0.4
+                      - 18.2
+              gateways:
+              - id: 127074
+                x: 12.282123588848002
+                y: 8.34375
+                virtual: false
+                sourceId: MvsGNG
+              - id: 102401
+                x: 1.0078084026993313
+                y: 11.355794982568481
+                virtual: false
+                sourceId: MviZtK
+              - id: 102414
+                x: 14.341409869048508
+                y: 11.162493231800077
+                virtual: false
+                sourceId: MvGzAq
+              - id: 102416
+                x: 10.091405943053076
+                y: 0.38784292535368436
+                virtual: false
+                sourceId: Mv9wt5
+              - id: 102415
+                x: 14.359377868110467
+                y: 2.3125
+                virtual: false
+                sourceId: Mvpg44
+              - id: 102418
+                x: 9.778128891734386
+                y: 14.087778686994282
+                virtual: false
+                sourceId: MvBgL8
+              - id: 102417
+                x: 8.828125
+                y: 9.52476916672415
+                virtual: false
+                sourceId: MvrqG5
+              - id: 102419
+                x: 5.9687475416195985
+                y: 13.865652072799694
+                virtual: false
+                sourceId: MvilXy
+              - id: 102421
+                x: 5.045309290681559
+                y: 8.663858739523844
+                virtual: false
+                sourceId: Mv1640
+              - id: 94135
+                x: 12.489064275964456
+                y: 14.351766260476156
+                virtual: false
+                sourceId: Mv4NFT
+              - id: 102394
+                x: 13.524218477314122
+                y: 17.565417914963753
+                virtual: false
+                sourceId: MvmnL3
+              - id: 102396
+                x: 14.343752868110467
+                y: 6.765625
+                virtual: false
+                sourceId: MvPcWo
+              - id: 102395
+                x: 14.314065299588373
+                y: 12.9296875
+                virtual: false
+                sourceId: MvgOmp
+              - id: 102398
+                x: 6.085932992969264
+                y: 2.3054890545997697
+                virtual: false
+                sourceId: MvhNRo
+              - id: 102397
+                x: 7.359370902699331
+                y: 8.079694268199923
+                virtual: false
+                sourceId: MvWT3H
+              - id: 102400
+                x: 1.779682480456056
+                y: 6.434068952951547
+                virtual: false
+                sourceId: Mvs8gb
+              - id: 102399
+                x: 6.857812806946925
+                y: 17.55378406516215
+                virtual: false
+                sourceId: MvECI7
+            roomNumber: 0
+            roomAttributes: []
+            roomSensors:
+            - id: 94055
+              x: 11.412103845330275
+              y: 15.893985791575489
+              trackingId: e0:91:1b:d7:42:07
+              inbounds: []
+              outbounds: []
+              type: Static
+              status: Assigned
+            xyGeojson:
+              type: Feature
+              geometry:
+                type: Polygon
+                coordinates:
+                - - - 10.2
+                    - 14
+                  - - 10.2
+                    - 17.8
+                  - - 14.6
+                    - 17.8
+                  - - 14.6
+                    - 14
+                  - - 10.2
+                    - 14
+              properties: {}
+          page:
+            size: 200
+            totalElements: 1
+            totalPages: 1
+            number: 0
+      examples:
+      - content:
+        - id: 0
+          name: string
+          roomType: string
+          floor:
+            id: 0
+            name: string
+            height: 0
+            width: 0
+            properties:
+              gridWidth: 0
+              gridBounds:
+                boundsLat:
+                  north: 0
+                  south: 0
+                boundsLng:
+                  east: 0
+                  west: 0
+              gridDensity: 0
+              outlineCreated: true
+            building:
+              id: 0
+              name: string
+            level: 0
+            xyGeojson:
+              type: string
+              geometry:
+                type: string
+                coordinates:
+                - '0':
+                  - '0':
+                    - {}
+                    '1':
+                    - {}
+                    '2':
+                    - {}
+                    '3':
+                    - {}
+                    '4':
+                    - {}
+              properties: {}
+            imageXyGeojson:
+              type: string
+              geometry:
+                type: string
+                coordinates:
+                - '0':
+                  - '0':
+                    - {}
+                    '1':
+                    - {}
+                    '2':
+                    - {}
+                    '3':
+                    - {}
+                    '4':
+                    - {}
+            gateways:
+            - id: 0
+              x: 0
+              y: 0
+              virtual: true
+              sourceId: string
+          roomNumber: 0
+          roomAttributes:
+          - {}
+          roomSensors:
+          - id: 0
+            x: 0
+            y: 0
+            trackingId: string
+            inbounds:
+            - {}
+            outbounds:
+            - {}
+            type: string
+            status: string
+          xyGeojson:
+            type: string
+            geometry:
+              type: string
+              coordinates:
+              - '0':
+                - '0':
+                  - {}
+                  '1':
+                  - {}
+                  '2':
+                  - {}
+                  '3':
+                  - {}
+                  '4':
+                  - {}
+            properties: {}
+      properties:
+        content:
+          type: array
+          uniqueItems: true
+          minItems: 1
+          items:
+            type: object
+            properties:
+              id:
+                type: number
+              name:
+                type: string
+                minLength: 1
+              roomType:
+                type: string
+                minLength: 1
+                default: ROOM
+                enum:
+                - ROOM
+                - CORRIDOR
+              floor:
+                type: object
+                description: Floor details
+                properties:
+                  id:
+                    type: number
+                  name:
+                    type: string
+                    minLength: 1
+                  height:
+                    type: number
+                  width:
+                    type: number
+                  properties:
+                    type: object
+                    required:
+                    - gridWidth
+                    - gridBounds
+                    - gridDensity
+                    - outlineCreated
+                    description: Additional properties of the room
+                    properties:
+                      gridWidth:
+                        type: number
+                      gridBounds:
+                        type: object
+                        required:
+                        - boundsLat
+                        - boundsLng
+                        properties:
+                          boundsLat:
+                            type: object
+                            required:
+                            - north
+                            - south
+                            properties:
+                              north:
+                                type: number
+                              south:
+                                type: number
+                          boundsLng:
+                            type: object
+                            required:
+                            - east
+                            - west
+                            properties:
+                              east:
+                                type: number
+                              west:
+                                type: number
+                      gridDensity:
+                        type: number
+                      outlineCreated:
+                        type: boolean
+                  building:
+                    type: object
+                    description: Building details
+                    required:
+                    - id
+                    - name
+                    properties:
+                      id:
+                        type: number
+                      name:
+                        type: string
+                        minLength: 1
+                  level:
+                    type: number
+                  xyGeojson:
+                    type: object
+                    required:
+                    - type
+                    - geometry
+                    - properties
+                    properties:
+                      type:
+                        type: string
+                        minLength: 1
+                      geometry:
+                        type: object
+                        required:
+                        - type
+                        - coordinates
+                        properties:
+                          type:
+                            type: string
+                            minLength: 1
+                          coordinates:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                '0':
+                                  type: array
+                                  uniqueItems: true
+                                  items:
+                                    type: object
+                                    properties:
+                                      '0':
+                                        type: array
+                                        uniqueItems: true
+                                        items:
+                                          type: object
+                                      '1':
+                                        type: array
+                                        uniqueItems: true
+                                        items:
+                                          type: object
+                                      '2':
+                                        type: array
+                                        uniqueItems: true
+                                        items:
+                                          type: object
+                                      '3':
+                                        type: array
+                                        uniqueItems: true
+                                        items:
+                                          type: object
+                                      '4':
+                                        type: array
+                                        uniqueItems: true
+                                        items:
+                                          type: object
+                      properties:
+                        type: object
+                  imageXyGeojson:
+                    type: object
+                    required:
+                    - type
+                    - geometry
+                    properties:
+                      type:
+                        type: string
+                        minLength: 1
+                      geometry:
+                        type: object
+                        required:
+                        - type
+                        - coordinates
+                        properties:
+                          type:
+                            type: string
+                            minLength: 1
+                          coordinates:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                '0':
+                                  type: array
+                                  uniqueItems: true
+                                  items:
+                                    type: object
+                                    properties:
+                                      '0':
+                                        type: array
+                                        uniqueItems: true
+                                        items:
+                                          type: object
+                                      '1':
+                                        type: array
+                                        uniqueItems: true
+                                        items:
+                                          type: object
+                                      '2':
+                                        type: array
+                                        uniqueItems: true
+                                        items:
+                                          type: object
+                                      '3':
+                                        type: array
+                                        uniqueItems: true
+                                        items:
+                                          type: object
+                                      '4':
+                                        type: array
+                                        uniqueItems: true
+                                        items:
+                                          type: object
+                  gateways:
+                    type: array
+                    uniqueItems: true
+                    minItems: 1
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                        x:
+                          type: number
+                        y:
+                          type: number
+                        virtual:
+                          type: boolean
+                        sourceId:
+                          type: string
+                          minLength: 1
+                      required:
+                      - id
+                      - x
+                      - y
+                      - virtual
+                      - sourceId
+                required:
+                - id
+                - name
+                - height
+                - width
+                - properties
+                - building
+                - level
+                - xyGeojson
+                - imageXyGeojson
+                - gateways
+              roomNumber:
+                type: number
+              roomAttributes:
+                type: array
+                items:
+                  type: object
+              roomSensors:
+                type: array
+                uniqueItems: true
+                minItems: 1
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    x:
+                      type: number
+                    y:
+                      type: number
+                    trackingId:
+                      type: string
+                      minLength: 1
+                    inbounds:
+                      type: array
+                      items:
+                        type: object
+                    outbounds:
+                      type: array
+                      items:
+                        type: object
+                    type:
+                      type: string
+                      minLength: 1
+                    status:
+                      type: string
+                      minLength: 1
+                  required:
+                  - id
+                  - x
+                  - y
+                  - trackingId
+                  - type
+                  - status
+              xyGeojson:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    minLength: 1
+                  geometry:
+                    type: object
+                    required:
+                    - type
+                    - coordinates
+                    properties:
+                      type:
+                        type: string
+                        minLength: 1
+                      coordinates:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            '0':
+                              type: array
+                              uniqueItems: true
+                              items:
+                                type: object
+                                properties:
+                                  '0':
+                                    type: array
+                                    uniqueItems: true
+                                    items:
+                                      type: object
+                                  '1':
+                                    type: array
+                                    uniqueItems: true
+                                    items:
+                                      type: object
+                                  '2':
+                                    type: array
+                                    uniqueItems: true
+                                    items:
+                                      type: object
+                                  '3':
+                                    type: array
+                                    uniqueItems: true
+                                    items:
+                                      type: object
+                                  '4':
+                                    type: array
+                                    uniqueItems: true
+                                    items:
+                                      type: object
+                  properties:
+                    type: object
+                required:
+                - type
+                - geometry
+                - properties
+            required:
+            - id
+            - name
+            - roomType
+            - roomNumber
+      required:
+      - content
+  parameters:
+    size:
+      name: size
+      in: query
+      schema:
+        type: string
+        default: '20'
+      description: Size of the page to retrieve.
+    sort:
+      name: sort
+      in: query
+      schema:
+        type: string
+        default: asc
+        example: ?sort=firstname&sort=lastname,asc
+        enum:
+        - asc
+        - desc
+      description: 'Sort objects returned in the response. Format property,property '
+    page:
+      name: page
+      in: query
+      schema:
+        type: integer
+        default: '0'
+      description: Page you want to retrieve; 0 indexed.
+    name:
+      name: name
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Filter by name
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      description: 'Your Kio Cloud API Key is required to be provided in the `Api-Key` header in each API call.
+
+
+        Get your API Key: sign in to **Kio Cloud** > select **Users** > select **Security** > copy your **Server API Key**.'
+      name: Api-Key
+x-: null

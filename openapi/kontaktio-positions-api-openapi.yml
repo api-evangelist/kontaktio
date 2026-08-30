@@ -1,0 +1,435 @@
+openapi: 3.2.0
+info:
+  title: Location & Occupancy Positions API
+  version: '1.0'
+  description: Real-time and historical Kio Cloud apps data including location tracking, occupancy, and telemetry.
+  contact:
+    name: Kontakt.io Support
+    url: https://support.kontakt.io
+    email: support@kontakt.io
+  termsOfService: https://kontakt.io/terms-of-service
+  summary: Real-time and historical Kio Cloud apps data including location tracking, occupancy, and telemetry.
+servers:
+- url: https://apps.cloud.us.kontakt.io
+  description: 'Kio Cloud US '
+- url: https://apps.cloud.uk.kontakt.io
+  description: Kio Cloud UK
+security:
+- API Key - 1: []
+tags:
+- name: Positions
+paths:
+  /v2/positions:
+    parameters: []
+    get:
+      summary: Retrieve device last position
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Position-Device'
+      operationId: get-positions
+      parameters:
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/size'
+      - $ref: '#/components/parameters/sort'
+      - schema:
+          type: number
+          example: 94215
+        in: query
+        name: floorId
+        description: Filter by one or multiple floor ID(s).
+      - schema:
+          type: number
+          example: 94194
+        in: query
+        name: buildingId
+        description: 'Filter by one or multiple building ID(s). '
+      - schema:
+          type: number
+          example: 93915
+        in: query
+        name: campusId
+        description: Filter by one or multiple campus ID(s).
+      - schema:
+          type: string
+          example: dd:24:d0:82:3d:7c
+        in: query
+        name: trackingId
+        description: 'Filter by one or multiple tracking IDs (MAC address) of a device; alpha characters: lowercase required'
+      - schema:
+          type: boolean
+          enum:
+          - 'true'
+          - 'false'
+          - 'null'
+        in: query
+        name: lost
+        description: Filter by lost flag.
+      description: 'Returns the last postion of a Kontakt.io Tag device (BLE beacon) by trackingId (MAC address) or multiple trackingIds.
+
+        '
+      tags:
+      - Positions
+      security:
+      - api_key: []
+  /v2/positions/history:
+    parameters: []
+    get:
+      summary: Retrieve device position history
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Position-Device-History'
+        '429':
+          $ref: '#/components/responses/error-429'
+      operationId: get-positions-history
+      description: "Returns the location history for a device; by trackingId (MAC address). \n\n> **IMPORTANT**\n> <br> - **trackingID** must be in **all lower case** (example: d6:3c:5d:b2:7c:a9) <br>\n> <br> - If **startTime** is empty, automatically sets startTime to **current time -15 minutes** <br>\n> <br> - **endTime** is not required, but can used it to limit the displayed data <br>\n> <br> - Difference between **startTime** to **endTime** cannot exceed **7 days** <br>\n> <br> - **Size** parameter specifies how many records will be displayed (20 by default). If there are records that haven't been displayed because of the size limit, the response will be paginated - it will contain links array, with a link to the next page, and page.hasNext value will be True.<br>"
+      parameters:
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/size'
+      - $ref: '#/components/parameters/sort'
+      - $ref: '#/components/parameters/floorId'
+      - schema:
+          type: string
+          example: '2020-11-27T08:00:00.000000Z'
+        in: query
+        name: startTime
+        description: ISO 8601 Timestamp - if not provided defaults to time at 15 minutes ago
+      - schema:
+          type: string
+          example: ' 2020-11-27T08:45:00.000000Z'
+        in: query
+        name: endTime
+        description: Historical positions end time (ISO 8601 Timestamp) - difference between startTime and endTime cannot exceed 7 days
+      - $ref: '#/components/parameters/lost'
+      - schema:
+          type: string
+          example: d6:3c:5d:b2:7c:a9
+        in: query
+        name: trackingId
+        description: 'Filter by one or more tracking IDs (device MAC address) <br> alpha characters: lowercase required'
+        required: true
+      tags:
+      - Positions
+      security:
+      - api_key: []
+components:
+  parameters:
+    size:
+      name: size
+      in: query
+      schema:
+        type: string
+        default: '20'
+      description: Size of the page to retrieve.
+    sort:
+      name: sort
+      in: query
+      schema:
+        type: string
+        default: asc
+        example: ?sort=firstname&sort=lastname,asc
+        enum:
+        - asc
+        - desc
+      description: 'Sort objects returned in the response. Format property,property '
+    page:
+      name: page
+      in: query
+      schema:
+        type: integer
+        default: '0'
+      description: Page you want to retrieve; 0 indexed.
+    floorId:
+      name: floorId
+      in: query
+      required: false
+      schema:
+        type: number
+      description: Filter by one or multiple floor ID(s)
+    lost:
+      name: lost
+      in: query
+      required: false
+      schema:
+        type: boolean
+        enum:
+        - 'true'
+        - 'false'
+        - 'null'
+      description: Filter by lost flag.
+  schemas:
+    Position-Device-History:
+      type: object
+      x-examples:
+        Example 1:
+          content:
+          - trackingId: OCwMCHpEfXma
+            level: floor
+            timestamp: '2023-03-07T13:04:35.860Z'
+            floorId: 11094
+            roomId: 11114
+            x: 37.358967
+            y: 80.027855
+            z: 96.2589
+            lat: 54.37634759607008
+            lng: 58.947371450591156
+            epsg3857X: 13.944785826919869
+            epsg3857Y: 13.637746494967452
+            metadata:
+              key1: value1
+              key2: value2
+            origin: oSIHud
+            lost: false
+            irAssisted: true
+            moving: true
+            roomName: cCrzxoEFzDQL
+            floorName: LRMXgOZUwhNp
+            buildingId: 11074
+            buildingName: YLwIwLZiAtRH
+            campusId: 11014
+            campusName: qXOmYHlErqwD
+      title: Position Device History
+      description: Historical location (position) information for a particular device.
+      properties:
+        content:
+          type: array
+          items:
+            type: object
+            properties:
+              trackingId:
+                type: string
+                description: MAC address of the device.
+                example: 00:60:81:1d:28:62
+              level:
+                type: string
+                x-stoplight:
+                  id: ffs1lpcr0w3gl
+                description: Reference purposes only; floor.
+                example: floor
+              timestamp:
+                type: string
+                description: Timestamp of device location. ISO 8601 UTC format (yyyy-mm-ddThh:mm:sssz).
+                example: 2023-07-02T02:46:39.746Z", 15
+              floorId:
+                type: integer
+                description: ID of the floor location.
+                example: 94215
+              roomId:
+                type: integer
+                description: ID of the room location.
+                example: 94109
+              x:
+                type: number
+                description: X coordinate position.
+                example: 7.960388382814483, 16
+              y:
+                type: number
+                description: Y coordinate position.
+                example: 13.771423891085552, 17
+              origin:
+                type: string
+                description: Identifies the source of the position calculation when the position is calculated by a third-party.
+              lost:
+                type: boolean
+                description: Lost flag. Set to true when the device is out of range.
+              irAssisted:
+                type: boolean
+                description: Flag that indicates whether device was located using IR technology.
+              moving:
+                type: boolean
+                description: Flag that indicates whether device was moving when the position was calculated.
+              roomName:
+                type: string
+                description: Name of the room location.
+                example: Lobby
+              floorName:
+                type: string
+                description: Name of the floor location.
+                example: Ground Floor
+              buildingId:
+                type: integer
+                description: ID of the building location.
+                example: 94194
+              buildingName:
+                type: string
+                description: Name of the building location.
+                example: Main Building
+              campusId:
+                type: integer
+                description: ID of the campus location.
+                example: 93915
+              campusName:
+                type: string
+                description: Name of the campus location.
+                example: Main Campus
+      examples:
+      - content:
+        - trackingId: 00:60:81:1d:28:62
+          level: floor
+          timestamp: 2023-07-02T02:46:39.746Z", 15
+          floorId: 94215
+          roomId: 94109
+          x: 7.960388382814483, 16
+          y: 13.771423891085552, 17
+          origin: string
+          lost: true
+          irAssisted: true
+          moving: true
+          roomName: Lobby
+          floorName: Ground Floor
+          buildingId: 94194
+          buildingName: Main Building
+          campusId: 93915
+          campusName: Main Campus
+    Position-Device:
+      type: object
+      x-examples:
+        Example 1:
+          content:
+          - companyId: test1234test
+            campusId: 8786189617504392000
+            buildingId: 4702332497649176000
+            floorId: 2909726066230122500
+            roomId: 2328560514289450000
+            trackingId: ToEWEIYmPMBI
+            lastUpdate: '2023-03-07T13:06:36.168Z'
+            x: 12.09620095447077
+            y: 86.90902534938057
+            z: 17.541993614631735
+            lat: 22.899344754799024
+            lng: 82.59240943567592
+            type: rDFiv
+            origin: OjigJ
+            lost: false
+            irAssisted: true
+            moving: false
+            metadata:
+              TdSpaJ: cUAnjX
+              wpaIsX: TKZSAK
+      description: Location information about the last position of a device.
+      title: Position Device
+      examples:
+      - content:
+        - companyId: a55b4f8236c9
+          campusId: 93915
+          campusName: Main Campus
+          buildingId: 94194
+          buildingName: Lab Building
+          floorId: 94215
+          floorName: Ground Floor
+          roomId: 94109
+          roomName: Entrance
+          trackingId: 00:60:81:1d:28:62
+          lastUpdate: '2023-07-02T02:46:39.746Z'
+          x: 7.960388382814483
+          y: 13.771423891085552
+          type: pSPNP
+          lost: true
+          irAssisted: false
+          moving: false
+      properties:
+        content:
+          type: array
+          items:
+            type: object
+            properties:
+              companyId:
+                type: string
+                description: ID of user’s company. You can only view positions with your company’s id.
+                example: a55b4f8236c9
+              campusId:
+                type: integer
+                description: ID of the campus.
+                example: 93915
+              campusName:
+                type: string
+                x-stoplight:
+                  id: u4kntbbmarkzl
+                description: Name of the campus.
+                example: Main Campus
+              buildingId:
+                type: integer
+                description: ID of the building.
+                example: 94194
+              buildingName:
+                type: string
+                x-stoplight:
+                  id: 7ymclrl754ga0
+                description: Name of the building.
+                example: Main Building
+              floorId:
+                type: integer
+                description: ID of the floor.
+                example: 94194
+              floorName:
+                type: string
+                x-stoplight:
+                  id: ew6mgo9yk6oeu
+                description: Name of the floor.
+                example: Ground Floor
+              roomId:
+                type: integer
+                description: ID of the room.
+                example: 94109
+              roomName:
+                type: string
+                x-stoplight:
+                  id: pyx36g52cd20e
+                description: Name of the room.
+                example: Lobby
+              trackingId:
+                type: string
+                description: MAC address of the device.
+                example: 00:1a:2b:3c:4d:5e
+              lastUpdate:
+                type: string
+                description: Time of the last position update. ISO 8601 UTC format (yyyy-mm-ddThh:mm:sssz).
+                example: '2023-08-25T10:13:46.869Z'
+              x:
+                type: number
+                example: 12.09620095447077
+                description: X coordinate position.
+              y:
+                type: number
+                example: 86.90902534938057
+                description: X coordinate position.
+              origin:
+                type: string
+                description: Identifies the source of the position calculation when the position is calculated by a third-party.
+              lost:
+                type: boolean
+                description: Lost flag. Set to true when the device is out of range.
+              irAssisted:
+                type: boolean
+                description: Flag that indicates whether device was located using IR technology.
+              moving:
+                type: boolean
+                description: Flag that indicates whether device was moving when the position was calculated.
+  responses:
+    error-429:
+      description: Rate limit exceeded. The response has no body.
+      headers:
+        Retry-After:
+          description: 'Indicates how long to wait before making a new request. The response includes this header twice: once with an HTTP-date format (e.g., "Wed, 21 Oct 2015 07:28:00 GMT") and once with delay-seconds format (e.g., "120").'
+          schema:
+            type: string
+          required: true
+      content:
+        text/plain: null
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      description: 'Your Kio Cloud API Key is required to be provided in the `Api-Key` header in each API call.
+
+
+        Get your API Key: sign in to **Kio Cloud** > select **Users** > select **Security** > copy your **Server API Key**.'
+      name: Api-Key
+x-: null

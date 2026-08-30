@@ -1,0 +1,1355 @@
+openapi: 3.2.0
+info:
+  title: 'Location & Occupancy Occupancy: Room API'
+  version: '1.0'
+  description: Real-time and historical Kio Cloud apps data including location tracking, occupancy, and telemetry.
+  contact:
+    name: Kontakt.io Support
+    url: https://support.kontakt.io
+    email: support@kontakt.io
+  termsOfService: https://kontakt.io/terms-of-service
+  summary: Real-time and historical Kio Cloud apps data including location tracking, occupancy, and telemetry.
+servers:
+- url: https://apps.cloud.us.kontakt.io
+  description: 'Kio Cloud US '
+- url: https://apps.cloud.uk.kontakt.io
+  description: Kio Cloud UK
+security:
+- API Key - 1: []
+tags:
+- name: 'Occupancy: Room'
+paths:
+  /v3/occupancy/rooms:
+    get:
+      summary: Retrieve current room occupancy
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Occupancy-Room-Current'
+              examples:
+                all rooms:
+                  value:
+                    links:
+                    - rel: self
+                      href: http://apps.cloud.us.kontakt.io/v3/occupancy/rooms?page=0&size=20
+                    content:
+                    - roomId: 94105
+                      roomName: Hospital Lab
+                      floorId: 94215
+                      floorName: Lab_floor_prod1
+                      buildingId: 94194
+                      buildingName: Lab
+                      campusId: 93915
+                      campusName: K.io_Lab_fixed
+                      lastUpdate: '2021-11-28T16:11:09.106Z'
+                      occupancy: 0
+                    - roomId: 94106
+                      lastUpdate: '2021-11-22T15:33:21.702Z'
+                      occupancy: 0
+                    - roomId: 94107
+                      roomName: Grace Hopper Conference Room
+                      floorId: 94215
+                      floorName: Lab_floor_prod1
+                      buildingId: 94194
+                      buildingName: Lab
+                      campusId: 93915
+                      campusName: K.io_Lab_fixed
+                      lastUpdate: '2021-11-23T14:13:26.816Z'
+                      occupancy: 0
+                    - roomId: 94108
+                      roomName: Cafeteria
+                      floorId: 94215
+                      floorName: Lab_floor_prod1
+                      buildingId: 94194
+                      buildingName: Lab
+                      campusId: 93915
+                      campusName: K.io_Lab_fixed
+                      lastUpdate: '2021-11-28T16:10:46.938Z'
+                      occupancy: 0
+                    - roomId: 94109
+                      roomName: Entrance
+                      floorId: 94215
+                      floorName: Lab_floor_prod1
+                      buildingId: 94194
+                      buildingName: Lab
+                      campusId: 93915
+                      campusName: K.io_Lab_fixed
+                      lastUpdate: '2021-11-28T16:09:51.199Z'
+                      occupancy: 7
+                    - roomId: 94110
+                      roomName: Margaret Hamilton Conference Room
+                      floorId: 94215
+                      floorName: Lab_floor_prod1
+                      buildingId: 94194
+                      buildingName: Lab
+                      campusId: 93915
+                      campusName: K.io_Lab_fixed
+                      lastUpdate: '2021-11-28T16:10:57.444Z'
+                      occupancy: 0
+                    - roomId: 126956
+                      roomName: Workstations
+                      floorId: 94215
+                      floorName: Lab_floor_prod1
+                      buildingId: 94194
+                      buildingName: Lab
+                      campusId: 93915
+                      campusName: K.io_Lab_fixed
+                      lastUpdate: '2021-11-28T16:11:14.434Z'
+                      occupancy: 0
+                    - roomId: 127236
+                      roomName: Kontakt room
+                      floorId: 94215
+                      floorName: Lab_floor_prod1
+                      buildingId: 94194
+                      buildingName: Lab
+                      campusId: 93915
+                      campusName: K.io_Lab_fixed
+                      lastUpdate: '2021-11-26T12:25:56.287Z'
+                      occupancy: 0
+                    - roomId: 127414
+                      lastUpdate: '2021-11-22T18:08:20.827Z'
+                      occupancy: 0
+                    page:
+                      size: 20
+                      totalElements: 9
+                      totalPages: 1
+                      number: 0
+                roomId query:
+                  value:
+                    links:
+                    - rel: self
+                      href: http://apps.cloud.us.kontakt.io/v3/occupancy/rooms?page=0&size=20
+                    content:
+                    - roomId: 94109
+                      roomName: Entrance
+                      floorId: 94215
+                      floorName: Lab_floor_prod1
+                      buildingId: 94194
+                      buildingName: Lab
+                      campusId: 93915
+                      campusName: K.io_Lab_fixed
+                      lastUpdate: '2021-11-28T16:16:42.096Z'
+                      occupancy: 6
+                    page:
+                      size: 20
+                      totalElements: 1
+                      totalPages: 1
+                      number: 0
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+            multipart/form-data:
+              schema:
+                type: object
+                properties: {}
+            text/html:
+              schema:
+                $ref: '#/components/schemas/Rooms'
+      operationId: get-v3-occupancy-rooms
+      description: Returns the current occupancy for all rooms or optionally for specific rooms with roomId query parameter.
+      parameters:
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/size'
+      - $ref: '#/components/parameters/sort'
+      - in: query
+        name: roomId
+        schema:
+          type: number
+          example: 127236
+        description: Filter by roomId
+      tags:
+      - 'Occupancy: Room'
+      security:
+      - api_key: []
+  /v3/occupancy/rooms/history:
+    parameters: []
+    get:
+      summary: Retrieve room occupancy history
+      operationId: get-v2-occupancy-roomId
+      description: Returns the occupancy history for a single room or multiple rooms specified with the roomId query parameter.
+      parameters:
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/size'
+      - $ref: '#/components/parameters/sort'
+      - $ref: '#/components/parameters/startTime'
+      - $ref: '#/components/parameters/endTime'
+      - $ref: '#/components/parameters/roomId'
+      tags:
+      - 'Occupancy: Room'
+      security:
+      - api_key: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Occupancy-Room-History'
+              examples:
+                roomId query:
+                  value:
+                    links:
+                    - rel: first
+                      href: http://apps.cloud.us.kontakt.io/v3/occupancy/rooms/history?roomId=94109&page=0&size=20
+                    - rel: self
+                      href: http://apps.cloud.us.kontakt.io/v3/occupancy/rooms/history?roomId=94109
+                    - rel: next
+                      href: http://apps.cloud.us.kontakt.io/v3/occupancy/rooms/history?roomId=94109&page=1&size=20
+                    - rel: last
+                      href: http://apps.cloud.us.kontakt.io/v3/occupancy/rooms/history?roomId=94109&page=48&size=20
+                    content:
+                    - startTime: '2021-11-27T16:24:29.782Z'
+                      endTime: '2021-11-27T16:25:29.782Z'
+                      occupancy: 5
+                      roomId: 94109
+                      roomName: Entrance
+                      floorId: 94215
+                      floorName: Lab_floor_prod1
+                      buildingId: 94194
+                      buildingName: Lab
+                      campusId: 93915
+                      campusName: K.io_Lab_fixed
+                    - startTime: '2021-11-27T16:25:29.782Z'
+                      endTime: '2021-11-27T16:26:29.782Z'
+                      occupancy: 4
+                      roomId: 94109
+                      roomName: Entrance
+                      floorId: 94215
+                      floorName: Lab_floor_prod1
+                      buildingId: 94194
+                      buildingName: Lab
+                      campusId: 93915
+                      campusName: K.io_Lab_fixed
+                    - startTime: '2021-11-27T16:26:29.782Z'
+                      endTime: '2021-11-27T16:29:29.782Z'
+                      occupancy: 5
+                      roomId: 94109
+                      roomName: Entrance
+                      floorId: 94215
+                      floorName: Lab_floor_prod1
+                      buildingId: 94194
+                      buildingName: Lab
+                      campusId: 93915
+                      campusName: K.io_Lab_fixed
+                    - startTime: '2021-11-27T16:29:29.782Z'
+                      endTime: '2021-11-27T16:33:29.782Z'
+                      occupancy: 6
+                      roomId: 94109
+                      roomName: Entrance
+                      floorId: 94215
+                      floorName: Lab_floor_prod1
+                      buildingId: 94194
+                      buildingName: Lab
+                      campusId: 93915
+                      campusName: K.io_Lab_fixed
+                    - startTime: '2021-11-27T16:33:29.782Z'
+                      endTime: '2021-11-27T16:36:29.782Z'
+                      occupancy: 5
+                      roomId: 94109
+                      roomName: Entrance
+                      floorId: 94215
+                      floorName: Lab_floor_prod1
+                      buildingId: 94194
+                      buildingName: Lab
+                      campusId: 93915
+                      campusName: K.io_Lab_fixed
+                    - startTime: '2021-11-27T16:36:29.782Z'
+                      endTime: '2021-11-27T16:37:29.782Z'
+                      occupancy: 6
+                      roomId: 94109
+                      roomName: Entrance
+                      floorId: 94215
+                      floorName: Lab_floor_prod1
+                      buildingId: 94194
+                      buildingName: Lab
+                      campusId: 93915
+                      campusName: K.io_Lab_fixed
+                    - startTime: '2021-11-27T16:37:29.782Z'
+                      endTime: '2021-11-27T16:38:29.782Z'
+                      occupancy: 7
+                      roomId: 94109
+                      roomName: Entrance
+                      floorId: 94215
+                      floorName: Lab_floor_prod1
+                      buildingId: 94194
+                      buildingName: Lab
+                      campusId: 93915
+                      campusName: K.io_Lab_fixed
+                    - startTime: '2021-11-27T16:38:29.782Z'
+                      endTime: '2021-11-27T16:39:29.782Z'
+                      occupancy: 4
+                      roomId: 94109
+                      roomName: Entrance
+                      floorId: 94215
+                      floorName: Lab_floor_prod1
+                      buildingId: 94194
+                      buildingName: Lab
+                      campusId: 93915
+                      campusName: K.io_Lab_fixed
+                    - startTime: '2021-11-27T16:39:29.782Z'
+                      endTime: '2021-11-27T16:41:29.782Z'
+                      occupancy: 5
+                      roomId: 94109
+                      roomName: Entrance
+                      floorId: 94215
+                      floorName: Lab_floor_prod1
+                      buildingId: 94194
+                      buildingName: Lab
+                      campusId: 93915
+                      campusName: K.io_Lab_fixed
+                    - startTime: '2021-11-27T16:41:29.782Z'
+                      endTime: '2021-11-27T16:42:29.782Z'
+                      occupancy: 6
+                      roomId: 94109
+                      roomName: Entrance
+                      floorId: 94215
+                      floorName: Lab_floor_prod1
+                      buildingId: 94194
+                      buildingName: Lab
+                      campusId: 93915
+                      campusName: K.io_Lab_fixed
+                    - startTime: '2021-11-27T16:42:29.782Z'
+                      endTime: '2021-11-27T16:44:29.782Z'
+                      occupancy: 5
+                      roomId: 94109
+                      roomName: Entrance
+                      floorId: 94215
+                      floorName: Lab_floor_prod1
+                      buildingId: 94194
+                      buildingName: Lab
+                      campusId: 93915
+                      campusName: K.io_Lab_fixed
+                    - startTime: '2021-11-27T16:44:29.782Z'
+                      endTime: '2021-11-27T16:46:29.782Z'
+                      occupancy: 6
+                      roomId: 94109
+                      roomName: Entrance
+                      floorId: 94215
+                      floorName: Lab_floor_prod1
+                      buildingId: 94194
+                      buildingName: Lab
+                      campusId: 93915
+                      campusName: K.io_Lab_fixed
+                    - startTime: '2021-11-27T16:46:29.782Z'
+                      endTime: '2021-11-27T16:47:29.782Z'
+                      occupancy: 5
+                      roomId: 94109
+                      roomName: Entrance
+                      floorId: 94215
+                      floorName: Lab_floor_prod1
+                      buildingId: 94194
+                      buildingName: Lab
+                      campusId: 93915
+                      campusName: K.io_Lab_fixed
+                    - startTime: '2021-11-27T16:47:29.782Z'
+                      endTime: '2021-11-27T16:48:29.782Z'
+                      occupancy: 7
+                      roomId: 94109
+                      roomName: Entrance
+                      floorId: 94215
+                      floorName: Lab_floor_prod1
+                      buildingId: 94194
+                      buildingName: Lab
+                      campusId: 93915
+                      campusName: K.io_Lab_fixed
+                    - startTime: '2021-11-27T16:48:29.782Z'
+                      endTime: '2021-11-27T16:49:29.782Z'
+                      occupancy: 5
+                      roomId: 94109
+                      roomName: Entrance
+                      floorId: 94215
+                      floorName: Lab_floor_prod1
+                      buildingId: 94194
+                      buildingName: Lab
+                      campusId: 93915
+                      campusName: K.io_Lab_fixed
+                    - startTime: '2021-11-27T16:49:29.782Z'
+                      endTime: '2021-11-27T16:50:29.782Z'
+                      occupancy: 4
+                      roomId: 94109
+                      roomName: Entrance
+                      floorId: 94215
+                      floorName: Lab_floor_prod1
+                      buildingId: 94194
+                      buildingName: Lab
+                      campusId: 93915
+                      campusName: K.io_Lab_fixed
+                    - startTime: '2021-11-27T16:50:29.782Z'
+                      endTime: '2021-11-27T16:52:29.782Z'
+                      occupancy: 6
+                      roomId: 94109
+                      roomName: Entrance
+                      floorId: 94215
+                      floorName: Lab_floor_prod1
+                      buildingId: 94194
+                      buildingName: Lab
+                      campusId: 93915
+                      campusName: K.io_Lab_fixed
+                    - startTime: '2021-11-27T16:52:29.782Z'
+                      endTime: '2021-11-27T16:53:29.782Z'
+                      occupancy: 5
+                      roomId: 94109
+                      roomName: Entrance
+                      floorId: 94215
+                      floorName: Lab_floor_prod1
+                      buildingId: 94194
+                      buildingName: Lab
+                      campusId: 93915
+                      campusName: K.io_Lab_fixed
+                    - startTime: '2021-11-27T16:53:29.782Z'
+                      endTime: '2021-11-27T16:58:29.782Z'
+                      occupancy: 6
+                      roomId: 94109
+                      roomName: Entrance
+                      floorId: 94215
+                      floorName: Lab_floor_prod1
+                      buildingId: 94194
+                      buildingName: Lab
+                      campusId: 93915
+                      campusName: K.io_Lab_fixed
+                    - startTime: '2021-11-27T16:58:29.782Z'
+                      endTime: '2021-11-27T16:59:29.782Z'
+                      occupancy: 5
+                      roomId: 94109
+                      roomName: Entrance
+                      floorId: 94215
+                      floorName: Lab_floor_prod1
+                      buildingId: 94194
+                      buildingName: Lab
+                      campusId: 93915
+                      campusName: K.io_Lab_fixed
+                    page:
+                      size: 20
+                      totalElements: 977
+                      totalPages: 49
+                      number: 0
+        '429':
+          $ref: '#/components/responses/error-429'
+components:
+  parameters:
+    startTime:
+      name: startTime
+      in: query
+      schema:
+        type: string
+        example: '2020-11-27T08:00:00.000000Z'
+        format: date-time
+      description: 'Filter by start time. <br> Values are always expressed in UTC (equivalent to an offset of +00:00). <br> The timezone designator is always Z. <br> The hours component must be specified as two digits in 24-hour format. '
+    size:
+      name: size
+      in: query
+      schema:
+        type: string
+        default: '20'
+      description: Size of the page to retrieve.
+    roomId:
+      name: roomId
+      in: query
+      schema:
+        type: number
+      description: Filter by one or more Room Ids (separated by comma).
+      required: true
+    sort:
+      name: sort
+      in: query
+      schema:
+        type: string
+        default: asc
+        example: ?sort=firstname&sort=lastname,asc
+        enum:
+        - asc
+        - desc
+      description: 'Sort objects returned in the response. Format property,property '
+    page:
+      name: page
+      in: query
+      schema:
+        type: integer
+        default: '0'
+      description: Page you want to retrieve; 0 indexed.
+    endTime:
+      name: endTime
+      in: query
+      schema:
+        type: string
+        example: ' 2020-11-29T08:00:00.000000Z'
+        format: date-time
+      description: 'Filter by end time. <br> Values are always expressed in UTC (equivalent to an offset of +00:00). <br> The timezone designator is always Z. <br> The hours component must be specified as two digits in 24-hour format. '
+  schemas:
+    Occupancy-Room-Current:
+      description: ''
+      type: object
+      x-examples:
+        example-1:
+          links:
+          - rel: self
+            href: https://apps-api.kontakt.io/v3/occupancy/rooms?page=0&size=2&sort=attributeId,asc
+          content:
+          - roomId: 59645
+            roomName: rwaTEUoSVmbb
+            floorId: 59814
+            floorName: PjUpFbENXqcd
+            buildingId: 59757
+            buildingName: TKWmhvLEiSHr
+            campusId: 59683
+            campusName: NOoqBklqWdNb
+            lastUpdate: '2021-11-25T18:23:05.078Z'
+            occupancy: 1
+          - roomId: 59646
+            roomName: JJONuaaQWqXA
+            floorId: 59815
+            floorName: dtgOaszJCbIk
+            buildingId: 59758
+            buildingName: VVoEtyUwgRef
+            campusId: 59684
+            campusName: gjNmIckFpfPK
+            lastUpdate: '2021-11-25T18:23:05.083Z'
+            occupancy: 1
+          page:
+            size: 2
+            totalElements: 2
+            totalPages: 1
+            number: 0
+      title: Occupancy-Room-Current
+      examples:
+      - links:
+        - rel: string
+          href: string
+        content:
+        - roomId: 0
+          roomName: string
+          floorId: 0
+          floorName: string
+          buildingId: 0
+          buildingName: string
+          campusId: 0
+          campusName: string
+          lastUpdate: string
+          occupancy: 0
+        page:
+          size: 0
+          totalElements: 0
+          totalPages: 0
+          number: 0
+      - links:
+        - rel: string
+          href: string
+        content:
+        - roomId: 0
+          roomName: string
+          floorId: 0
+          floorName: string
+          buildingId: 0
+          buildingName: string
+          campusId: 0
+          campusName: string
+          lastUpdate: string
+          occupancy: 0
+        page:
+          size: 0
+          totalElements: 0
+          totalPages: 0
+          number: 0
+      properties:
+        content:
+          type: array
+          uniqueItems: true
+          minItems: 0
+          items:
+            type: object
+            properties:
+              roomId:
+                type: number
+                description: ID of the room.
+              roomName:
+                type: string
+                minLength: 1
+                description: Name of the room.
+              floorId:
+                type: number
+                description: ID of the floor.
+              floorName:
+                type: string
+                minLength: 1
+                description: Name of the floor.
+              buildingId:
+                type: number
+                description: ID of the building.
+              buildingName:
+                type: string
+                minLength: 1
+                description: Name of the building.
+              campusId:
+                type: number
+                description: ID of the campus.
+              campusName:
+                type: string
+                minLength: 1
+                description: Name of the campus.
+              lastUpdate:
+                type: string
+                minLength: 1
+                description: Time of last occupancy update
+              occupancy:
+                type: number
+                description: Number of people detected in the given time range.
+            required:
+            - roomId
+            - lastUpdate
+            - occupancy
+        page:
+          type: object
+          required:
+          - size
+          - totalElements
+          - totalPages
+          - number
+          properties:
+            size:
+              type: number
+            totalElements:
+              type: number
+            totalPages:
+              type: number
+            number:
+              type: number
+      required:
+      - content
+      - page
+    Occupancy-Room-History:
+      description: ''
+      type: object
+      x-examples:
+        example-1:
+          links:
+          - rel: first
+            href: https://apps-api.test.kontakt.io/v3/occupancy?startTime=2021-11-16T12:44:47.505Z&endTime=2021-11-16T12:48:07.505Z&roomId=25958&page=0&size=2&sort=roomId,asc
+          - rel: self
+            href: https://apps-api.test.kontakt.io/v3/occupancy?page=0&size=2&sort=roomId&startTime=2021-11-16T12:44:47.505Z&endTime=2021-11-16T12:48:07.505Z&roomId=25958
+          - rel: next
+            href: https://apps-api.test.kontakt.io/v3/occupancy?startTime=2021-11-16T12:44:47.505Z&endTime=2021-11-16T12:48:07.505Z&roomId=25958&page=1&size=2&sort=roomId,asc
+          - rel: last
+            href: https://apps-api.test.kontakt.io/v3/occupancy?startTime=2021-11-16T12:44:47.505Z&endTime=2021-11-16T12:48:07.505Z&roomId=25958&page=1&size=2&sort=roomId,asc
+          content:
+          - startTime: '2021-11-16T12:46:27.505Z'
+            endTime: '2021-11-16T12:47:17.505Z'
+            occupancy: 580475930
+            roomId: 25958
+            roomName: NzubefFxOQCn
+            floorId: 25938
+            floorName: gcwPDUIDCeKy
+            buildingId: 25918
+            buildingName: uBTUIxoNgkZv
+            campusId: 25858
+            campusName: WaUIpzohiOCw
+          - startTime: '2021-11-16T12:47:17.505Z'
+            endTime: '2021-11-16T12:47:47.505Z'
+            occupancy: 1609483868
+            roomId: 25958
+            roomName: NzubefFxOQCn
+            floorId: 25938
+            floorName: gcwPDUIDCeKy
+            buildingId: 25918
+            buildingName: uBTUIxoNgkZv
+            campusId: 25858
+            campusName: WaUIpzohiOCw
+          page:
+            size: 2
+            totalElements: 3
+            totalPages: 2
+            number: 0
+      examples: []
+      properties:
+        content:
+          type: array
+          uniqueItems: true
+          minItems: 0
+          items:
+            type: object
+            properties:
+              startTime:
+                type: string
+                minLength: 1
+                description: Time when given occupancy started.
+              endTime:
+                type: string
+                minLength: 1
+                description: Time when given occupancy ended.
+              occupancy:
+                type: number
+                description: Number of people detected in the given time range.
+              roomId:
+                type: number
+                description: ID of Room in which occupancy was calculated.
+              roomName:
+                type: string
+                minLength: 1
+                description: Name of Room in which occupancy was calculated.
+              floorId:
+                type: number
+                description: ID of the Floor in which occupancy was calculated.
+              floorName:
+                type: string
+                minLength: 1
+                description: Name of the Floor in which occupancy was calculated. JL Floor ID where room is located.
+              buildingId:
+                type: number
+                description: ID of the Building in which occupancy was calculated.
+              buildingName:
+                type: string
+                minLength: 1
+                description: Name of the Building in which occupancy was calculated.
+              campusId:
+                type: number
+                description: ID of the Campus in which occupancy was calculated.
+              campusName:
+                type: string
+                minLength: 1
+                description: Name of the Campus in which occupancy was calculated.
+            required:
+            - startTime
+            - endTime
+            - occupancy
+            - roomId
+      title: Occupancy-Room-History
+    Rooms:
+      type: object
+      x-examples:
+        example-1:
+          links:
+          - rel: self
+            href: http://apps.cloud.us.kontakt.io/v2/locations/rooms?page=0&size=200
+          content:
+          - id: 94105
+            name: Hospital Lab
+            roomType: ROOM
+            floor:
+              id: 94215
+              name: Lab_floor_prod1
+              height: 17.8
+              width: 14.6
+              properties:
+                gridWidth: 4
+                gridBounds:
+                  boundsLat:
+                    north: 22.2
+                    south: -4.3
+                  boundsLng:
+                    east: 23
+                    west: -8.4
+                gridDensity: 1
+                outlineCreated: true
+              building:
+                id: 94194
+                name: Lab
+              level: 0
+              xyGeojson:
+                type: Feature
+                geometry:
+                  type: Polygon
+                  coordinates:
+                  - - - 0
+                      - 17.8
+                    - - 14.6
+                      - 17.8
+                    - - 14.6
+                      - 0
+                    - - 0
+                      - 0
+                    - - 0
+                      - 17.8
+                properties: {}
+              imageXyGeojson:
+                type: Feature
+                geometry:
+                  type: Polygon
+                  coordinates:
+                  - - - -0.4
+                      - 18.2
+                    - - 14.9
+                      - 18.2
+                    - - 14.9
+                      - -0.3
+                    - - -0.4
+                      - -0.3
+                    - - -0.4
+                      - 18.2
+              gateways:
+              - id: 127074
+                x: 12.282123588848002
+                y: 8.34375
+                virtual: false
+                sourceId: MvsGNG
+              - id: 102401
+                x: 1.0078084026993313
+                y: 11.355794982568481
+                virtual: false
+                sourceId: MviZtK
+              - id: 102414
+                x: 14.341409869048508
+                y: 11.162493231800077
+                virtual: false
+                sourceId: MvGzAq
+              - id: 102416
+                x: 10.091405943053076
+                y: 0.38784292535368436
+                virtual: false
+                sourceId: Mv9wt5
+              - id: 102415
+                x: 14.359377868110467
+                y: 2.3125
+                virtual: false
+                sourceId: Mvpg44
+              - id: 102418
+                x: 9.778128891734386
+                y: 14.087778686994282
+                virtual: false
+                sourceId: MvBgL8
+              - id: 102417
+                x: 8.828125
+                y: 9.52476916672415
+                virtual: false
+                sourceId: MvrqG5
+              - id: 102419
+                x: 5.9687475416195985
+                y: 13.865652072799694
+                virtual: false
+                sourceId: MvilXy
+              - id: 102421
+                x: 5.045309290681559
+                y: 8.663858739523844
+                virtual: false
+                sourceId: Mv1640
+              - id: 94135
+                x: 12.489064275964456
+                y: 14.351766260476156
+                virtual: false
+                sourceId: Mv4NFT
+              - id: 102394
+                x: 13.524218477314122
+                y: 17.565417914963753
+                virtual: false
+                sourceId: MvmnL3
+              - id: 102396
+                x: 14.343752868110467
+                y: 6.765625
+                virtual: false
+                sourceId: MvPcWo
+              - id: 102395
+                x: 14.314065299588373
+                y: 12.9296875
+                virtual: false
+                sourceId: MvgOmp
+              - id: 102398
+                x: 6.085932992969264
+                y: 2.3054890545997697
+                virtual: false
+                sourceId: MvhNRo
+              - id: 102397
+                x: 7.359370902699331
+                y: 8.079694268199923
+                virtual: false
+                sourceId: MvWT3H
+              - id: 102400
+                x: 1.779682480456056
+                y: 6.434068952951547
+                virtual: false
+                sourceId: Mvs8gb
+              - id: 102399
+                x: 6.857812806946925
+                y: 17.55378406516215
+                virtual: false
+                sourceId: MvECI7
+            roomNumber: 0
+            roomAttributes: []
+            roomSensors:
+            - id: 94055
+              x: 11.412103845330275
+              y: 15.893985791575489
+              trackingId: e0:91:1b:d7:42:07
+              inbounds: []
+              outbounds: []
+              type: Static
+              status: Assigned
+            xyGeojson:
+              type: Feature
+              geometry:
+                type: Polygon
+                coordinates:
+                - - - 10.2
+                    - 14
+                  - - 10.2
+                    - 17.8
+                  - - 14.6
+                    - 17.8
+                  - - 14.6
+                    - 14
+                  - - 10.2
+                    - 14
+              properties: {}
+          page:
+            size: 200
+            totalElements: 1
+            totalPages: 1
+            number: 0
+      examples:
+      - content:
+        - id: 0
+          name: string
+          roomType: string
+          floor:
+            id: 0
+            name: string
+            height: 0
+            width: 0
+            properties:
+              gridWidth: 0
+              gridBounds:
+                boundsLat:
+                  north: 0
+                  south: 0
+                boundsLng:
+                  east: 0
+                  west: 0
+              gridDensity: 0
+              outlineCreated: true
+            building:
+              id: 0
+              name: string
+            level: 0
+            xyGeojson:
+              type: string
+              geometry:
+                type: string
+                coordinates:
+                - '0':
+                  - '0':
+                    - {}
+                    '1':
+                    - {}
+                    '2':
+                    - {}
+                    '3':
+                    - {}
+                    '4':
+                    - {}
+              properties: {}
+            imageXyGeojson:
+              type: string
+              geometry:
+                type: string
+                coordinates:
+                - '0':
+                  - '0':
+                    - {}
+                    '1':
+                    - {}
+                    '2':
+                    - {}
+                    '3':
+                    - {}
+                    '4':
+                    - {}
+            gateways:
+            - id: 0
+              x: 0
+              y: 0
+              virtual: true
+              sourceId: string
+          roomNumber: 0
+          roomAttributes:
+          - {}
+          roomSensors:
+          - id: 0
+            x: 0
+            y: 0
+            trackingId: string
+            inbounds:
+            - {}
+            outbounds:
+            - {}
+            type: string
+            status: string
+          xyGeojson:
+            type: string
+            geometry:
+              type: string
+              coordinates:
+              - '0':
+                - '0':
+                  - {}
+                  '1':
+                  - {}
+                  '2':
+                  - {}
+                  '3':
+                  - {}
+                  '4':
+                  - {}
+            properties: {}
+      properties:
+        content:
+          type: array
+          uniqueItems: true
+          minItems: 1
+          items:
+            type: object
+            properties:
+              id:
+                type: number
+              name:
+                type: string
+                minLength: 1
+              roomType:
+                type: string
+                minLength: 1
+                default: ROOM
+                enum:
+                - ROOM
+                - CORRIDOR
+              floor:
+                type: object
+                description: Floor details
+                properties:
+                  id:
+                    type: number
+                  name:
+                    type: string
+                    minLength: 1
+                  height:
+                    type: number
+                  width:
+                    type: number
+                  properties:
+                    type: object
+                    required:
+                    - gridWidth
+                    - gridBounds
+                    - gridDensity
+                    - outlineCreated
+                    description: Additional properties of the room
+                    properties:
+                      gridWidth:
+                        type: number
+                      gridBounds:
+                        type: object
+                        required:
+                        - boundsLat
+                        - boundsLng
+                        properties:
+                          boundsLat:
+                            type: object
+                            required:
+                            - north
+                            - south
+                            properties:
+                              north:
+                                type: number
+                              south:
+                                type: number
+                          boundsLng:
+                            type: object
+                            required:
+                            - east
+                            - west
+                            properties:
+                              east:
+                                type: number
+                              west:
+                                type: number
+                      gridDensity:
+                        type: number
+                      outlineCreated:
+                        type: boolean
+                  building:
+                    type: object
+                    description: Building details
+                    required:
+                    - id
+                    - name
+                    properties:
+                      id:
+                        type: number
+                      name:
+                        type: string
+                        minLength: 1
+                  level:
+                    type: number
+                  xyGeojson:
+                    type: object
+                    required:
+                    - type
+                    - geometry
+                    - properties
+                    properties:
+                      type:
+                        type: string
+                        minLength: 1
+                      geometry:
+                        type: object
+                        required:
+                        - type
+                        - coordinates
+                        properties:
+                          type:
+                            type: string
+                            minLength: 1
+                          coordinates:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                '0':
+                                  type: array
+                                  uniqueItems: true
+                                  items:
+                                    type: object
+                                    properties:
+                                      '0':
+                                        type: array
+                                        uniqueItems: true
+                                        items:
+                                          type: object
+                                      '1':
+                                        type: array
+                                        uniqueItems: true
+                                        items:
+                                          type: object
+                                      '2':
+                                        type: array
+                                        uniqueItems: true
+                                        items:
+                                          type: object
+                                      '3':
+                                        type: array
+                                        uniqueItems: true
+                                        items:
+                                          type: object
+                                      '4':
+                                        type: array
+                                        uniqueItems: true
+                                        items:
+                                          type: object
+                      properties:
+                        type: object
+                  imageXyGeojson:
+                    type: object
+                    required:
+                    - type
+                    - geometry
+                    properties:
+                      type:
+                        type: string
+                        minLength: 1
+                      geometry:
+                        type: object
+                        required:
+                        - type
+                        - coordinates
+                        properties:
+                          type:
+                            type: string
+                            minLength: 1
+                          coordinates:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                '0':
+                                  type: array
+                                  uniqueItems: true
+                                  items:
+                                    type: object
+                                    properties:
+                                      '0':
+                                        type: array
+                                        uniqueItems: true
+                                        items:
+                                          type: object
+                                      '1':
+                                        type: array
+                                        uniqueItems: true
+                                        items:
+                                          type: object
+                                      '2':
+                                        type: array
+                                        uniqueItems: true
+                                        items:
+                                          type: object
+                                      '3':
+                                        type: array
+                                        uniqueItems: true
+                                        items:
+                                          type: object
+                                      '4':
+                                        type: array
+                                        uniqueItems: true
+                                        items:
+                                          type: object
+                  gateways:
+                    type: array
+                    uniqueItems: true
+                    minItems: 1
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                        x:
+                          type: number
+                        y:
+                          type: number
+                        virtual:
+                          type: boolean
+                        sourceId:
+                          type: string
+                          minLength: 1
+                      required:
+                      - id
+                      - x
+                      - y
+                      - virtual
+                      - sourceId
+                required:
+                - id
+                - name
+                - height
+                - width
+                - properties
+                - building
+                - level
+                - xyGeojson
+                - imageXyGeojson
+                - gateways
+              roomNumber:
+                type: number
+              roomAttributes:
+                type: array
+                items:
+                  type: object
+              roomSensors:
+                type: array
+                uniqueItems: true
+                minItems: 1
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    x:
+                      type: number
+                    y:
+                      type: number
+                    trackingId:
+                      type: string
+                      minLength: 1
+                    inbounds:
+                      type: array
+                      items:
+                        type: object
+                    outbounds:
+                      type: array
+                      items:
+                        type: object
+                    type:
+                      type: string
+                      minLength: 1
+                    status:
+                      type: string
+                      minLength: 1
+                  required:
+                  - id
+                  - x
+                  - y
+                  - trackingId
+                  - type
+                  - status
+              xyGeojson:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    minLength: 1
+                  geometry:
+                    type: object
+                    required:
+                    - type
+                    - coordinates
+                    properties:
+                      type:
+                        type: string
+                        minLength: 1
+                      coordinates:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            '0':
+                              type: array
+                              uniqueItems: true
+                              items:
+                                type: object
+                                properties:
+                                  '0':
+                                    type: array
+                                    uniqueItems: true
+                                    items:
+                                      type: object
+                                  '1':
+                                    type: array
+                                    uniqueItems: true
+                                    items:
+                                      type: object
+                                  '2':
+                                    type: array
+                                    uniqueItems: true
+                                    items:
+                                      type: object
+                                  '3':
+                                    type: array
+                                    uniqueItems: true
+                                    items:
+                                      type: object
+                                  '4':
+                                    type: array
+                                    uniqueItems: true
+                                    items:
+                                      type: object
+                  properties:
+                    type: object
+                required:
+                - type
+                - geometry
+                - properties
+            required:
+            - id
+            - name
+            - roomType
+            - roomNumber
+      required:
+      - content
+  responses:
+    error-429:
+      description: Rate limit exceeded. The response has no body.
+      headers:
+        Retry-After:
+          description: 'Indicates how long to wait before making a new request. The response includes this header twice: once with an HTTP-date format (e.g., "Wed, 21 Oct 2015 07:28:00 GMT") and once with delay-seconds format (e.g., "120").'
+          schema:
+            type: string
+          required: true
+      content:
+        text/plain: null
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      description: 'Your Kio Cloud API Key is required to be provided in the `Api-Key` header in each API call.
+
+
+        Get your API Key: sign in to **Kio Cloud** > select **Users** > select **Security** > copy your **Server API Key**.'
+      name: Api-Key
+x-: null

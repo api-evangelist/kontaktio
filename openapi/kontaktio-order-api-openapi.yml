@@ -1,0 +1,241 @@
+openapi: 3.2.0
+info:
+  title: Device Management Order API
+  x-logo:
+    url: https://kontakt.io/wp-content/themes/kontakt/dist/img/site-header/logo.svg
+    backgroundColor: '#FFFFFF'
+  version: '10'
+  description: 'This Kontakt.io API provides direct access to all Kio Cloud Device Management resources. It allows integrating device administration functionality into 3rd-party applications without the need to build all underlying logic from the ground up.
+
+
+    ## Authentication
+
+
+    All requests must include a **JWT Bearer token** in the `Authorization` header, obtained via the [OAuth2 Client Credentials flow](https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow).
+
+
+    > **Deprecated:** The `Api-Key` header is still accepted for backward compatibility but is deprecated and will be removed. Do not use it for new integrations.
+
+
+    Each API call requires the `Accept` header with the API version. **By default, set to the current stable version:** `application/vnd.com.kontakt+json;version=10`
+
+    '
+  contact:
+    name: Support
+    url: https://support.kontakt.io
+    email: support@kontakt.io
+  termsOfService: https://kontakt.io/legal-documents/terms-of-sale-and-service/
+servers:
+- url: https://dm-api.cloud.us.kontakt.io
+  description: Kio Cloud US region
+- url: https://dm-api.cloud.uk.kontakt.io
+  description: Kio Cloud UK region
+security:
+- bearer_token: []
+- api_key: []
+tags:
+- name: Order
+  description: An Order represents all devices that have been purchased in Kontakt.io Web Store in a single transaction. Before these devices can be used with Kontakt.io platform, they need to be added to Kontakt.io Manager Account.
+paths:
+  /order:
+    get:
+      tags:
+      - Order
+      summary: Check Order IDs
+      description: Returns a list of all **unassigned** devices (specifically their Unique IDs) for the Order IDs provided in the request parameter.
+      parameters:
+      - name: orderId
+        in: query
+        description: List of Order IDs to be checked
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+            description: Order ID
+      - $ref: '#/components/parameters/accept'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/vnd.com.kontakt+json;version=10:
+              schema:
+                type: array
+                description: List of Unique IDs of devices that are associated with provided Order IDs
+                items:
+                  type: string
+                  description: Unique ID
+      security:
+      - bearer_token: []
+      - api_key: []
+  /order/claim:
+    post:
+      tags:
+      - Order
+      summary: Claim an order
+      description: 'Assigns one or more order''s devices to this account. An order has to exist in DCC and NOT be claimed elsewhere for this to work.
+
+
+        Devices from the order that already exist in API will be skipped. Devices that didn''t exist in API prior to claiming will be created from scratch.
+
+
+        This operation is idempotent: claiming an order on the same account more than once has no effect.'
+      parameters:
+      - name: orderId
+        in: query
+        description: List of Order IDs that should be claimed on this account
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+            description: Order ID
+      - $ref: '#/components/parameters/accept'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/vnd.com.kontakt+json;version=10:
+              schema:
+                $ref: '#/components/schemas/OrderManagementResponse'
+      security:
+      - bearer_token: []
+      - api_key: []
+    get:
+      tags:
+      - Order
+      summary: Get order status
+      description: 'After claiming/releasing the order in DCC, all subsequent device fetch/cleanup jobs in API
+
+        are performed asynchronously. This endpoint allows to track the progress of those operations.
+
+        '
+      parameters:
+      - name: orderId
+        in: query
+        description: List of Order IDs for which the order job progress will be displayed.
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+            description: Order ID
+      - $ref: '#/components/parameters/accept'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/vnd.com.kontakt+json;version=10:
+              schema:
+                type: object
+                properties:
+                  orders:
+                    type: object
+                    description: Per-order job progress
+                    properties:
+                      each orderId from request:
+                        type: object
+                        description: Job progress for this order ID
+                        properties:
+                          runningJobs:
+                            type: array
+                            items:
+                              type: string
+                              description: Currently running jobs. ImportOrderFromDccJob imports and persists devices from DCC after order claiming, DeleteOrderDevicesJob deletes order devices after releasing.
+                          lastImportJob:
+                            type: object
+                            description: Detailed information about each step that was performed on the last import job to date.
+                          lastDeleteJob:
+                            type: object
+                            description: Detailed information about each step that was performed on the last delete job to date.
+      security:
+      - bearer_token: []
+      - api_key: []
+components:
+  schemas:
+    OrderManagementResponse:
+      type: object
+      properties:
+        orders:
+          type: object
+          description: Per-order claiming/releasing status
+          properties:
+            each orderId from request:
+              type: object
+              description: Claiming/releasing status for this order ID
+              properties:
+                status:
+                  type: string
+                  description: 'Successful statuses:
+
+
+
+
+                    CLAIMED
+
+
+                    RELEASED
+
+
+
+
+                    Failure statuses:
+
+
+                    CANNOT_CLAIM or CANNOT_RELEASE - received a non-200 response from DCC, except...
+
+
+                    NOT_FOUND - received a 404 response from DCC
+
+
+                    UNCLASSIFIED_COMMUNICATION_ERROR - unknown error when communicating with DCC.
+
+
+                    UNCLASSIFIED_SCHEDULING_ERROR - order claimed/released, but can not schedule a job for adding/removing order devices.'
+                  enum:
+                  - CLAIMED
+                  - RELEASED
+                  - CANNOT_CLAIM
+                  - CANNOT_RELEASE
+                  - NOT_FOUND
+                  - UNCLASSIFIED_COMMUNICATION_ERROR
+                  - UNCLASSIFIED_SCHEDULING_ERROR
+                details:
+                  type: string
+                  description: Usually error details, e.g. '503 DCC unavailable'
+                totalDevices:
+                  type: number
+                  description: Number of devices in this order
+  parameters:
+    accept:
+      name: Accept
+      in: header
+      required: true
+      schema:
+        type: string
+        default: application/vnd.com.kontakt+json;version=10
+      description: Accept header is required.
+  securitySchemes:
+    bearer_token:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Provide a JWT in the `Authorization: Bearer <token>` header. This is the standard authentication method for all API requests.
+
+
+        Obtain a token via the OAuth2 Client Credentials flow from the Kontakt.io Keycloak identity provider.'
+    api_key:
+      type: apiKey
+      name: Api-Key
+      in: header
+      description: '**Deprecated — do not use for new integrations.** This method exists solely for backward compatibility and will be removed in a future release. Use JWT Bearer token authentication instead.
+
+
+        If you still need an API Key: sign in to **Kio Cloud** > select **Users** > select **Security** > copy your **Server API Key**.'
+    management_api_key:
+      name: Api-Key
+      type: apiKey
+      in: header
+      description: Special management API Key with additional privileges used by authorized users.
+externalDocs:
+  url: https://developer.kontakt.io

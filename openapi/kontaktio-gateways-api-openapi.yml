@@ -1,0 +1,166 @@
+openapi: 3.2.0
+info:
+  title: Location & Occupancy Gateways API
+  version: '1.0'
+  description: Real-time and historical Kio Cloud apps data including location tracking, occupancy, and telemetry.
+  contact:
+    name: Kontakt.io Support
+    url: https://support.kontakt.io
+    email: support@kontakt.io
+  termsOfService: https://kontakt.io/terms-of-service
+  summary: Real-time and historical Kio Cloud apps data including location tracking, occupancy, and telemetry.
+servers:
+- url: https://apps.cloud.us.kontakt.io
+  description: 'Kio Cloud US '
+- url: https://apps.cloud.uk.kontakt.io
+  description: Kio Cloud UK
+security:
+- API Key - 1: []
+tags:
+- name: Gateways
+paths:
+  /v2/locations/gateways:
+    get:
+      summary: List all gateways
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Floor-Gateways'
+              examples:
+                example-1:
+                  value:
+                    links:
+                    - rel: self
+                      href: https://apps.cloud.us.kontakt.io/v2/locations/gateways?page=0&size=100&sort=id,asc
+                    content:
+                    - id: 24305
+                      lat: 57.4770162657816
+                      lng: -101.69751627231699
+                      altitude: 87.35568496060814
+                      x: 1085.0987979465135
+                      y: 63801.81179821145
+                      z: 4.014334689282525
+                      verticalOrientation: 84
+                      range: -147
+                      virtual: false
+                      sourceId: DyYlymXTSBZIGtHN
+                      floor:
+                        id: 25197
+                    page:
+                      size: 100
+                      totalElements: 1
+                      totalPages: 1
+                      number: 0
+      operationId: get-v2-locations-gateways
+      description: Returns a list of all gateways located in all floors. Data returned includes each gateway's floor location, position details including coordinate values and range (RSSI).
+      tags:
+      - Gateways
+      security:
+      - api_key: []
+components:
+  schemas:
+    Floor-Gateways:
+      description: 'Floor gateways. '
+      type: object
+      x-examples:
+        example-1:
+          links:
+          - rel: self
+            href: https://apps.cloud.us.kontakt.io/v2/locations/gateways?page=0&size=100&sort=id,asc
+          content:
+          - id: 24305
+            lat: 57.4770162657816
+            lng: -101.69751627231699
+            altitude: 87.35568496060814
+            x: 1085.0987979465135
+            y: 63801.81179821145
+            z: 4.014334689282525
+            verticalOrientation: 84
+            range: -147
+            virtual: false
+            sourceId: DyYlymXTSBZIGtHN
+            floor:
+              id: 25197
+          page:
+            size: 100
+            totalElements: 1
+            totalPages: 1
+            number: 0
+      properties:
+        content:
+          type: array
+          uniqueItems: true
+          minItems: 1
+          items:
+            type: object
+            properties:
+              id:
+                type: number
+                description: Id of the gateway.
+              lat:
+                type: number
+                description: Latitude of a gateway.
+              lng:
+                type: number
+                description: Longitude of a gateway.
+              altitude:
+                type: number
+                description: Height in meters above sea level.
+              x:
+                type: number
+                description: Horizontal coordinate of a gateway; in meters relative to baseline of floor.
+              y:
+                type: number
+                description: Vertical coordinate of a gateway; in meters relative to baseline of floor.
+              z:
+                type: number
+                description: Height coordinate of a gateway; in meters relative to baseline of floor.
+              verticalOrientation:
+                type: number
+                description: Rotation in degrees on the horizontal plane. 0 = parallel to the ground facing up, 90 = on the wall, 180 = parallel to the ground facing down.
+              range:
+                type: number
+                description: Minimum RSSI (Received Signal Strength Indicator). When calculating position, if strongest signal will have less RSSI than range, that result will be rejected and beacon considered lost.
+              virtual:
+                type: boolean
+                description: Virtual gateway will be used to map lat, lng to sourceId. There should be one virtual gateway in each floor. Virtual gateway is created automatically when creating floor.
+              sourceId:
+                type: string
+                minLength: 1
+                description: SourceId of the gateway.
+              floor:
+                type: object
+                description: Gateway's floor location.
+                properties:
+                  id:
+                    type: number
+                    description: Floor Id.
+                required:
+                - id
+            required:
+            - id
+            - lat
+            - lng
+            - altitude
+            - x
+            - y
+            - z
+            - verticalOrientation
+            - range
+            - virtual
+            - sourceId
+      required:
+      - content
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      description: 'Your Kio Cloud API Key is required to be provided in the `Api-Key` header in each API call.
+
+
+        Get your API Key: sign in to **Kio Cloud** > select **Users** > select **Security** > copy your **Server API Key**.'
+      name: Api-Key
+x-: null

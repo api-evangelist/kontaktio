@@ -1,0 +1,287 @@
+openapi: 3.2.0
+info:
+  title: Device Management Device (3rd party) API
+  x-logo:
+    url: https://kontakt.io/wp-content/themes/kontakt/dist/img/site-header/logo.svg
+    backgroundColor: '#FFFFFF'
+  version: '10'
+  description: 'This Kontakt.io API provides direct access to all Kio Cloud Device Management resources. It allows integrating device administration functionality into 3rd-party applications without the need to build all underlying logic from the ground up.
+
+
+    ## Authentication
+
+
+    All requests must include a **JWT Bearer token** in the `Authorization` header, obtained via the [OAuth2 Client Credentials flow](https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow).
+
+
+    > **Deprecated:** The `Api-Key` header is still accepted for backward compatibility but is deprecated and will be removed. Do not use it for new integrations.
+
+
+    Each API call requires the `Accept` header with the API version. **By default, set to the current stable version:** `application/vnd.com.kontakt+json;version=10`
+
+    '
+  contact:
+    name: Support
+    url: https://support.kontakt.io
+    email: support@kontakt.io
+  termsOfService: https://kontakt.io/legal-documents/terms-of-sale-and-service/
+servers:
+- url: https://dm-api.cloud.us.kontakt.io
+  description: Kio Cloud US region
+- url: https://dm-api.cloud.uk.kontakt.io
+  description: Kio Cloud UK region
+security:
+- bearer_token: []
+- api_key: []
+tags:
+- name: Device (3rd party)
+  description: 'NOTE: this set of endpoints has been superseded by External Devices functionality.
+
+
+    These endpoints provide a way to integrate 3rd party Bluetooth-enabled scanning devices into Kontakt.io platform. As of Summer 2018, Kontakt.io is working with manufacturers of enterprise-level networking devices, like Cassia, Ruckus and Meraki, to seamlessly incorporate data collected by their routers and/or WiFi access points into Kontakt.io Data Streams, and to improve Infrastructure Management capabilities.
+
+
+    Users wanting to take advantage of this feature, first need to provide proper authentication and integrate Kontakt.io Panel account with a 3rd party vendor. Only after that, devices from that vendor can be added into Kontakt.io platform.
+
+
+    At any given moment a Company can have **only one** integration per 3rd party Vendor, i.e. you can have **one** Cassia *and* **one** Meraki integration, but you can''t have e.g. two Meraki integrations.
+
+    '
+paths:
+  /device/vendor/meraki/create:
+    post:
+      tags:
+      - Device (3rd party)
+      summary: Add a Meraki Integration
+      description: 'This endpoint allows to associate your Meraki controller with Kontakt.io platform, enabling to use Meraki devices as external data sources for Data Streams
+
+        '
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              properties:
+                apiKey:
+                  type: string
+                  description: API Key used for authentication on Meraki's cloud
+                secret:
+                  type: string
+                  description: Secret used for authentication on Meraki's backend
+                validator:
+                  type: string
+                  description: Verification token ensuring Meraki's cloud that the endpoint is correct
+              required:
+              - apiKey
+              - secret
+              - validator
+      responses:
+        '200':
+          description: OK
+          content:
+            application/vnd.com.kontakt+json; version=10:
+              schema:
+                type: object
+                properties:
+                  apiKey:
+                    type: string
+                    description: API Key used for authentication on Meraki's cloud
+                    example: skhefgjhdfgv347fsfdv
+                  secret:
+                    type: string
+                    description: Secret used for authentication on Meraki's backend
+                    example: SuperSecretString
+                  validator:
+                    type: string
+                    description: Verification token ensuring Meraki's cloud that the endpoint is correct
+                    example: lekur8934hiu2ghebv0tbshef
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      security:
+      - bearer_token: []
+      - api_key: []
+      parameters:
+      - $ref: '#/components/parameters/accept'
+  /device/vendor/meraki/update:
+    post:
+      tags:
+      - Device (3rd party)
+      summary: Update a Meraki Integration
+      description: 'This endpoint allows to update an already existing integration with a Meraki platform
+
+        '
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              properties:
+                apiKey:
+                  type: string
+                  description: API Key used for authentication on Meraki's cloud
+                secret:
+                  type: string
+                  description: Secret used for authentication on Meraki's backend
+                validator:
+                  type: string
+                  description: Verification token ensuring Meraki's cloud that the endpoint is correct
+              required:
+              - apiKey
+              - secret
+              - validator
+      responses:
+        '200':
+          description: OK
+          content:
+            application/vnd.com.kontakt+json; version=10:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+                    example: Update successful
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      security:
+      - bearer_token: []
+      - api_key: []
+      parameters:
+      - $ref: '#/components/parameters/accept'
+  /device/vendor/meraki/delete:
+    post:
+      tags:
+      - Device (3rd party)
+      summary: Delete a Meraki Integration
+      description: 'This endpoint allows to remove a Meraki integration
+
+        '
+      responses:
+        '200':
+          description: OK
+          content:
+            application/vnd.com.kontakt+json; version=10:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Delete message
+                    example: Delete successful
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      security:
+      - bearer_token: []
+      - api_key: []
+      parameters:
+      - $ref: '#/components/parameters/accept'
+components:
+  schemas:
+    ApiError:
+      type: object
+      title: API Error
+      properties:
+        id:
+          type: string
+          description: Internal API error code
+          example: API_ERROR_1693477316246
+        status:
+          type: number
+          description: HTTP response status code
+          example: 422
+        cause:
+          type: string
+          description: General cause of the error
+          example: ValidationError
+        message:
+          type: string
+          description: Error message with an explanation of the problem
+          example: Invalid value for field name
+        details:
+          type:
+          - array
+          - 'null'
+          description: Optional details
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                example: name
+              error:
+                type: string
+                description: Error name
+                example: INVALID_VALUE
+              message:
+                type: string
+                description: Error message
+                example: Invalid value for field name
+  parameters:
+    accept:
+      name: Accept
+      in: header
+      required: true
+      schema:
+        type: string
+        default: application/vnd.com.kontakt+json;version=10
+      description: Accept header is required.
+  securitySchemes:
+    bearer_token:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Provide a JWT in the `Authorization: Bearer <token>` header. This is the standard authentication method for all API requests.
+
+
+        Obtain a token via the OAuth2 Client Credentials flow from the Kontakt.io Keycloak identity provider.'
+    api_key:
+      type: apiKey
+      name: Api-Key
+      in: header
+      description: '**Deprecated — do not use for new integrations.** This method exists solely for backward compatibility and will be removed in a future release. Use JWT Bearer token authentication instead.
+
+
+        If you still need an API Key: sign in to **Kio Cloud** > select **Users** > select **Security** > copy your **Server API Key**.'
+    management_api_key:
+      name: Api-Key
+      type: apiKey
+      in: header
+      description: Special management API Key with additional privileges used by authorized users.
+externalDocs:
+  url: https://developer.kontakt.io

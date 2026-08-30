@@ -1,0 +1,259 @@
+openapi: 3.2.0
+info:
+  title: 'Location & Occupancy Occupancy: Footfall API'
+  version: '1.0'
+  description: Real-time and historical Kio Cloud apps data including location tracking, occupancy, and telemetry.
+  contact:
+    name: Kontakt.io Support
+    url: https://support.kontakt.io
+    email: support@kontakt.io
+  termsOfService: https://kontakt.io/terms-of-service
+  summary: Real-time and historical Kio Cloud apps data including location tracking, occupancy, and telemetry.
+servers:
+- url: https://apps.cloud.us.kontakt.io
+  description: 'Kio Cloud US '
+- url: https://apps.cloud.uk.kontakt.io
+  description: Kio Cloud UK
+security:
+- API Key - 1: []
+tags:
+- name: 'Occupancy: Footfall'
+paths:
+  /v3/occupancy/spaces:
+    get:
+      summary: Retrieve current footfall occupancy
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Occupancy-Footfall-Current'
+      operationId: get-v3-occupancy-spaces
+      description: "Returns the current occupancy of all footfall spaces or for a specific footfall space(s) with use of the spaceId query parameter.\n\nOccupancy is the count of people present in a footfall space. \n\nA footfall space is a user-defined virtual location that identifies where a Traffic Portal Beam measures the inbound (entering) and outbound (exiting) people traffic. The Portal Beam uses an invisible threshold line to detect people entering and exiting at its installation location.\n\nThe occupancy count of a footfall space is reset every day at midnight. This means that the count starts from zero at the beginning of each day, and only includes the traffic recorded during that day."
+      parameters:
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/size'
+      - $ref: '#/components/parameters/sort'
+      - in: query
+        name: spaceId
+        schema:
+          type: string
+          example: 619e418cd272f240e3d00518
+        description: Filter by one or multiple spaceIDs (separated by comma)
+      tags:
+      - 'Occupancy: Footfall'
+      security:
+      - api_key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Occupancy-Footfall-Current'
+  /v3/occupancy/spaces/history:
+    parameters: []
+    get:
+      summary: Retrieve footfall occupancy history
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Occupancy-Footfall-History'
+              examples:
+                example-1:
+                  value:
+                    startTime: '2021-11-17T15:48:18.556Z'
+                    endTime: '2021-11-17T15:49:08.556Z'
+                    occupancy: 66371635
+                    spaceId: 619524a6ba8a8c1963d8b7e2
+                    spaceName: gTRkqRYmGyqO
+        '429':
+          $ref: '#/components/responses/error-429'
+      operationId: get-v3-occupancy-spaces-history
+      description: 'Returns the occupancy history of a footfall space or for a specific footfall space(s) with use of the spaceId query parameter.
+
+
+        Occupancy is the count of people present in the footfall space.
+
+
+        A footfall space is a user-defined virtual location that identifies where a Traffic Portal Beam measures the inbound (entering) and outbound (exiting) people traffic. The Portal Beam is uses an invisible threshold line to detect people entering and exiting the location at its installation location.
+
+
+        The occupancy count of a footfall space is reset every day at midnight. This means that the count starts from zero at the beginning of each day, and only includes the traffic recorded during that day.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/size'
+      - $ref: '#/components/parameters/sort'
+      - $ref: '#/components/parameters/startTime'
+      - $ref: '#/components/parameters/endTime'
+      - schema:
+          type: string
+        in: query
+        name: spaceId
+        description: Filter by one or multiple Space IDs (separated by comma)
+        required: true
+      tags:
+      - 'Occupancy: Footfall'
+      security:
+      - api_key: []
+components:
+  parameters:
+    startTime:
+      name: startTime
+      in: query
+      schema:
+        type: string
+        example: '2020-11-27T08:00:00.000000Z'
+        format: date-time
+      description: 'Filter by start time. <br> Values are always expressed in UTC (equivalent to an offset of +00:00). <br> The timezone designator is always Z. <br> The hours component must be specified as two digits in 24-hour format. '
+    size:
+      name: size
+      in: query
+      schema:
+        type: string
+        default: '20'
+      description: Size of the page to retrieve.
+    sort:
+      name: sort
+      in: query
+      schema:
+        type: string
+        default: asc
+        example: ?sort=firstname&sort=lastname,asc
+        enum:
+        - asc
+        - desc
+      description: 'Sort objects returned in the response. Format property,property '
+    page:
+      name: page
+      in: query
+      schema:
+        type: integer
+        default: '0'
+      description: Page you want to retrieve; 0 indexed.
+    endTime:
+      name: endTime
+      in: query
+      schema:
+        type: string
+        example: ' 2020-11-29T08:00:00.000000Z'
+        format: date-time
+      description: 'Filter by end time. <br> Values are always expressed in UTC (equivalent to an offset of +00:00). <br> The timezone designator is always Z. <br> The hours component must be specified as two digits in 24-hour format. '
+  schemas:
+    Occupancy-Footfall-Current:
+      type: object
+      x-stoplight:
+        id: fc7b9557b3076
+      x-examples:
+        example-1:
+          content:
+          - spaceId: 619fd489baed0b3dd9863866
+            spaceName: jfRTJIIoxYkb
+            lastUpdate: '2021-11-25T18:23:05.455Z'
+            occupancy: 211
+          - spaceId: 619fd489baed0b3dd9863867
+            spaceName: NPVghcKEqqkf
+            lastUpdate: '2021-11-25T18:23:05.460Z'
+            occupancy: 37
+      title: Occupancy-Footfall-Current
+      properties:
+        content:
+          type: array
+          uniqueItems: true
+          minItems: 0
+          items:
+            type: object
+            properties:
+              spaceId:
+                type: string
+                minLength: 1
+              spaceName:
+                type: string
+                minLength: 1
+              lastUpdate:
+                type: string
+                minLength: 1
+              occupancy:
+                type: number
+                description: Count of people in the footfall location; calculated by subtracting the exit (outbound) count from the entry (inbound) count.
+            required:
+            - spaceId
+            - spaceName
+            - lastUpdate
+            - occupancy
+      required:
+      - content
+    Occupancy-Footfall-History:
+      type: object
+      x-stoplight:
+        id: 02668a9fc4907
+      x-examples:
+        example-1:
+          content:
+          - startTime: '2021-11-25T18:21:25.390Z'
+            endTime: '2021-11-25T18:22:15.390Z'
+            occupancy: 46394714
+            spaceId: 619fd489baed0b3dd9863865
+            spaceName: GicvbLePkFJI
+          - startTime: '2021-11-25T18:22:15.390Z'
+            endTime: '2021-11-25T18:22:45.390Z'
+            occupancy: 179202525
+            spaceId: 619fd489baed0b3dd9863865
+            spaceName: GicvbLePkFJI
+      title: Occupancy-Footfall-History
+      properties:
+        content:
+          type: array
+          uniqueItems: true
+          minItems: 0
+          items:
+            type: object
+            properties:
+              startTime:
+                type: string
+                minLength: 1
+              endTime:
+                type: string
+                minLength: 1
+              occupancy:
+                type: number
+                description: Count of people in the footfall location; calculated by subtracting the exit (outbound) count from the entry (inbound) count.
+              spaceId:
+                type: string
+                minLength: 1
+              spaceName:
+                type: string
+                minLength: 1
+            required:
+            - startTime
+            - endTime
+            - occupancy
+            - spaceId
+            - spaceName
+      required:
+      - content
+  responses:
+    error-429:
+      description: Rate limit exceeded. The response has no body.
+      headers:
+        Retry-After:
+          description: 'Indicates how long to wait before making a new request. The response includes this header twice: once with an HTTP-date format (e.g., "Wed, 21 Oct 2015 07:28:00 GMT") and once with delay-seconds format (e.g., "120").'
+          schema:
+            type: string
+          required: true
+      content:
+        text/plain: null
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      description: 'Your Kio Cloud API Key is required to be provided in the `Api-Key` header in each API call.
+
+
+        Get your API Key: sign in to **Kio Cloud** > select **Users** > select **Security** > copy your **Server API Key**.'
+      name: Api-Key
+x-: null

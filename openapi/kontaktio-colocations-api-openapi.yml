@@ -1,0 +1,197 @@
+openapi: 3.2.0
+info:
+  title: Location & Occupancy Colocations API
+  version: '1.0'
+  description: Real-time and historical Kio Cloud apps data including location tracking, occupancy, and telemetry.
+  contact:
+    name: Kontakt.io Support
+    url: https://support.kontakt.io
+    email: support@kontakt.io
+  termsOfService: https://kontakt.io/terms-of-service
+  summary: Real-time and historical Kio Cloud apps data including location tracking, occupancy, and telemetry.
+servers:
+- url: https://apps.cloud.us.kontakt.io
+  description: 'Kio Cloud US '
+- url: https://apps.cloud.uk.kontakt.io
+  description: Kio Cloud UK
+security:
+- API Key - 1: []
+tags:
+- name: Colocations
+paths:
+  /v3/novid/colocations:
+    get:
+      summary: List colocated devices
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Colocated-devices-list'
+              examples:
+                example-1:
+                  value:
+                    content:
+                    - entityId: 29357
+                      entityName: OhJOfzEYtgQC
+                      trackingId: YDDDkL
+                      startTime: '2022-01-11T08:17:00.725468Z'
+                      endTime: '2022-01-18T08:17:00.725485Z'
+                      contacts:
+                      - entityId: 29356
+                        entityName: hfrtnszGIwhn
+                        trackingId: uSOKrc
+                        durationSec: 1
+                    - entityId: 29358
+                      entityName: QLkgWkWaFuGJ
+                      trackingId: iexMRB
+                      startTime: '2022-01-11T08:17:00.726105Z'
+                      endTime: '2022-01-18T08:17:00.726111Z'
+                      contacts:
+                      - entityId: 29356
+                        entityName: hfrtnszGIwhn
+                        trackingId: uSOKrc
+                        durationSec: 1
+                    page:
+                      size: 2
+                      totalElements: 3
+                      totalPages: 2
+                      number: 0
+        '400':
+          description: 'Bad Request - too many results to query
+
+
+            Too many results to query. If possible, try lowering the time range or number of trackingIds. This error mostly occurs when there is very big amount of tracked devices in one room. If that is the case and these devices are not used currently, move them out of range of scanning devices.'
+          content:
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                Example:
+                  value: "{\n  \"timestamp\": \"2022-01-20T15:17:50.993+00:00\",\n  \"status\": 400,\n  \"error\": \"Bad Request\",\n  \"message\": \"Too many results to query. If possible, try lowering the time range or number of trackingIds. This error mostly occurs when there is very big amount of tracked devices in one room. If that is the case and these devices are not used currently, move them out of range of scanning devices.\",\n  \"path\": \"/v3/colocations/summary\"\n}"
+            multipart/form-data:
+              schema:
+                $ref: ''
+      operationId: get-v3-novid-colocations
+      description: 'Returns a list of all colocated devices, where colacated is defined as two devices dwelling in the same room.
+
+        **Time range specified by startTime and endTime cannot be greater than 21 days.**'
+      security:
+      - api_key: []
+      parameters:
+      - schema:
+          type: string
+          example: dd:24:d0:82:3d:7c
+        in: query
+        name: trackingId
+        description: Filter by single infected device trackingId
+        required: true
+      - schema:
+          type: string
+          example: '2021-11-29T09:40:32Z'
+          format: date-time
+        in: query
+        name: startTime
+        description: 'ISO 8601 Timestamp. Indicates the starting point of the time range you want to check. <br> You should use the following format: 2020-08-12T11:40:32+02:00 or 2020-08-12T09:40:32Z for UTC'
+        required: true
+      - schema:
+          type: string
+          format: date-time
+          example: '2021-11-29T11:40:00+02:00'
+        in: query
+        name: endTime
+        description: 'ISO 8601 Timestamp. Indicates the ending point of the time range you want to check.<br> You should use the following format: 2020-08-12T11:40:32+02:00 or 2020-08-12T09:40:32Z for UTC'
+      tags:
+      - Colocations
+components:
+  schemas:
+    Colocated-devices-list:
+      description: ''
+      type: object
+      x-examples:
+        example-1:
+          links:
+          - rel: first
+            href: https://apps-api.test.kontakt.io/v3/novid/colocations?trackingId=uSOKrc&startTime=2022-01-11T07:17:00.725468Z&endTime=2022-01-18T09:17:00.725485Z&page=0&size=2&sort=entityId,asc
+          - rel: self
+            href: https://apps-api.test.kontakt.io/v3/novid/colocations?page=0&size=2&sort=entityId&trackingId=uSOKrc&startTime=2022-01-11T07:17:00.725468Z&endTime=2022-01-18T09:17:00.725485Z
+          - rel: next
+            href: https://apps-api.test.kontakt.io/v3/novid/colocations?trackingId=uSOKrc&startTime=2022-01-11T07:17:00.725468Z&endTime=2022-01-18T09:17:00.725485Z&page=1&size=2&sort=entityId,asc
+          - rel: last
+            href: https://apps-api.test.kontakt.io/v3/novid/colocations?trackingId=uSOKrc&startTime=2022-01-11T07:17:00.725468Z&endTime=2022-01-18T09:17:00.725485Z&page=1&size=2&sort=entityId,asc
+          content:
+          - entityId: 29357
+            entityName: OhJOfzEYtgQC
+            trackingId: YDDDkL
+            startTime: '2022-01-11T08:17:00.725468Z'
+            endTime: '2022-01-18T08:17:00.725485Z'
+            contacts:
+            - entityId: 29356
+              entityName: hfrtnszGIwhn
+              trackingId: uSOKrc
+              durationSec: 1
+          - entityId: 29358
+            entityName: QLkgWkWaFuGJ
+            trackingId: iexMRB
+            startTime: '2022-01-11T08:17:00.726105Z'
+            endTime: '2022-01-18T08:17:00.726111Z'
+            contacts:
+            - entityId: 29356
+              entityName: hfrtnszGIwhn
+              trackingId: uSOKrc
+              durationSec: 1
+          page:
+            size: 2
+            totalElements: 3
+            totalPages: 2
+            number: 0
+      title: Colocated devices
+      properties:
+        content:
+          type: array
+          uniqueItems: true
+          minItems: 1
+          description: List of colocated devices with queried devices.
+          items:
+            type: object
+            properties:
+              trackingId:
+                type: string
+                minLength: 1
+                description: TrackingID of colocated device.
+              startTime:
+                type: string
+                minLength: 1
+                description: Beginning of checked time period.
+              endTime:
+                type: string
+                minLength: 1
+                description: End of checked time period.
+              contacts:
+                type: array
+                uniqueItems: true
+                minItems: 1
+                description: List of queried devices.
+                items:
+                  type: object
+                  description: Query device tracking ID
+                  properties:
+                    trackingId:
+                      type: string
+                      minLength: 1
+                      description: trackingId of queried device.
+                    durationSec:
+                      type: number
+                      description: Duration in seconds of colocation time between queried device and colocated device.
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      description: 'Your Kio Cloud API Key is required to be provided in the `Api-Key` header in each API call.
+
+
+        Get your API Key: sign in to **Kio Cloud** > select **Users** > select **Security** > copy your **Server API Key**.'
+      name: Api-Key
+x-: null

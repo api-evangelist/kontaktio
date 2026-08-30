@@ -1,0 +1,276 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Entity Management Integration Entity Integration API
+  description: 'Use this API to integrate third-party systems with the Kontakt.io Kio Apps platform.  You can batch import and update Entities such as Staff and Assets, and retrieve their current configuration.
+
+
+    API requests require an [Access token](client-credentials-flow.md).
+
+    '
+  termsOfService: https://kontakt.io/legal-documents/terms-of-sale-and-service/
+  contact:
+    name: Kontakt.io
+    url: https://kontakt.io/contact-us/
+    email: kontakt@kontakt.io
+servers:
+- url: https://api.cloud.us.kontakt.io/entity-management
+  description: US Kio Cloud
+- url: https://api.cloud.uk.kontakt.io/entity-management
+  description: UK Kio Cloud
+security:
+- Jwt token: []
+tags:
+- name: entity-integration
+paths:
+  /v1/integration/entity:
+    post:
+      tags:
+      - entity-integration
+      summary: Batch import or update entities
+      description: 'This endpoint allows the import or update up to 1000 entities (e.g. Staff or Assets) in a single request.  Each entity must include a unique `entityId`, and may optionally include device identifiers and custom attributes.  Entities will be created if they do not already exist, or updated if they do.  Validation errors for individual items will be returned in the response body.
+
+        '
+      operationId: createUpdateEntities
+      parameters:
+      - name: Realm
+        in: header
+        description: Kio Cloud account Tenant Name
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              title: CreateUpdateEntitiesBatch
+              maxItems: 1000
+              items:
+                $ref: '#/components/schemas/EntityCreateUpdateDto'
+            examples:
+              default:
+                value:
+                - entityId: 1234
+                  name: Staff 1234
+                  entityTypeId: abc123
+                  status: ACTIVE
+                  attributes:
+                  - name: Role
+                    value: Assistant
+                - entityId: 1235
+                  name: Staff 1235
+                  entityTypeId: abc456
+                  status: DEACTIVATED
+                  attributes:
+                  - name: Role
+                    value: Assistant
+              Example 1:
+                value:
+                - entityId: string
+                  name: string
+                  entityTypeId: string
+                  trackingId: string
+                  virtualTrackingId:
+                  - string
+                  status: ACTIVE
+                  attributes:
+                  - id: string
+                    name: string
+                    value: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityCreateUpdateResult'
+        '400':
+          description: Validation error
+        '401':
+          description: Unauthorized
+        '403':
+          description: Permission denied
+        '409':
+          description: Conflict – entityId or trackingId already exists in an incompatible state
+      security:
+      - Jwt token: []
+      servers:
+      - url: https://api.cloud.us.kontakt.io/entity-management
+        description: US Kio Cloud
+      - url: https://api.cloud.uk.kontakt.io/entity-management
+        description: UK Kio Cloud
+  /v1/integration/entity/{entityId}:
+    get:
+      tags:
+      - entity-integration
+      summary: Retrieve details of a single entity
+      description: 'Returns the full configuration of a specific entity, including its ID, type, lifecycle status, and assigned attributes.  Use this to verify the current state of an entity in the Kontakt.io platform.
+
+        '
+      operationId: entityDetails
+      parameters:
+      - name: Realm
+        in: header
+        description: Kio Cloud account Tenant Name
+        required: true
+        schema:
+          type: string
+      - $ref: '#/components/parameters/entityId'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityDetails'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Permission denied
+        '404':
+          description: Entity not found
+      security:
+      - Jwt token: []
+      servers:
+      - url: https://api.cloud.us.kontakt.io/entity-management
+        description: US Kio Cloud
+      - url: https://api.cloud.uk.kontakt.io/entity-management
+        description: UK Kio Cloud
+components:
+  schemas:
+    Attribute:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 'Id of attribute definition on EntityType level. If not provided attribute will be matched by name if the same name exists  If no match is found, the attribute will be ignored.
+
+            '
+        name:
+          type: string
+          description: The name of the attribute (e.g. "Department", "Role").
+        value:
+          type: string
+          description: The attribute's value (e.g. "Radiology", "Technician").
+      required:
+      - name
+      - value
+    EntityStatus:
+      type: string
+      enum:
+      - ACTIVE
+      - DEACTIVATED
+      - DELETED
+      description: 'Indicates the current lifefcyle of the entity:   - `ACTIVE`: Fully operational.   - `DEACTIVATED`: Entity position data is collected, but not monitored by alert rules (alerts and notfications are disabled). - `DELETED`: Entity is archived and hidden from the UI. The `entityId` can be restored or re-registered with a new entity.
+
+        '
+    ItemError:
+      type: object
+      description: Details about an entity that couldn't be processed.
+      properties:
+        item:
+          type: string
+          description: The `entityId` of the failed entity.
+        errorMessage:
+          type: string
+          description: Message describing the error.
+      required:
+      - item
+      - errorMessage
+    EntityCreateUpdateResult:
+      type: object
+      description: Response model that summarizes the result of a batch create/update operation.
+      properties:
+        processed:
+          type: integer
+          description: Number of entities successfully created or updated.
+        totalItems:
+          type: integer
+          description: Total number of entities submitted in the request.
+        errors:
+          type: array
+          description: A list of failed items along with details about each error.
+          items:
+            $ref: '#/components/schemas/ItemError'
+      required:
+      - processed
+      - totalItems
+    EntityCreateUpdateDto:
+      type: object
+      title: EntityCreateDto
+      properties:
+        entityId:
+          type: string
+          description: A unique identifier for the entity. Required for both creating new entities and updating existing ones.
+          minLength: 2
+          maxLength: 36
+        name:
+          type: string
+          description: The name of the entity (e.g. "IV Pump 1234" or "John Smith").
+          minLength: 2
+          maxLength: 36
+        entityTypeId:
+          type: string
+          description: The ID of an existing Entity Type defined in the Kontakt.io platform.
+        trackingId:
+          type: string
+          description: The MAC address of the device (e.g. Smart Badge or Tag) assigned to this entity. Will be validated against registered devices in the Device Management API.
+        virtualTrackingId:
+          type: array
+          description: 'Virtual Device MAC address assigned to this entity.  Is not validated against registered devices in the Device Management API.
+
+            '
+          uniqueItems: true
+          items:
+            type: string
+        status:
+          $ref: '#/components/schemas/EntityStatus'
+        attributes:
+          type: array
+          description: 'A list of key-value pairs that describe the entity (e.g. `Role: Nurse`).  These must match defined attributes on the entity type.
+
+            '
+          items:
+            $ref: '#/components/schemas/Attribute'
+      required:
+      - entityId
+      - name
+      - entityTypeId
+      - status
+    EntityDetails:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of entity
+        entityId:
+          type: string
+          description: Unique identifier of entity
+        entityTypeId:
+          type: string
+          description: ID of existing Entity Type
+        status:
+          $ref: '#/components/schemas/EntityStatus'
+        attributes:
+          type: array
+          description: Entity attributes
+          items:
+            $ref: '#/components/schemas/Attribute'
+      required:
+      - name
+      - entityId
+      - entityTypeId
+      - status
+  parameters:
+    entityId:
+      name: entityId
+      in: path
+      description: A unique identifier for the entity. Required for both creating new entities and updating existing ones.
+      required: true
+      schema:
+        type: string
+  securitySchemes:
+    Jwt_token:
+      type: http
+      scheme: bearer

@@ -1,0 +1,1587 @@
+openapi: 3.2.0
+info:
+  title: Location & Occupancy Stream API
+  version: '1.0'
+  description: Real-time and historical Kio Cloud apps data including location tracking, occupancy, and telemetry.
+  contact:
+    name: Kontakt.io Support
+    url: https://support.kontakt.io
+    email: support@kontakt.io
+  termsOfService: https://kontakt.io/terms-of-service
+  summary: Real-time and historical Kio Cloud apps data including location tracking, occupancy, and telemetry.
+servers:
+- url: https://apps.cloud.us.kontakt.io
+  description: 'Kio Cloud US '
+- url: https://apps.cloud.uk.kontakt.io
+  description: Kio Cloud UK
+security:
+- API Key - 1: []
+tags:
+- name: Stream
+paths:
+  /v3/channels:
+    parameters:
+    - schema:
+        type: string
+      name: ''
+      in: path
+      required: true
+    get:
+      summary: List all configured channels
+      responses:
+        '200':
+          description: 'OK
+
+
+            Select **any of** the channel types; Kinesis, EventHub, or Watson for a response example.'
+          content:
+            application/json:
+              schema:
+                description: Response will include all configured channels. Select any of to view response details by channel type.
+                oneOf:
+                - $ref: '#/components/schemas/Stream-channel-kinesis'
+                - $ref: '#/components/schemas/Stream-channel-eventHub'
+                - $ref: '#/components/schemas/Stream-channel-watson'
+              examples: {}
+      operationId: get-v3-channels
+      security:
+      - api_key: []
+      description: Returns a list of all configured stream channels.
+      tags:
+      - Stream
+    post:
+      summary: Create new channel
+      operationId: post-v3-channels
+      responses:
+        '200':
+          description: 'HTTP/1.1 200 OK <br>
+
+            Content-Type: application/json;charset=UTF-8 <br>
+
+            Content-Length: 24 <br>
+
+
+            **Channel Id of new channel created**. The Channel Id (channelIds) is required to create a stream subscription.'
+          content: {}
+      description: 'Create a new AWS Kinesis, Azure Event Hub, or IBM Watson channel.
+
+
+        The response includes the **channel Id** that is required to create a stream subscription.
+
+        '
+      parameters: []
+      tags:
+      - Stream
+      requestBody:
+        $ref: '#/components/requestBodies/stream-post-channel'
+      security:
+      - api_key: []
+  /v3/channels/{id}:
+    parameters:
+    - schema:
+        type: string
+      name: id
+      in: path
+      required: true
+      description: The channel Id. Channel Id is generated from the Create new channel request by type (kinesis, eventHub, or watson).
+    get:
+      summary: Retrieve channel by id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/Stream-channel-kinesis'
+                - $ref: '#/components/schemas/Stream-channel-watson'
+                  x-stoplight:
+                    id: fca4y1zwjma5u
+                - $ref: '#/components/schemas/Stream-channel-watson'
+                  x-stoplight:
+                    id: duy40ufuh67q7
+      operationId: get-v3-channels-id
+      description: Retrieve the configuration of a channel by id.
+      security:
+      - api_key: []
+      tags:
+      - Stream
+    delete:
+      summary: Delete a channel  by id
+      operationId: delete-v3-channels-id
+      responses:
+        '200':
+          description: OK
+      description: Delete a channel by id
+      security:
+      - api_key: []
+      tags:
+      - Stream
+    patch:
+      summary: Update Channel by ID
+      operationId: patch-v3-channels-id
+      responses:
+        '200':
+          description: OK
+      description: "Update a AWS Kinesis, Azure Event Hub, or IBM Watson channel. \n"
+      tags:
+      - Stream
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - $ref: '#/components/schemas/Stream-patch-kinesis-channel'
+              - $ref: '#/components/schemas/Stream-patch-eventhub-channel'
+              - $ref: '#/components/schemas/Stream-patch-watson-channel'
+            examples:
+              kinesis:
+                value:
+                  status: string
+                  name: Kontakt kinesis stream
+                  channel:
+                    type: kinesis
+                    endpoint: kinesis.us-east-2.amazonaws.com
+                    streamName: string
+                    accessKey: string
+                    secretKey: string
+                    region: string
+              eventHub:
+                value:
+                  status: active
+                  name: string
+                  channel:
+                    type: eventHub
+                    endpoint: string
+                    sharedAccessKeyName: string
+                    sharedAccessKey: string
+                    eventHubName: string
+              watson:
+                value:
+                  status: active
+                  name: string
+                  channel:
+                    type: watson
+                    orgId: string
+                    typeId: string
+                    token: string
+                    deviceId: string
+        description: 'From **one of**, select the **channel type** updating (Kinesis, Event Hub, or Watson).
+
+
+          **IMPORTANT:** When updating a channel property, all channel property values must be provided.'
+      security:
+      - api_key: []
+  /v3/streams/subscriptions/telemetry:
+    get:
+      summary: Retrieve telemetry subscription
+      responses: {}
+      operationId: get-v3-streams-subscriptions-telemetry
+      description: Returns the name, type, and channeIds for a telemetry stream subscription.
+      tags:
+      - Stream
+      security:
+      - api_key: []
+    post:
+      summary: Create telemetry subscription
+      operationId: post-v3-streams-subscriptions-telemetry
+      responses:
+        '200':
+          description: OK
+      description: 'Creates a new telemetry stream subscription.
+
+
+        > It’s important to **first validate that no existing Telemetry stream subscription type exists with connected channels** prior to creating a new subscription. Creating a new Telemetry subscription type when one already exists overwrites that subscription and immediately disconnects any subscribed channels. If a subscription type already exist, you will only need to add a channel ID to the existing subscription via the Telemetry subscritpion PATCH request. **Refer to the GET Subscription Endpoint to validate if a subscription type already exists and record the existing Channel IDs included in the subscription.**
+
+        '
+      security:
+      - api_key: []
+      tags:
+      - Stream
+      requestBody:
+        $ref: '#/components/requestBodies/stream-post-subscription'
+    patch:
+      summary: Update telemetry subscription
+      operationId: patch-v3-streams-subscriptions-telemetry
+      responses:
+        '200':
+          description: OK
+      description: 'Updates a telemetry stream subscription.
+
+
+        **It is important to include any channels already subscribed to the subscription by including them in the array of channel Ids when updating a subscription type.**
+
+        '
+      tags:
+      - Stream
+      security:
+      - api_key: []
+      requestBody:
+        $ref: '#/components/requestBodies/stream-patch-subscription'
+    delete:
+      summary: Delete telemetry subscription
+      operationId: delete-v3-streams-subscriptions-telemetry
+      responses:
+        '204':
+          description: No Content
+      description: Deletes a telemetry stream subscription.
+      security:
+      - api_key: []
+      tags:
+      - Stream
+  /v3/channels/state/{id}:
+    parameters:
+    - schema:
+        type: string
+      name: id
+      in: path
+      required: true
+      description: ID of the channel.
+    get:
+      summary: Retrieve channel connection state by id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                x-examples:
+                  example-1:
+                    connectionState: DISCONNECTED
+                    errorMessage: error message if any
+                    timestamp: 1638253416.61
+                properties:
+                  connectionState:
+                    type: string
+                    minLength: 1
+                    enum:
+                    - DISCONNECTED
+                    - CONNECTED
+                    - INVALID
+                  errorMessage:
+                    type: string
+                    minLength: 1
+                    description: Contains possible error messages when processor was unable to establish connection end send any message successfully.
+                  timestamp:
+                    type: number
+                    description: Time when change of the state occurred.
+                required:
+                - connectionState
+                - timestamp
+      operationId: get-v3-channels-state
+      description: "Returns the current connection state of a stream channel.\n\nconnectionState - state of connection to the channel. \n\nCan be one of following:\n\n- **DISCONNECTED** - default after channel creation, means channel is not used\n\n- **CONNECTED** - established connection and message has been successfully sent\n\n- **INVALID** - cannot establish connection because of a channel configuration issue"
+      security:
+      - api_key: []
+      tags:
+      - Stream
+  /v3/streams/subscriptions/position:
+    parameters: []
+    get:
+      summary: Retrieve position subscription
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stream-V2-GET-Subscription'
+      operationId: get-v3-streams-subscriptions-position
+      description: "Returns the name, type, and channeIds for a position stream subscription. \n\nAlso, filter by deviceModel when configured."
+      security:
+      - api_key: []
+      tags:
+      - Stream
+    post:
+      summary: Create position subscription
+      operationId: post-v3-streams-subscriptions-position
+      responses:
+        '200':
+          description: OK
+      description: 'Creates a new position stream subscription.
+
+
+        Filter by Kontakt.io device model ID is availble. For the list of device models and their corresponding device model ID, see **[Stream Position filtering by device model](docs/stream/position-filter.md).**
+
+
+        > It’s important to **first validate that no existing Position stream subscription type exists with connected channels** prior to creating a new subscription. Creating a new Position subscription type when one already exists overwrites that subscription and immediately disconnects any subscribed channels. If a subscription type already exist, you will only need to add a channel ID to the existing subscription via the Position subscritpion PATCH request. **Refer to the GET Subscription Endpoint to validate if a subscription type already exists and record the existing Channel IDs included in the subscription.**'
+      security:
+      - api_key: []
+      parameters: []
+      tags:
+      - Stream
+      requestBody:
+        $ref: '#/components/requestBodies/stream-position-subscription'
+    patch:
+      summary: Update position subscription
+      operationId: patch-v3-streams-subscriptions-position
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+      description: 'Updates a position stream subscription.
+
+
+        **It is important to include any channels already subscribed to the subscription by including them in the array of channel Ids when updating a subscription type.**'
+      security:
+      - api_key: []
+      tags:
+      - Stream
+      requestBody:
+        $ref: '#/components/requestBodies/stream-position-subscription'
+    delete:
+      summary: Delete position subscription
+      operationId: delete-v3-streams-subscriptions-position
+      responses:
+        '204':
+          description: No Content
+      description: Deletes a postion stream subscription.
+      security:
+      - api_key: []
+      tags:
+      - Stream
+  /v3/streams/subscriptions/occupancy:
+    parameters: []
+    get:
+      summary: Retrieve occupancy subscription
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                x-examples:
+                  example-1:
+                    name: mCCCZeKGYj
+                    type: telemetry
+                    channelIds:
+                    - 6238449836543f4ceda20ebb
+                properties:
+                  name:
+                    type: string
+                    description: A user-defined name to identify the subscription.
+                  type:
+                    type: string
+                    description: The type of subscription. Set to occupancy to create the occupancy subscription.
+                    enum:
+                    - telemetry
+                    - position
+                    - occupancy
+                    example: occupancy
+                  channelIds:
+                    type: array
+                    description: 'The channel Id or multiple channel Ids separated by a comma.
+
+                      Channel Id is included in the Create new channel response that identifies the channel (AWS Kinesis, Azure Event Hub, or IBM Watson)'
+                    items:
+                      type: string
+                required:
+                - name
+                - type
+                - channelIds
+      operationId: get-v3-streams-subscriptions-telemetry
+      description: Returns the name, type, and channeIds for a occupancy stream subscription.
+      security:
+      - api_key: []
+      tags:
+      - Stream
+      requestBody:
+        $ref: '#/components/requestBodies/stream-post-subscription'
+    post:
+      summary: Create occupancy subscription
+      operationId: post-v3-streams-subscriptions-telemetry
+      responses:
+        '200':
+          description: OK
+      description: 'Creates a new occupancy stream subscription.
+
+
+        > It’s important to **first validate that no existing Occupancy stream subscription type exists with connected channels** prior to creating a new subscription. Creating a new Occupancy subscription type when one already exists overwrites that subscription and immediately disconnects any subscribed channels. If a subscription type already exist, you will only need to add a channel ID to the existing subscription via the Occupancy subscritpion PATCH request. **Refer to the GET Subscription Endpoint to validate if a subscription type already exists and record the existing Channel IDs included in the subscription.**
+
+        '
+      security:
+      - api_key: []
+      tags:
+      - Stream
+      requestBody:
+        $ref: '#/components/requestBodies/stream-occupancy-subscription'
+    patch:
+      summary: Update occupancy subscription
+      operationId: patch-v3-streams-subscriptions-telemetry
+      responses:
+        '200':
+          description: OK
+      description: 'Updates a occupancy stream subscription.
+
+
+        **It is important to include any channels already subscribed to the subscription by including them in the array of channel Ids when updating a subscription type.**'
+      security:
+      - api_key: []
+      tags:
+      - Stream
+      requestBody:
+        $ref: '#/components/requestBodies/stream-occupancy-subscription'
+    delete:
+      summary: Delete occupancy subscription
+      operationId: delete-v3-streams-subscriptions-telemetry
+      responses:
+        '204':
+          description: No Content
+      description: Deletes a occupancy stream subscription.
+      security:
+      - api_key: []
+      tags:
+      - Stream
+  /v3/streams/subscriptions/position/channels:
+    parameters: []
+    post:
+      summary: Add Channels to Position Subscription
+      tags:
+      - Stream
+      responses: {}
+      operationId: post-v3-streams-subscriptions-type-channels
+      x-stoplight:
+        id: cbqhlxd4mbqm5
+      description: Safely appends one or more channels to an existing Position subscription’s channelIds array, without overwriting the existing list.
+      security:
+      - api_key: []
+      parameters: []
+      requestBody:
+        description: ' The list of channel IDs to append to the subscription.'
+        content:
+          application/json:
+            schema:
+              type: object
+              x-examples:
+                Example 1:
+                  channelIds:
+                  - channel-to-remove-1
+                  - channel-to-remove-2
+              required:
+              - channelIds
+              properties:
+                channelIds:
+                  type: array
+                  description: The Channel IDs
+                  items:
+                    type: string
+    delete:
+      summary: Remove Channels from Position Subscription
+      tags:
+      - Stream
+      responses: {}
+      operationId: delete-v3-streams-subscriptions-type-channels
+      x-stoplight:
+        id: lejnlb1ql6m7c
+      description: Safely removes one or more channel IDs from an existing subscription, updating the channelIds list accordingly.
+      security:
+      - api_key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - channelIds
+              properties:
+                channelIds:
+                  type: array
+                  x-stoplight:
+                    id: 391ahiq26cfbi
+                  items:
+                    x-stoplight:
+                      id: cnmaihy7nl55g
+                    type: string
+        description: The list of channel IDs to remove from the subscription.
+  /v3/streams/subscriptions/telemetry/channels:
+    parameters: []
+    post:
+      summary: Add Channels to Telemetry Subscription
+      tags:
+      - Stream
+      responses: {}
+      operationId: post-v3-streams-subscriptions-type-channels
+      description: Safely appends one or more channels to an existing Telemetry subscription’s channelIds array, without overwriting the existing list.
+      security:
+      - api_key: []
+      parameters: []
+      requestBody:
+        description: ' The list of channel IDs to append to the subscription.'
+        content:
+          application/json:
+            schema:
+              type: object
+              x-examples:
+                Example 1:
+                  channelIds:
+                  - channel-to-remove-1
+                  - channel-to-remove-2
+              required:
+              - channelIds
+              properties:
+                channelIds:
+                  type: array
+                  items:
+                    type: string
+      x-stoplight:
+        id: ajvvdott039m8
+    delete:
+      summary: Remove Channels from Telemetry Subscription
+      tags:
+      - Stream
+      responses: {}
+      operationId: delete-v3-streams-subscriptions-type-channels
+      description: Safely removes one or more channel IDs from an existing Telemetry subscription, updating the channelIds list accordingly.
+      security:
+      - api_key: []
+      x-stoplight:
+        id: gygwt4cmi73df
+      requestBody:
+        description: The list of channel IDs to remove from the subscription.
+        content:
+          application/json:
+            schema:
+              type: object
+              x-examples:
+                Example 1:
+                  channelIds:
+                  - new-channel-1
+                  - new-channel-2
+              required:
+              - channelIds
+              properties:
+                channelIds:
+                  type: array
+                  items:
+                    type: string
+  /v3/streams/subscriptions/occupancy/channels:
+    parameters: []
+    post:
+      summary: Add Channels to Occupancy Subscription
+      tags:
+      - Stream
+      responses: {}
+      operationId: post-v3-streams-subscriptions-type-channels
+      description: Safely appends one or more channels to an existing Occupancy subscription’s channelIds array, without overwriting the existing list.
+      security:
+      - api_key: []
+      parameters: []
+      requestBody:
+        description: ' The list of channel IDs to append to the subscription.'
+        content:
+          application/json:
+            schema:
+              type: object
+              x-examples:
+                Example 1:
+                  channelIds:
+                  - channel-to-remove-1
+                  - channel-to-remove-2
+              required:
+              - channelIds
+              properties:
+                channelIds:
+                  type: array
+                  items:
+                    type: string
+      x-stoplight:
+        id: ei3eqyorqusdb
+    delete:
+      summary: Remove Channels from Occupancy Subscription
+      tags:
+      - Stream
+      responses: {}
+      operationId: delete-v3-streams-subscriptions-type-channels
+      description: Safely removes one or more channel IDs from an existing Occupancy subscription, updating the channelIds list accordingly.
+      security:
+      - api_key: []
+      x-stoplight:
+        id: 3caa8ema32npq
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              x-examples:
+                Example 1:
+                  channelIds:
+                  - new-channel-1
+                  - new-channel-2
+              required:
+              - channelIds
+              properties:
+                channelIds:
+                  type: array
+                  items:
+                    type: string
+        description: The list of channel IDs to remove from the subscription.
+components:
+  requestBodies:
+    stream-patch-subscription:
+      content:
+        application/json:
+          schema:
+            type: object
+            x-examples:
+              Example 1:
+                name: cUyTMAyIhJ
+                type: position
+                channelIds:
+                - 6238449836543f4ceda20ec4
+            properties:
+              name:
+                type: string
+                description: User-defined name to identify the subscription.
+              type:
+                type: string
+                description: The type of subscription. MUST be set to type of subscription updating.
+                enum:
+                - telemetry
+                - position
+                - occupancy
+              channelIds:
+                type: array
+                description: Provide the channel Id or multiple channel Ids separated by a comma. A channel Id is generated by the Create new channel request. Once generated, retrieve ids from List all configured channels request.
+                items:
+                  type: string
+            required:
+            - name
+            - type
+            - channelIds
+          examples:
+            Telemetry:
+              value:
+                name: tUyTMAyIhJ
+                type: telemetry
+                channelIds:
+                - 6238449836543f4teda20ec4
+      description: '**IMPORTANT:** When updating a subscription property, all subscription property values must be provided.'
+    stream-post-channel:
+      content:
+        application/json:
+          schema:
+            oneOf:
+            - $ref: '#/components/schemas/Stream-post-kinesis'
+            - $ref: '#/components/schemas/Stream-post-eventhub'
+            - $ref: '#/components/schemas/Stream-post-watson'
+            description: Select one of; by channel type
+          examples: {}
+      description: "Creates a stream channel. \n\nFrom **one of**, select the **channel type** (Kinesis, Event Hub, or Watson)."
+    stream-occupancy-subscription:
+      content:
+        application/json:
+          schema:
+            type: object
+            x-examples:
+              Example 1:
+                name: Room occupancy and room attributes stream
+                channelIds:
+                - channel_id_1
+                - channel_id_2
+                filters:
+                  occupancyTypes:
+                  - room
+                  - roomAttribute
+                  - space
+                  - zone
+            properties:
+              name:
+                type: string
+                description: The name of the subscription.
+              channelIds:
+                type: array
+                description: The IDs of the channels to subscribe to.
+                items:
+                  type: string
+              filter:
+                type: object
+                properties:
+                  occupancyTypes:
+                    type: array
+                    description: 'The occupancy types to include in the subscription.
+
+                      [More information](docs/stream/occupancy-filte.r.md)'
+                    items:
+                      type: string
+                      enum:
+                      - room
+                      - roomAttribute
+                      - space
+                      example: room
+            required:
+            - name
+            - channelIds
+      description: 'This schema defines the request body for creating [POST] or updating [PATCH] an occupancy subscription
+
+
+        **IMPORTANT:** When updating a subscription property, all required property values must be provided.'
+    stream-post-subscription:
+      content:
+        application/json:
+          schema:
+            type: object
+            x-examples:
+              example-1:
+                name: KqazTkMOyD
+                type: occupancy
+                channelIds:
+                - 62726a33c567d41c01e002ab
+            properties:
+              name:
+                type: string
+                description: User-defined name to identify the subscription.
+              type:
+                type: string
+                description: The type of subscription
+                enum:
+                - telemetry
+                - position
+                - occupancy
+              channelIds:
+                type: array
+                description: Provide the channel Id or multiple channel Ids separated by a comma. A channel Id is generated by the Create new channel request. Once generated, retrieve ids from List all configured channels request.
+                items:
+                  type: string
+            required:
+            - name
+            - type
+            - channelIds
+          examples:
+            Example 1:
+              value:
+                name: string
+                type: telemetry
+                channelIds:
+                - string
+      description: Creates a new stream subscription.
+    stream-position-subscription:
+      content:
+        application/json:
+          schema:
+            type: object
+            x-examples:
+              Example 1:
+                name: Nano and Badge position subscription
+                channelIds:
+                - channel_id_1
+                - channel_id_2
+                filter:
+                  deviceModels:
+                  - 30
+                  - 32
+            properties:
+              name:
+                type: string
+                description: User-defined name to identify the subscription.
+              channelIds:
+                type: array
+                description: The type of subscription.
+                items:
+                  type: string
+                  example: position
+                  enum:
+                  - position
+              filter:
+                type: object
+                description: Capbility to filter stream by Kontakt.io device models.
+                properties:
+                  deviceModels:
+                    type: array
+                    description: "The device model ID(s) to filter by. \nFor IDs see **[position filtering](docs/stream/position-filter.md).**"
+                    items:
+                      type: integer
+                      example: 30,32
+            required:
+            - name
+            - channelIds
+          examples:
+            Example 1:
+              value:
+                name: Nano and Badge position subscription
+                channelIds:
+                - channel_id_1
+                - channel_id_2
+                filter:
+                  deviceModels:
+                  - 30
+                  - 32
+        application/xml:
+          schema:
+            type: object
+            properties: {}
+        multipart/form-data:
+          schema:
+            type: object
+            properties: {}
+      description: 'This schema defines the request body for creating [POST] or updating [PATCH] a position subscription
+
+
+        **IMPORTANT:** When updating a subscription property, all required property values must be provided.'
+  schemas:
+    Stream-channel-kinesis:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+        name:
+          type: string
+        channel:
+          type: object
+          properties:
+            type:
+              type: string
+            endpoint:
+              type: string
+            streamName:
+              type: string
+            region:
+              type: string
+        lastUpdate:
+          type: string
+        state:
+          type: object
+          properties:
+            connectionState:
+              type: string
+            timestamp:
+              type: string
+        filters:
+          type: object
+          properties:
+            campusIds:
+              type: array
+              items:
+                type: integer
+            deviceModels:
+              type: array
+              items:
+                type: integer
+      x-examples:
+        Example 1:
+          id: 6841afb73f3b6d4eaec38e38
+          status: active
+          name: kinesis_splitted_stream_channel_device_model_30_campusIds_605414 NEW
+          channel:
+            type: kinesis
+            endpoint: kinesis.us-east-1.amazonaws.com
+            streamName: ue1-kontakt-common-eks-test-qatest1-kinesis
+            region: us-east-1
+          lastUpdate: '2025-06-05T14:58:52.304Z'
+          state:
+            connectionState: DISCONNECTED
+            timestamp: '2025-06-05T14:58:52.304Z'
+          filters:
+            campusIds:
+            - 605414
+            deviceModels:
+            - 31
+      examples:
+      - id: string
+        status: string
+        name: string
+        channel:
+          type: string
+          endpoint: string
+          streamName: string
+          region: string
+        lastUpdate: string
+        state:
+          connectionState: string
+          timestamp: string
+        filters:
+          campusIds:
+          - 0
+          deviceModels:
+          - 0
+      title: Stream kinesis GET
+    Stream-patch-eventhub-channel:
+      type: object
+      x-examples:
+        example-1:
+          status: active
+          name: friendly name
+          channel:
+            type: eventHub
+            endpoint: rIWxfZExvhAQQBUYFssuWFfplEkBvd
+            sharedAccessKeyName: sBaXFcDOdhzfbweNcPhF
+            sharedAccessKey: dOchnyFnQPWIbCETCDlkaxpphJYhsQBgRlRiamFoasfR
+            eventHubName: fYpQkIrLdNUEkuX
+      description: 'Update a Azure Event Hub stream channel
+
+
+        **IMPORTANT:** when updating channel object, all properties are required.'
+      title: Event Hub channel PATCH
+      x-internal: false
+      properties:
+        status:
+          type: string
+          description: Channel configuration status.
+          enum:
+          - active
+          - inactive
+          example: active
+        name:
+          type: string
+          description: User-defined name to identify the channel.
+        channel:
+          type: object
+          description: Configuration specific to the Azure Event Hub stream. When updating a channel property, all channel property values must be provided.
+          properties:
+            type:
+              type: string
+              description: Set to eventHub. Type of channel; identifies the third-party streaming service.
+              enum:
+              - kinesis
+              - eventHub
+              - watson
+              example: eventHub
+            endpoint:
+              type: string
+            sharedAccessKeyName:
+              type: string
+            sharedAccessKey:
+              type: string
+            eventHubName:
+              type: string
+      examples:
+      - status: active
+        name: string
+        channel:
+          type: eventHub
+          endpoint: string
+          sharedAccessKeyName: string
+          sharedAccessKey: string
+          eventHubName: string
+    Stream-patch-watson-channel:
+      type: object
+      x-examples:
+        example-1:
+          status: active
+          name: sgluBTLJHvGRRMHOMAYh
+          channel:
+            type: watson
+            orgId: FQFieoFlys
+            typeId: mrEARmZEKjpSOyxwDHVVcS
+            token: AQSpIInRWSXsGKm
+            deviceId: HuSWIhmsqbvqKjVmkvyhVsySEelUOb
+      description: 'Updates a IBM Watson stream channel
+
+
+        **IMPORTANT** when updating channel properties, all properties are required.'
+      title: Watson channel PATCH
+      x-internal: false
+      properties:
+        status:
+          type: string
+          description: Channel configuration status.
+          enum:
+          - active
+          - inactive
+          example: active
+        name:
+          type: string
+          description: User-defined name to identify the channel.
+        channel:
+          type: object
+          description: Configuration specific to the IBM Watson stream. When updating a channel property, all channel property values must be provided.
+          properties:
+            type:
+              type: string
+              description: Set to watson. Type of channel; identifies the third-party streaming service.
+              enum:
+              - kinesis
+              - eventHub
+              - watson
+              example: watson
+            orgId:
+              type: string
+            typeId:
+              type: string
+            token:
+              type: string
+            deviceId:
+              type: string
+      examples:
+      - status: active
+        name: string
+        channel:
+          type: watson
+          orgId: string
+          typeId: string
+          token: string
+          deviceId: string
+    Stream-channel-eventHub:
+      type: object
+      x-examples:
+        example-1:
+          id: 6238449936543f4ceda20ecb
+          status: active
+          name: friendly name
+          channel:
+            type: eventHub
+            endpoint: MSUjKbZVmYbkerLHFwCjywaCZPZUAK
+            sharedAccessKeyName: aXJirTBOevEQFxPEAJlc
+            eventHubName: iDwhEoMiPsNdbUd
+          lastUpdate: 1647854745.285
+          state:
+            connectionState: DISCONNECTED
+            errorMessage: error message if any
+            timestamp: 1647854745.285
+      x-internal: false
+      title: Stream eventHub GET
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+        name:
+          type: string
+        channel:
+          type: object
+          properties:
+            type:
+              type: string
+            endpoint:
+              type: string
+            sharedAccessKeyName:
+              type: string
+            eventHubName:
+              type: string
+        lastUpdate:
+          type: number
+        state:
+          type: object
+          properties:
+            connectionState:
+              type: string
+            errorMessage:
+              type: string
+            timestamp:
+              type: number
+        filters:
+          type: object
+          x-stoplight:
+            id: tgxswxxwm0q9h
+          properties:
+            campusIds:
+              type: array
+              x-stoplight:
+                id: lrkstd5k95rlj
+              items:
+                x-stoplight:
+                  id: acjvam8gdytg5
+                type: integer
+            deviceModels:
+              type: array
+              x-stoplight:
+                id: uxfqbvdps5dnu
+              items:
+                x-stoplight:
+                  id: o09ymg67v0d66
+                type: string
+      examples:
+      - id: string
+        status: string
+        name: string
+        channel:
+          type: string
+          endpoint: string
+          sharedAccessKeyName: string
+          eventHubName: string
+        lastUpdate: 0
+        state:
+          connectionState: string
+          errorMessage: string
+          timestamp: 0
+        filters:
+          campusIds:
+          - 605414
+          deviceModels:
+          - '30'
+    Stream-patch-kinesis-channel:
+      type: object
+      x-examples:
+        example-1:
+          status: active
+          name: xjLBDFksiLWLTyRPYeWQ
+          channel:
+            type: kinesis
+            endpoint: XOsiPLrSvrrBkEsdneBKDXEptprFED
+            streamName: erwKuNJJBXzlBFE
+            accessKey: elsMnEBrVpxeVewzreGLGZ
+            secretKey: efarfGYULyqOKrMwSctyaaalKZsaiteSdDLekzRF
+            region: vgCZafJDQN
+            forcedPartitionKey: EmckwlqWlo
+      examples:
+      - status: string
+        name: Kontakt kinesis stream
+        channel:
+          type: kinesis
+          endpoint: kinesis.us-east-2.amazonaws.com
+          streamName: string
+          accessKey: string
+          secretKey: string
+          region: string
+      description: 'Updates a AWS Kinesis stream channel
+
+
+        **IMPORTANT:** when updating channel object, all properties are required.'
+      x-internal: false
+      title: Kinesis channel PATCH
+      properties:
+        status:
+          type: string
+          description: The configuration status.
+          enum:
+          - active
+          - inactive
+          example: active
+        name:
+          type: string
+          description: User-defined name to identify the channel.
+        channel:
+          type: object
+          description: Configuration specific to the AWS Kinesis stream. When updating a channel property, all channel property values must be provided.
+          properties:
+            type:
+              type: string
+              description: Set to kinesis. Type of channel; identifies the third-party streaming service.
+              enum:
+              - kinesis
+              - eventHub
+              - watson
+              example: kinesis
+            endpoint:
+              type: string
+              description: 'Kinesis “endpoint“ parameter is constant based on the “region“ value.
+
+                Example: region is us-east-2, the endpoint is kinesis.us-east-2.amazonaws.com
+
+                AWS article with region endpoints: https://docs.aws.amazon.com/general/latest/gr/ak.html'
+              example: kinesis.us-east-2.amazonaws.com
+            streamName:
+              type: string
+              description: kinesis stream name.
+            accessKey:
+              type: string
+              description: AWS kinesis access key.
+            secretKey:
+              type: string
+              description: AWS kinesis secret access key.
+            region:
+              type: string
+              description: kinesis stream AWS region
+    Stream-post-eventhub:
+      type: object
+      x-examples:
+        example-1:
+          status: active
+          name: friendly name
+          channel:
+            type: eventHub
+            endpoint: rIWxfZExvhAQQBUYFssuWFfplEkBvd
+            sharedAccessKeyName: sBaXFcDOdhzfbweNcPhF
+            sharedAccessKey: dOchnyFnQPWIbCETCDlkaxpphJYhsQBgRlRiamFoasfR
+            eventHubName: fYpQkIrLdNUEkuX
+      description: Create a Azure Event Hub stream channel
+      title: Event Hub channel POST
+      x-internal: false
+      required:
+      - status
+      - name
+      properties:
+        status:
+          type: string
+          description: Channel configuration status.
+          enum:
+          - active
+          - inactive
+          example: active
+        name:
+          type: string
+          description: User-defined name to identify the channel.
+        channel:
+          type: object
+          description: Configuration specific to the Azure Event Hub stream.
+          required:
+          - type
+          - endpoint
+          - sharedAccessKeyName
+          - sharedAccessKey
+          - eventHubName
+          properties:
+            type:
+              type: string
+              description: Set to eventHub. Type of channel; identifies the third-party streaming service.
+              enum:
+              - kinesis
+              - eventHub
+              - watson
+              example: eventHub
+            endpoint:
+              type: string
+            sharedAccessKeyName:
+              type: string
+            sharedAccessKey:
+              type: string
+            eventHubName:
+              type: string
+        filters:
+          type: object
+          x-stoplight:
+            id: f3rdkk5sls5ha
+          description: Optional filters to limit the data received by subscriptions
+          properties:
+            deviceModels:
+              type: array
+              x-stoplight:
+                id: 0zgguqav4niq4
+              description: List of device model IDs to include
+              items:
+                x-stoplight:
+                  id: qks10au8af5uh
+                type: integer
+                example: 30, 32
+            campusIds:
+              type: array
+              x-stoplight:
+                id: zcwcvd1ct899y
+              description: List of campus IDs to include
+              items:
+                x-stoplight:
+                  id: 3put1sd26c1mv
+                type: integer
+                example: 57891, 73129
+      examples:
+      - status: active
+        name: string
+        channel:
+          type: eventHub
+          endpoint: string
+          sharedAccessKeyName: string
+          sharedAccessKey: string
+          eventHubName: string
+        filters:
+          deviceModels:
+          - 30, 32
+          campusIds:
+          - 57891, 73129
+    Stream-post-watson:
+      type: object
+      x-examples:
+        example-1:
+          status: active
+          name: sgluBTLJHvGRRMHOMAYh
+          channel:
+            type: watson
+            orgId: FQFieoFlys
+            typeId: mrEARmZEKjpSOyxwDHVVcS
+            token: AQSpIInRWSXsGKm
+            deviceId: HuSWIhmsqbvqKjVmkvyhVsySEelUOb
+      description: Create a IBM Watson stream channel
+      title: Watson channel POST
+      x-internal: false
+      required:
+      - status
+      - name
+      properties:
+        status:
+          type: string
+          description: Channel configuration status.
+          enum:
+          - active
+          - inactive
+          example: active
+        name:
+          type: string
+          description: User-defined name to identify the channel.
+        channel:
+          type: object
+          description: 'Configuration specific to the IBM Watson stream. '
+          required:
+          - type
+          - orgId
+          - typeId
+          - token
+          - deviceId
+          properties:
+            type:
+              type: string
+              description: Set to watson. Type of channel; identifies the third-party streaming service.
+              enum:
+              - kinesis
+              - eventHub
+              - watson
+              example: watson
+            orgId:
+              type: string
+            typeId:
+              type: string
+            token:
+              type: string
+            deviceId:
+              type: string
+        filters:
+          type: object
+          x-stoplight:
+            id: hkn9hu2shg9l5
+          description: Optional filters to limit the data received by subscriptions
+          properties:
+            deviceModels:
+              type: array
+              x-stoplight:
+                id: nu4tbi8x0ufyt
+              description: List of device model IDs to include
+              items:
+                x-stoplight:
+                  id: 5hz9vkjwzntaq
+                type: integer
+                example: 30, 32
+            campusIds:
+              type: array
+              x-stoplight:
+                id: q1gty5pedowp8
+              description: List of campus IDs to include
+              items:
+                x-stoplight:
+                  id: lxzdjfi9sdp8a
+                type: integer
+                example: 57891, 73129
+      examples:
+      - status: active
+        name: string
+        channel:
+          type: watson
+          orgId: string
+          typeId: string
+          token: string
+          deviceId: string
+        filters:
+          deviceModels:
+          - 30, 32
+          campusIds:
+          - 57891, 73129
+    Stream-post-kinesis:
+      type: object
+      x-examples:
+        example-1:
+          status: active
+          name: xjLBDFksiLWLTyRPYeWQ
+          channel:
+            type: kinesis
+            endpoint: XOsiPLrSvrrBkEsdneBKDXEptprFED
+            streamName: erwKuNJJBXzlBFE
+            accessKey: elsMnEBrVpxeVewzreGLGZ
+            secretKey: efarfGYULyqOKrMwSctyaaalKZsaiteSdDLekzRF
+            region: vgCZafJDQN
+            forcedPartitionKey: EmckwlqWlo
+      description: Creates a new AWS Kinesis stream channel
+      x-internal: false
+      title: Kinesis channel POST
+      required:
+      - status
+      - name
+      properties:
+        status:
+          type: string
+          description: The configuration status.
+          enum:
+          - active
+          - inactive
+          example: active
+        name:
+          type: string
+          description: User-defined name to identify the channel.
+          example: Kontakt kinesis stream
+        channel:
+          type: object
+          description: Configuration specific to the AWS Kinesis stream.
+          required:
+          - type
+          - endpoint
+          - streamName
+          - accessKey
+          - secretKey
+          - region
+          properties:
+            type:
+              type: string
+              description: Set to kinesis. Type of channel; identifies the third-party streaming service.
+              enum:
+              - kinesis
+              - eventHub
+              - watson
+              example: kinesis
+            endpoint:
+              type: string
+              description: 'Kinesis “endpoint“ parameter is constant based on the “region“ value.
+
+                Example: region is us-east-2, the endpoint is kinesis.us-east-2.amazonaws.com
+
+                AWS article with region endpoints: https://docs.aws.amazon.com/general/latest/gr/ak.html'
+              example: kinesis.us-east-2.amazonaws.com
+            streamName:
+              type: string
+              description: kinesis stream name.
+            accessKey:
+              type: string
+              description: AWS kinesis access key.
+            secretKey:
+              type: string
+              description: AWS kinesis secret access key.
+            region:
+              type: string
+              description: kinesis stream AWS region
+        filters:
+          type: object
+          x-stoplight:
+            id: 7fvyh9hm6mfh3
+          description: Optional filters to limit the data received by subscriptions
+          properties:
+            deviceModels:
+              type: array
+              x-stoplight:
+                id: gqdl3q0782hwd
+              description: List of device model IDs to include
+              items:
+                x-stoplight:
+                  id: o68kyws7ax88n
+                type: integer
+                example: 30, 32
+            campusIds:
+              type: array
+              x-stoplight:
+                id: rellwkh8w471o
+              description: List of campus IDs to include
+              items:
+                x-stoplight:
+                  id: q0w1t2rvapbmw
+                type: integer
+                example: 57891, 73129
+      examples:
+      - status: string
+        name: Kontakt kinesis stream
+        filters:
+          deviceModels:
+          - 30
+          - 32
+          campusIds:
+          - 57891
+          - 73129
+        channel:
+          type: kinesis
+          endpoint: kinesis.us-east-2.amazonaws.com
+          streamName: string
+          accessKey: string
+          secretKey: string
+          region: string
+    Stream-channel-watson:
+      type: object
+      x-examples:
+        example-1:
+          id: 6238449936543f4ceda20ecc
+          status: active
+          name: GGKMndCSezAeVTIAIKNH
+          channel:
+            type: watson
+            orgId: czVaWaurJN
+            typeId: dMaBRjYKcGhqIMeUsxxoax
+            token: '               '
+            deviceId: ejGbzuQaiJaXnLbCOyAGhWmAdliCsb
+          lastUpdate: 1647854745.286
+          state:
+            connectionState: DISCONNECTED
+            errorMessage: error message if any
+            timestamp: 1647854745.286
+      title: Stream watson GET
+      x-internal: false
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+        name:
+          type: string
+        channel:
+          type: object
+          properties:
+            type:
+              type: string
+            orgId:
+              type: string
+            typeId:
+              type: string
+            token:
+              type: string
+            deviceId:
+              type: string
+        lastUpdate:
+          type: number
+        state:
+          type: object
+          properties:
+            connectionState:
+              type: string
+            errorMessage:
+              type: string
+            timestamp:
+              type: number
+        filters:
+          type: object
+          x-stoplight:
+            id: 6ub2vy1jd1z1p
+          properties:
+            campusIds:
+              type: array
+              x-stoplight:
+                id: uaebqkcd4zi5m
+              items:
+                x-stoplight:
+                  id: 7zp44o0m8b0k4
+                type: integer
+            deviceModels:
+              type: array
+              x-stoplight:
+                id: gfrnqab4c3hzw
+              items:
+                x-stoplight:
+                  id: ix3bq51nti72o
+                type: integer
+      examples:
+      - id: string
+        status: string
+        name: string
+        channel:
+          type: string
+          orgId: string
+          typeId: string
+          token: string
+          deviceId: string
+        lastUpdate: 0
+        state:
+          connectionState: string
+          errorMessage: string
+          timestamp: 0
+        filters:
+          campusIds:
+          - 0
+          deviceModels:
+          - 0
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      description: 'Your Kio Cloud API Key is required to be provided in the `Api-Key` header in each API call.
+
+
+        Get your API Key: sign in to **Kio Cloud** > select **Users** > select **Security** > copy your **Server API Key**.'
+      name: Api-Key
+x-: null

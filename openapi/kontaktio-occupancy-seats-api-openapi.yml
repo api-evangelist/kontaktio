@@ -1,0 +1,448 @@
+openapi: 3.2.0
+info:
+  title: 'Location & Occupancy Occupancy: Seats API'
+  version: '1.0'
+  description: Real-time and historical Kio Cloud apps data including location tracking, occupancy, and telemetry.
+  contact:
+    name: Kontakt.io Support
+    url: https://support.kontakt.io
+    email: support@kontakt.io
+  termsOfService: https://kontakt.io/terms-of-service
+  summary: Real-time and historical Kio Cloud apps data including location tracking, occupancy, and telemetry.
+servers:
+- url: https://apps.cloud.us.kontakt.io
+  description: 'Kio Cloud US '
+- url: https://apps.cloud.uk.kontakt.io
+  description: Kio Cloud UK
+security:
+- API Key - 1: []
+tags:
+- name: 'Occupancy: Seats'
+paths:
+  /v3/occupancy/room-attributes:
+    parameters: []
+    get:
+      summary: Retrieve current seat occupancy
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Occupancy-Room-Attributes-Current'
+              examples:
+                roomId query:
+                  value:
+                    content:
+                    - roomId: 25934
+                      roomName: YyiTOHCAOjGt
+                      floorId: 25914
+                      floorName: yBXNHcpkmiQb
+                      buildingId: 25894
+                      buildingName: IYZoenFDSyCo
+                      campusId: 25834
+                      campusName: xnYmAUTTGqSH
+                      attributeId: PpSgotTSbQHR
+                      attributeName: DzxmsiPKdtqa
+                      lastUpdate: '2021-11-17T15:49:51.139Z'
+                      occupancy: 1
+                All rooms:
+                  value:
+                    links:
+                    - rel: self
+                      href: http://apps.cloud.us.kontakt.io/v3/occupancy/room-attributes?page=0&size=20
+                    content:
+                    - roomId: 126956
+                      roomName: Workstations
+                      floorId: 94215
+                      floorName: Lab_floor_prod1
+                      buildingId: 94194
+                      buildingName: Lab
+                      campusId: 93915
+                      campusName: K.io_Lab_fixed
+                      attributeId: 16c99533-69ee-4f15-bc33-262166717484
+                      attributeName: '3'
+                      lastUpdate: '2021-11-28T16:30:49.129Z'
+                      occupancy: 0
+                    - roomId: 126956
+                      roomName: Workstations
+                      floorId: 94215
+                      floorName: Lab_floor_prod1
+                      buildingId: 94194
+                      buildingName: Lab
+                      campusId: 93915
+                      campusName: K.io_Lab_fixed
+                      attributeId: 7d5840f7-726a-49e6-9f58-96b5e0a969fa
+                      attributeName: '4'
+                      lastUpdate: '2021-11-28T16:30:49.130Z'
+                      occupancy: 0
+                    - roomId: 126956
+                      roomName: Workstations
+                      floorId: 94215
+                      floorName: Lab_floor_prod1
+                      buildingId: 94194
+                      buildingName: Lab
+                      campusId: 93915
+                      campusName: K.io_Lab_fixed
+                      attributeId: d1411a86-9bf6-4eb1-8528-4e289faa5274
+                      attributeName: '2'
+                      lastUpdate: '2021-11-28T16:30:49.133Z'
+                      occupancy: 0
+                    - roomId: 126956
+                      roomName: Workstations
+                      floorId: 94215
+                      floorName: Lab_floor_prod1
+                      buildingId: 94194
+                      buildingName: Lab
+                      campusId: 93915
+                      campusName: K.io_Lab_fixed
+                      attributeId: 5a4ef38a-3766-4c30-bba0-4efe8df8f65b
+                      attributeName: '1'
+                      lastUpdate: '2021-11-28T16:30:49.134Z'
+                      occupancy: 0
+                    page:
+                      size: 20
+                      totalElements: 4
+                      totalPages: 1
+                      number: 0
+      operationId: get-v3-occupancy-room-attributes
+      description: 'Returns the current seat occupany for all Rooms or the current seat occupancy for a room(s) with the roomId query parameter.
+
+
+        By default **valueType** parameter is set to **binary**: occupancy returned is either 0 (not occupied) or 1 (occupied). '
+      parameters:
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/size'
+      - $ref: '#/components/parameters/sort'
+      - in: query
+        name: roomId
+        schema:
+          type: number
+          example: 127326
+        description: Filter by one or more Room IDs (separated by comma)
+      - $ref: '#/components/parameters/valueType'
+      tags:
+      - 'Occupancy: Seats'
+      security:
+      - api_key: []
+  /v3/occupancy/room-attributes/history:
+    parameters: []
+    get:
+      summary: Retrieve seat occupancy history by room
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Occupancy-Room-Attributes-History'
+              examples: {}
+        '429':
+          $ref: '#/components/responses/error-429'
+      operationId: get-v3-occupancy-room-attributes-history
+      description: 'Returns the seat occupancy history for a room.
+
+
+        By default **valueType** parameter is set to **binary**: occupancy returned is either 0 (not occupied) or 1 (occupied).'
+      parameters:
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/size'
+      - $ref: '#/components/parameters/sort'
+      - $ref: '#/components/parameters/startTime'
+      - $ref: '#/components/parameters/endTime'
+      - in: query
+        name: roomId
+        schema:
+          type: number
+          example: 126956
+        description: Filter by one or more Room IDs (separated by comma)
+        required: true
+      - $ref: '#/components/parameters/valueType'
+      tags:
+      - 'Occupancy: Seats'
+      security:
+      - api_key: []
+components:
+  parameters:
+    startTime:
+      name: startTime
+      in: query
+      schema:
+        type: string
+        example: '2020-11-27T08:00:00.000000Z'
+        format: date-time
+      description: 'Filter by start time. <br> Values are always expressed in UTC (equivalent to an offset of +00:00). <br> The timezone designator is always Z. <br> The hours component must be specified as two digits in 24-hour format. '
+    size:
+      name: size
+      in: query
+      schema:
+        type: string
+        default: '20'
+      description: Size of the page to retrieve.
+    sort:
+      name: sort
+      in: query
+      schema:
+        type: string
+        default: asc
+        example: ?sort=firstname&sort=lastname,asc
+        enum:
+        - asc
+        - desc
+      description: 'Sort objects returned in the response. Format property,property '
+    page:
+      name: page
+      in: query
+      schema:
+        type: integer
+        default: '0'
+      description: Page you want to retrieve; 0 indexed.
+    valueType:
+      name: valueType
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+        - binary
+        - numerical
+        default: binary
+      description: Type of occupancy value returned, default is 'binary'. If valueType is 'binary', then occupancy is either 0 (not occupied) or 1 (occupied). If value is 'numerical', occupancy value is the count of people detected.
+    endTime:
+      name: endTime
+      in: query
+      schema:
+        type: string
+        example: ' 2020-11-29T08:00:00.000000Z'
+        format: date-time
+      description: 'Filter by end time. <br> Values are always expressed in UTC (equivalent to an offset of +00:00). <br> The timezone designator is always Z. <br> The hours component must be specified as two digits in 24-hour format. '
+  schemas:
+    Occupancy-Room-Attributes-Current:
+      description: ''
+      type: object
+      x-examples:
+        example-1:
+          links:
+          - rel: first
+            href: https://apps-api.test.kontakt.io/v3/occupancy/room-attributes?page=0&size=2&sort=attributeId,asc
+          - rel: self
+            href: https://apps-api.test.kontakt.io/v3/occupancy/room-attributes?page=0&size=2&sort=attributeId,asc
+          - rel: next
+            href: https://apps-api.test.kontakt.io/v3/occupancy/room-attributes?page=1&size=2&sort=attributeId,asc
+          - rel: last
+            href: https://apps-api.test.kontakt.io/v3/occupancy/room-attributes?page=2&size=2&sort=attributeId,asc
+          content:
+          - roomId: 25934
+            roomName: YyiTOHCAOjGt
+            floorId: 25914
+            floorName: yBXNHcpkmiQb
+            buildingId: 25894
+            buildingName: IYZoenFDSyCo
+            campusId: 25834
+            campusName: xnYmAUTTGqSH
+            attributeId: PpSgotTSbQHR
+            attributeName: DzxmsiPKdtqa
+            lastUpdate: '2021-11-17T15:49:51.139Z'
+            occupancy: 1
+          - roomId: 25935
+            roomName: TBSrECTZzGNz
+            floorId: 25915
+            floorName: iFglGczPDzKY
+            buildingId: 25895
+            buildingName: UaJEGppssoEO
+            campusId: 25835
+            campusName: XUgLvHpmFfln
+            attributeId: RvysMFUsxJGI
+            attributeName: GiZCWEXJWqVw
+            lastUpdate: '2021-11-17T15:49:51.163Z'
+            occupancy: 2
+          page:
+            size: 2
+            totalElements: 6
+            totalPages: 3
+            number: 0
+      properties:
+        content:
+          type: array
+          uniqueItems: true
+          minItems: 0
+          items:
+            type: object
+            properties:
+              roomId:
+                type: number
+                description: ID of Room in which occupancy was calculated.
+              roomName:
+                type: string
+                minLength: 1
+                description: Name of Room in which occupancy was calculated.
+              floorId:
+                type: number
+                description: ID of the Floor in which occupancy was calculated.
+              floorName:
+                type: string
+                minLength: 1
+                description: Name of the Floor in which occupancy was calculated.
+              buildingId:
+                type: number
+                description: ID of the Building in which occupancy was calculated.
+              buildingName:
+                type: string
+                minLength: 1
+                description: Name of the Building in which occupancy was calculated.
+              campusId:
+                type: number
+                description: ID of the Campus in which occupancy was calculated.
+              campusName:
+                type: string
+                minLength: 1
+                description: Name of the Campus in which occupancy was calculated.
+              attributeId:
+                type: string
+                minLength: 1
+                description: Identifier of the Room (Seat) Attribute.
+              attributeName:
+                type: string
+                minLength: 1
+                description: User defined name of the Room (Seat) Attribute.
+              lastUpdate:
+                type: string
+                minLength: 1
+                description: Time of last occupancy update.
+              occupancy:
+                type: number
+                description: Number of people detected in the given time range.
+            required:
+            - roomId
+            - attributeId
+            - lastUpdate
+            - occupancy
+    Occupancy-Room-Attributes-History:
+      description: ''
+      type: object
+      x-examples:
+        example-1:
+          content:
+          - startTime: '2021-11-25T18:21:24.894Z'
+            endTime: '2021-11-25T18:22:14.894Z'
+            occupancy: 409456355
+            attributeId: PYustxRGJAIh
+            attributeName: cUTeJpxlWBZu
+            roomId: 59644
+            roomName: hERYblLeQzGk
+            floorId: 59393
+            floorName: SjwicuPSFGoD
+            buildingId: 59756
+            buildingName: cWtMryWTFNWZ
+            campusId: 59682
+            campusName: PYGihCCEhNgL
+          - startTime: '2021-11-25T18:22:14.894Z'
+            endTime: '2021-11-25T18:22:44.894Z'
+            occupancy: 1125867079
+            attributeId: PYustxRGJAIh
+            attributeName: cUTeJpxlWBZu
+            roomId: 59644
+            roomName: hERYblLeQzGk
+            floorId: 59393
+            floorName: SjwicuPSFGoD
+            buildingId: 59756
+            buildingName: cWtMryWTFNWZ
+            campusId: 59682
+            campusName: PYGihCCEhNgL
+      properties:
+        content:
+          type: array
+          uniqueItems: true
+          minItems: 0
+          items:
+            type: object
+            properties:
+              startTime:
+                type: string
+                minLength: 1
+                description: Time when given occupancy started.
+              endTime:
+                type: string
+                minLength: 1
+                description: Time when given occupancy ended.
+              occupancy:
+                type: number
+                description: Number of people detected in the given time range.
+              attributeId:
+                type: string
+                minLength: 1
+              attributeName:
+                type: string
+                minLength: 1
+              roomId:
+                type: number
+                description: ID of the room.
+              roomName:
+                type: string
+                minLength: 1
+                description: Name of the room.
+              floorId:
+                type: number
+                description: ID of the floor.
+              floorName:
+                type: string
+                minLength: 1
+                description: Name of the floor.
+              buildingId:
+                type: number
+                description: ID of the building.
+              buildingName:
+                type: string
+                minLength: 1
+                description: Name of the building.
+              campusId:
+                type: number
+                description: ID of the campus.
+              campusName:
+                type: string
+                minLength: 1
+                description: Name of the campus.
+            required:
+            - startTime
+            - endTime
+            - occupancy
+            - attributeId
+            - roomId
+      required:
+      - content
+      examples:
+      - content:
+        - startTime: string
+          endTime: string
+          occupancy: 0
+          attributeId: string
+          attributeName: string
+          roomId: 0
+          roomName: string
+          floorId: 0
+          floorName: string
+          buildingId: 0
+          buildingName: string
+          campusId: 0
+          campusName: string
+  responses:
+    error-429:
+      description: Rate limit exceeded. The response has no body.
+      headers:
+        Retry-After:
+          description: 'Indicates how long to wait before making a new request. The response includes this header twice: once with an HTTP-date format (e.g., "Wed, 21 Oct 2015 07:28:00 GMT") and once with delay-seconds format (e.g., "120").'
+          schema:
+            type: string
+          required: true
+      content:
+        text/plain: null
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      description: 'Your Kio Cloud API Key is required to be provided in the `Api-Key` header in each API call.
+
+
+        Get your API Key: sign in to **Kio Cloud** > select **Users** > select **Security** > copy your **Server API Key**.'
+      name: Api-Key
+x-: null
