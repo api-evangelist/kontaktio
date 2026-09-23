@@ -430,292 +430,7 @@ paths:
         '429':
           $ref: '#/components/responses/error-429'
 components:
-  parameters:
-    startTime:
-      name: startTime
-      in: query
-      schema:
-        type: string
-        example: '2020-11-27T08:00:00.000000Z'
-        format: date-time
-      description: 'Filter by start time. <br> Values are always expressed in UTC (equivalent to an offset of +00:00). <br> The timezone designator is always Z. <br> The hours component must be specified as two digits in 24-hour format. '
-    size:
-      name: size
-      in: query
-      schema:
-        type: string
-        default: '20'
-      description: Size of the page to retrieve.
-    roomId:
-      name: roomId
-      in: query
-      schema:
-        type: number
-      description: Filter by one or more Room Ids (separated by comma).
-      required: true
-    sort:
-      name: sort
-      in: query
-      schema:
-        type: string
-        default: asc
-        example: ?sort=firstname&sort=lastname,asc
-        enum:
-        - asc
-        - desc
-      description: 'Sort objects returned in the response. Format property,property '
-    page:
-      name: page
-      in: query
-      schema:
-        type: integer
-        default: '0'
-      description: Page you want to retrieve; 0 indexed.
-    endTime:
-      name: endTime
-      in: query
-      schema:
-        type: string
-        example: ' 2020-11-29T08:00:00.000000Z'
-        format: date-time
-      description: 'Filter by end time. <br> Values are always expressed in UTC (equivalent to an offset of +00:00). <br> The timezone designator is always Z. <br> The hours component must be specified as two digits in 24-hour format. '
   schemas:
-    Occupancy-Room-Current:
-      description: ''
-      type: object
-      x-examples:
-        example-1:
-          links:
-          - rel: self
-            href: https://apps-api.kontakt.io/v3/occupancy/rooms?page=0&size=2&sort=attributeId,asc
-          content:
-          - roomId: 59645
-            roomName: rwaTEUoSVmbb
-            floorId: 59814
-            floorName: PjUpFbENXqcd
-            buildingId: 59757
-            buildingName: TKWmhvLEiSHr
-            campusId: 59683
-            campusName: NOoqBklqWdNb
-            lastUpdate: '2021-11-25T18:23:05.078Z'
-            occupancy: 1
-          - roomId: 59646
-            roomName: JJONuaaQWqXA
-            floorId: 59815
-            floorName: dtgOaszJCbIk
-            buildingId: 59758
-            buildingName: VVoEtyUwgRef
-            campusId: 59684
-            campusName: gjNmIckFpfPK
-            lastUpdate: '2021-11-25T18:23:05.083Z'
-            occupancy: 1
-          page:
-            size: 2
-            totalElements: 2
-            totalPages: 1
-            number: 0
-      title: Occupancy-Room-Current
-      examples:
-      - links:
-        - rel: string
-          href: string
-        content:
-        - roomId: 0
-          roomName: string
-          floorId: 0
-          floorName: string
-          buildingId: 0
-          buildingName: string
-          campusId: 0
-          campusName: string
-          lastUpdate: string
-          occupancy: 0
-        page:
-          size: 0
-          totalElements: 0
-          totalPages: 0
-          number: 0
-      - links:
-        - rel: string
-          href: string
-        content:
-        - roomId: 0
-          roomName: string
-          floorId: 0
-          floorName: string
-          buildingId: 0
-          buildingName: string
-          campusId: 0
-          campusName: string
-          lastUpdate: string
-          occupancy: 0
-        page:
-          size: 0
-          totalElements: 0
-          totalPages: 0
-          number: 0
-      properties:
-        content:
-          type: array
-          uniqueItems: true
-          minItems: 0
-          items:
-            type: object
-            properties:
-              roomId:
-                type: number
-                description: ID of the room.
-              roomName:
-                type: string
-                minLength: 1
-                description: Name of the room.
-              floorId:
-                type: number
-                description: ID of the floor.
-              floorName:
-                type: string
-                minLength: 1
-                description: Name of the floor.
-              buildingId:
-                type: number
-                description: ID of the building.
-              buildingName:
-                type: string
-                minLength: 1
-                description: Name of the building.
-              campusId:
-                type: number
-                description: ID of the campus.
-              campusName:
-                type: string
-                minLength: 1
-                description: Name of the campus.
-              lastUpdate:
-                type: string
-                minLength: 1
-                description: Time of last occupancy update
-              occupancy:
-                type: number
-                description: Number of people detected in the given time range.
-            required:
-            - roomId
-            - lastUpdate
-            - occupancy
-        page:
-          type: object
-          required:
-          - size
-          - totalElements
-          - totalPages
-          - number
-          properties:
-            size:
-              type: number
-            totalElements:
-              type: number
-            totalPages:
-              type: number
-            number:
-              type: number
-      required:
-      - content
-      - page
-    Occupancy-Room-History:
-      description: ''
-      type: object
-      x-examples:
-        example-1:
-          links:
-          - rel: first
-            href: https://apps-api.test.kontakt.io/v3/occupancy?startTime=2021-11-16T12:44:47.505Z&endTime=2021-11-16T12:48:07.505Z&roomId=25958&page=0&size=2&sort=roomId,asc
-          - rel: self
-            href: https://apps-api.test.kontakt.io/v3/occupancy?page=0&size=2&sort=roomId&startTime=2021-11-16T12:44:47.505Z&endTime=2021-11-16T12:48:07.505Z&roomId=25958
-          - rel: next
-            href: https://apps-api.test.kontakt.io/v3/occupancy?startTime=2021-11-16T12:44:47.505Z&endTime=2021-11-16T12:48:07.505Z&roomId=25958&page=1&size=2&sort=roomId,asc
-          - rel: last
-            href: https://apps-api.test.kontakt.io/v3/occupancy?startTime=2021-11-16T12:44:47.505Z&endTime=2021-11-16T12:48:07.505Z&roomId=25958&page=1&size=2&sort=roomId,asc
-          content:
-          - startTime: '2021-11-16T12:46:27.505Z'
-            endTime: '2021-11-16T12:47:17.505Z'
-            occupancy: 580475930
-            roomId: 25958
-            roomName: NzubefFxOQCn
-            floorId: 25938
-            floorName: gcwPDUIDCeKy
-            buildingId: 25918
-            buildingName: uBTUIxoNgkZv
-            campusId: 25858
-            campusName: WaUIpzohiOCw
-          - startTime: '2021-11-16T12:47:17.505Z'
-            endTime: '2021-11-16T12:47:47.505Z'
-            occupancy: 1609483868
-            roomId: 25958
-            roomName: NzubefFxOQCn
-            floorId: 25938
-            floorName: gcwPDUIDCeKy
-            buildingId: 25918
-            buildingName: uBTUIxoNgkZv
-            campusId: 25858
-            campusName: WaUIpzohiOCw
-          page:
-            size: 2
-            totalElements: 3
-            totalPages: 2
-            number: 0
-      examples: []
-      properties:
-        content:
-          type: array
-          uniqueItems: true
-          minItems: 0
-          items:
-            type: object
-            properties:
-              startTime:
-                type: string
-                minLength: 1
-                description: Time when given occupancy started.
-              endTime:
-                type: string
-                minLength: 1
-                description: Time when given occupancy ended.
-              occupancy:
-                type: number
-                description: Number of people detected in the given time range.
-              roomId:
-                type: number
-                description: ID of Room in which occupancy was calculated.
-              roomName:
-                type: string
-                minLength: 1
-                description: Name of Room in which occupancy was calculated.
-              floorId:
-                type: number
-                description: ID of the Floor in which occupancy was calculated.
-              floorName:
-                type: string
-                minLength: 1
-                description: Name of the Floor in which occupancy was calculated. JL Floor ID where room is located.
-              buildingId:
-                type: number
-                description: ID of the Building in which occupancy was calculated.
-              buildingName:
-                type: string
-                minLength: 1
-                description: Name of the Building in which occupancy was calculated.
-              campusId:
-                type: number
-                description: ID of the Campus in which occupancy was calculated.
-              campusName:
-                type: string
-                minLength: 1
-                description: Name of the Campus in which occupancy was calculated.
-            required:
-            - startTime
-            - endTime
-            - occupancy
-            - roomId
-      title: Occupancy-Room-History
     Rooms:
       type: object
       x-examples:
@@ -1332,6 +1047,291 @@ components:
             - roomNumber
       required:
       - content
+    Occupancy-Room-Current:
+      description: ''
+      type: object
+      x-examples:
+        example-1:
+          links:
+          - rel: self
+            href: https://apps-api.kontakt.io/v3/occupancy/rooms?page=0&size=2&sort=attributeId,asc
+          content:
+          - roomId: 59645
+            roomName: rwaTEUoSVmbb
+            floorId: 59814
+            floorName: PjUpFbENXqcd
+            buildingId: 59757
+            buildingName: TKWmhvLEiSHr
+            campusId: 59683
+            campusName: NOoqBklqWdNb
+            lastUpdate: '2021-11-25T18:23:05.078Z'
+            occupancy: 1
+          - roomId: 59646
+            roomName: JJONuaaQWqXA
+            floorId: 59815
+            floorName: dtgOaszJCbIk
+            buildingId: 59758
+            buildingName: VVoEtyUwgRef
+            campusId: 59684
+            campusName: gjNmIckFpfPK
+            lastUpdate: '2021-11-25T18:23:05.083Z'
+            occupancy: 1
+          page:
+            size: 2
+            totalElements: 2
+            totalPages: 1
+            number: 0
+      title: Occupancy-Room-Current
+      examples:
+      - links:
+        - rel: string
+          href: string
+        content:
+        - roomId: 0
+          roomName: string
+          floorId: 0
+          floorName: string
+          buildingId: 0
+          buildingName: string
+          campusId: 0
+          campusName: string
+          lastUpdate: string
+          occupancy: 0
+        page:
+          size: 0
+          totalElements: 0
+          totalPages: 0
+          number: 0
+      - links:
+        - rel: string
+          href: string
+        content:
+        - roomId: 0
+          roomName: string
+          floorId: 0
+          floorName: string
+          buildingId: 0
+          buildingName: string
+          campusId: 0
+          campusName: string
+          lastUpdate: string
+          occupancy: 0
+        page:
+          size: 0
+          totalElements: 0
+          totalPages: 0
+          number: 0
+      properties:
+        content:
+          type: array
+          uniqueItems: true
+          minItems: 0
+          items:
+            type: object
+            properties:
+              roomId:
+                type: number
+                description: ID of the room.
+              roomName:
+                type: string
+                minLength: 1
+                description: Name of the room.
+              floorId:
+                type: number
+                description: ID of the floor.
+              floorName:
+                type: string
+                minLength: 1
+                description: Name of the floor.
+              buildingId:
+                type: number
+                description: ID of the building.
+              buildingName:
+                type: string
+                minLength: 1
+                description: Name of the building.
+              campusId:
+                type: number
+                description: ID of the campus.
+              campusName:
+                type: string
+                minLength: 1
+                description: Name of the campus.
+              lastUpdate:
+                type: string
+                minLength: 1
+                description: Time of last occupancy update
+              occupancy:
+                type: number
+                description: Number of people detected in the given time range.
+            required:
+            - roomId
+            - lastUpdate
+            - occupancy
+        page:
+          type: object
+          required:
+          - size
+          - totalElements
+          - totalPages
+          - number
+          properties:
+            size:
+              type: number
+            totalElements:
+              type: number
+            totalPages:
+              type: number
+            number:
+              type: number
+      required:
+      - content
+      - page
+    Occupancy-Room-History:
+      description: ''
+      type: object
+      x-examples:
+        example-1:
+          links:
+          - rel: first
+            href: https://apps-api.test.kontakt.io/v3/occupancy?startTime=2021-11-16T12:44:47.505Z&endTime=2021-11-16T12:48:07.505Z&roomId=25958&page=0&size=2&sort=roomId,asc
+          - rel: self
+            href: https://apps-api.test.kontakt.io/v3/occupancy?page=0&size=2&sort=roomId&startTime=2021-11-16T12:44:47.505Z&endTime=2021-11-16T12:48:07.505Z&roomId=25958
+          - rel: next
+            href: https://apps-api.test.kontakt.io/v3/occupancy?startTime=2021-11-16T12:44:47.505Z&endTime=2021-11-16T12:48:07.505Z&roomId=25958&page=1&size=2&sort=roomId,asc
+          - rel: last
+            href: https://apps-api.test.kontakt.io/v3/occupancy?startTime=2021-11-16T12:44:47.505Z&endTime=2021-11-16T12:48:07.505Z&roomId=25958&page=1&size=2&sort=roomId,asc
+          content:
+          - startTime: '2021-11-16T12:46:27.505Z'
+            endTime: '2021-11-16T12:47:17.505Z'
+            occupancy: 580475930
+            roomId: 25958
+            roomName: NzubefFxOQCn
+            floorId: 25938
+            floorName: gcwPDUIDCeKy
+            buildingId: 25918
+            buildingName: uBTUIxoNgkZv
+            campusId: 25858
+            campusName: WaUIpzohiOCw
+          - startTime: '2021-11-16T12:47:17.505Z'
+            endTime: '2021-11-16T12:47:47.505Z'
+            occupancy: 1609483868
+            roomId: 25958
+            roomName: NzubefFxOQCn
+            floorId: 25938
+            floorName: gcwPDUIDCeKy
+            buildingId: 25918
+            buildingName: uBTUIxoNgkZv
+            campusId: 25858
+            campusName: WaUIpzohiOCw
+          page:
+            size: 2
+            totalElements: 3
+            totalPages: 2
+            number: 0
+      examples: []
+      properties:
+        content:
+          type: array
+          uniqueItems: true
+          minItems: 0
+          items:
+            type: object
+            properties:
+              startTime:
+                type: string
+                minLength: 1
+                description: Time when given occupancy started.
+              endTime:
+                type: string
+                minLength: 1
+                description: Time when given occupancy ended.
+              occupancy:
+                type: number
+                description: Number of people detected in the given time range.
+              roomId:
+                type: number
+                description: ID of Room in which occupancy was calculated.
+              roomName:
+                type: string
+                minLength: 1
+                description: Name of Room in which occupancy was calculated.
+              floorId:
+                type: number
+                description: ID of the Floor in which occupancy was calculated.
+              floorName:
+                type: string
+                minLength: 1
+                description: Name of the Floor in which occupancy was calculated. JL Floor ID where room is located.
+              buildingId:
+                type: number
+                description: ID of the Building in which occupancy was calculated.
+              buildingName:
+                type: string
+                minLength: 1
+                description: Name of the Building in which occupancy was calculated.
+              campusId:
+                type: number
+                description: ID of the Campus in which occupancy was calculated.
+              campusName:
+                type: string
+                minLength: 1
+                description: Name of the Campus in which occupancy was calculated.
+            required:
+            - startTime
+            - endTime
+            - occupancy
+            - roomId
+      title: Occupancy-Room-History
+  parameters:
+    roomId:
+      name: roomId
+      in: query
+      schema:
+        type: number
+      description: Filter by one or more Room Ids (separated by comma).
+      required: true
+    page:
+      name: page
+      in: query
+      schema:
+        type: integer
+        default: '0'
+      description: Page you want to retrieve; 0 indexed.
+    startTime:
+      name: startTime
+      in: query
+      schema:
+        type: string
+        example: '2020-11-27T08:00:00.000000Z'
+        format: date-time
+      description: 'Filter by start time. <br> Values are always expressed in UTC (equivalent to an offset of +00:00). <br> The timezone designator is always Z. <br> The hours component must be specified as two digits in 24-hour format. '
+    size:
+      name: size
+      in: query
+      schema:
+        type: string
+        default: '20'
+      description: Size of the page to retrieve.
+    endTime:
+      name: endTime
+      in: query
+      schema:
+        type: string
+        example: ' 2020-11-29T08:00:00.000000Z'
+        format: date-time
+      description: 'Filter by end time. <br> Values are always expressed in UTC (equivalent to an offset of +00:00). <br> The timezone designator is always Z. <br> The hours component must be specified as two digits in 24-hour format. '
+    sort:
+      name: sort
+      in: query
+      schema:
+        type: string
+        default: asc
+        example: ?sort=firstname&sort=lastname,asc
+        enum:
+        - asc
+        - desc
+      description: 'Sort objects returned in the response. Format property,property '
   responses:
     error-429:
       description: Rate limit exceeded. The response has no body.

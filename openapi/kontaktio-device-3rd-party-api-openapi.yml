@@ -5,21 +5,7 @@ info:
     url: https://kontakt.io/wp-content/themes/kontakt/dist/img/site-header/logo.svg
     backgroundColor: '#FFFFFF'
   version: '10'
-  description: 'This Kontakt.io API provides direct access to all Kio Cloud Device Management resources. It allows integrating device administration functionality into 3rd-party applications without the need to build all underlying logic from the ground up.
-
-
-    ## Authentication
-
-
-    All requests must include a **JWT Bearer token** in the `Authorization` header, obtained via the [OAuth2 Client Credentials flow](https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow).
-
-
-    > **Deprecated:** The `Api-Key` header is still accepted for backward compatibility but is deprecated and will be removed. Do not use it for new integrations.
-
-
-    Each API call requires the `Accept` header with the API version. **By default, set to the current stable version:** `application/vnd.com.kontakt+json;version=10`
-
-    '
+  description: This Kontakt.io API provides direct access to all Kio Cloud Device Management resources.
   contact:
     name: Support
     url: https://support.kontakt.io
@@ -35,27 +21,14 @@ security:
 - api_key: []
 tags:
 - name: Device (3rd party)
-  description: 'NOTE: this set of endpoints has been superseded by External Devices functionality.
-
-
-    These endpoints provide a way to integrate 3rd party Bluetooth-enabled scanning devices into Kontakt.io platform. As of Summer 2018, Kontakt.io is working with manufacturers of enterprise-level networking devices, like Cassia, Ruckus and Meraki, to seamlessly incorporate data collected by their routers and/or WiFi access points into Kontakt.io Data Streams, and to improve Infrastructure Management capabilities.
-
-
-    Users wanting to take advantage of this feature, first need to provide proper authentication and integrate Kontakt.io Panel account with a 3rd party vendor. Only after that, devices from that vendor can be added into Kontakt.io platform.
-
-
-    At any given moment a Company can have **only one** integration per 3rd party Vendor, i.e. you can have **one** Cassia *and* **one** Meraki integration, but you can''t have e.g. two Meraki integrations.
-
-    '
+  description: 'NOTE: this set of endpoints has been superseded by External Devices functionality.'
 paths:
   /device/vendor/meraki/create:
     post:
       tags:
       - Device (3rd party)
       summary: Add a Meraki Integration
-      description: 'This endpoint allows to associate your Meraki controller with Kontakt.io platform, enabling to use Meraki devices as external data sources for Data Streams
-
-        '
+      description: This endpoint allows to associate your Meraki controller with Kontakt.io platform, enabling to use Meraki devices as external data sources for Data Streams
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -115,14 +88,14 @@ paths:
       - api_key: []
       parameters:
       - $ref: '#/components/parameters/accept'
+      operationId: postDeviceVendorMerakiCreate
+      x-operation-id-source: derived
   /device/vendor/meraki/update:
     post:
       tags:
       - Device (3rd party)
       summary: Update a Meraki Integration
-      description: 'This endpoint allows to update an already existing integration with a Meraki platform
-
-        '
+      description: This endpoint allows to update an already existing integration with a Meraki platform
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -172,14 +145,14 @@ paths:
       - api_key: []
       parameters:
       - $ref: '#/components/parameters/accept'
+      operationId: postDeviceVendorMerakiUpdate
+      x-operation-id-source: derived
   /device/vendor/meraki/delete:
     post:
       tags:
       - Device (3rd party)
       summary: Delete a Meraki Integration
-      description: 'This endpoint allows to remove a Meraki integration
-
-        '
+      description: This endpoint allows to remove a Meraki integration
       responses:
         '200':
           description: OK
@@ -211,7 +184,18 @@ paths:
       - api_key: []
       parameters:
       - $ref: '#/components/parameters/accept'
+      operationId: postDeviceVendorMerakiDelete
+      x-operation-id-source: derived
 components:
+  parameters:
+    accept:
+      name: Accept
+      in: header
+      required: true
+      schema:
+        type: string
+        default: application/vnd.com.kontakt+json;version=10
+      description: Accept header is required.
   schemas:
     ApiError:
       type: object
@@ -252,15 +236,6 @@ components:
                 type: string
                 description: Error message
                 example: Invalid value for field name
-  parameters:
-    accept:
-      name: Accept
-      in: header
-      required: true
-      schema:
-        type: string
-        default: application/vnd.com.kontakt+json;version=10
-      description: Accept header is required.
   securitySchemes:
     bearer_token:
       type: http

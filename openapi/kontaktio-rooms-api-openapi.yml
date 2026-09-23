@@ -276,151 +276,40 @@ paths:
       - $ref: '#/components/parameters/size'
       - $ref: '#/components/parameters/sort'
 components:
+  parameters:
+    name:
+      name: name
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Filter by name
+    page:
+      name: page
+      in: query
+      schema:
+        type: integer
+        default: '0'
+      description: Page you want to retrieve; 0 indexed.
+    size:
+      name: size
+      in: query
+      schema:
+        type: string
+        default: '20'
+      description: Size of the page to retrieve.
+    sort:
+      name: sort
+      in: query
+      schema:
+        type: string
+        default: asc
+        example: ?sort=firstname&sort=lastname,asc
+        enum:
+        - asc
+        - desc
+      description: 'Sort objects returned in the response. Format property,property '
   schemas:
-    Room-Sensors:
-      description: ''
-      type: object
-      x-examples:
-        example-1:
-          links:
-          - rel: self
-            href: http://apps.cloud.us.kontakt.io/v2/locations/room-sensors?page=0&size=20
-          content:
-          - id: 128059
-            x: 8.650711325863393
-            y: 2.969598029016233
-            z: 3
-            trackingId: c4:0a:ef:9e:71:03
-            inbounds: []
-            outbounds: []
-            type: Static
-            room:
-              id: 127236
-            status: Assigned
-          - id: 128058
-            x: 8.591470391603178
-            y: 7.2133787526002004
-            z: 3.1
-            trackingId: c9:39:37:9a:12:bc
-            inbounds: []
-            outbounds: []
-            type: Static
-            room:
-              id: 127236
-            status: Assigned
-          - id: 128075
-            x: 12.2430005
-            y: 8.021051
-            z: 3.2
-            trackingId: eb:90:e8:f4:b4:8b
-            type: Static
-            room:
-              id: 126956
-            status: Assigned
-          - id: 128594
-            x: 11.35313563325963
-            y: 13.668869216741786
-            trackingId: fa:bf:dc:81:9d:9e
-            name: ''
-            inbounds:
-            - id: 619e418cd272f240e3d00518
-              name: Conference and Spaces
-            outbounds: []
-            type: Traffic
-            room:
-              id: 94110
-            status: Assigned
-          - id: 106814
-            x: 12.399999999999999
-            y: 12.85
-            trackingId: d7:23:8e:76:44:65
-            inbounds: []
-            outbounds: []
-            type: Static
-            room:
-              id: 94110
-            status: Assigned
-          - id: 102894
-            x: 3.8124449255128443
-            y: 7.53125
-            trackingId: d6:3c:5d:b2:7c:a9
-            type: Static
-            room:
-              id: 94108
-            status: Assigned
-          - id: 127099
-            x: 2.7
-            y: 10.399999999999999
-            trackingId: f2:24:0f:2f:82:4f
-            type: Static
-            room:
-              id: 94107
-            status: Assigned
-          - id: 94055
-            x: 11.412103845330275
-            y: 15.893985791575489
-            trackingId: e0:91:1b:d7:42:07
-            inbounds: []
-            outbounds: []
-            type: Static
-            room:
-              id: 94105
-            status: Assigned
-          page:
-            size: 20
-            totalElements: 8
-            totalPages: 1
-            number: 0
-      properties:
-        content:
-          type: array
-          uniqueItems: true
-          minItems: 1
-          items:
-            type: object
-            properties:
-              id:
-                type: number
-              x:
-                type: number
-              y:
-                type: number
-              z:
-                type: number
-              trackingId:
-                type: string
-                minLength: 1
-              inbounds:
-                type: array
-                items:
-                  type: object
-              outbounds:
-                type: array
-                items:
-                  type: object
-              type:
-                type: string
-                minLength: 1
-              room:
-                type: object
-                properties:
-                  id:
-                    type: number
-                required:
-                - id
-              status:
-                type: string
-                minLength: 1
-            required:
-            - id
-            - x
-            - y
-            - z
-            - trackingId
-            - type
-            - status
-      required:
-      - content
     Rooms:
       type: object
       x-examples:
@@ -1037,39 +926,150 @@ components:
             - roomNumber
       required:
       - content
-  parameters:
-    size:
-      name: size
-      in: query
-      schema:
-        type: string
-        default: '20'
-      description: Size of the page to retrieve.
-    sort:
-      name: sort
-      in: query
-      schema:
-        type: string
-        default: asc
-        example: ?sort=firstname&sort=lastname,asc
-        enum:
-        - asc
-        - desc
-      description: 'Sort objects returned in the response. Format property,property '
-    page:
-      name: page
-      in: query
-      schema:
-        type: integer
-        default: '0'
-      description: Page you want to retrieve; 0 indexed.
-    name:
-      name: name
-      in: query
-      required: false
-      schema:
-        type: string
-      description: Filter by name
+    Room-Sensors:
+      description: ''
+      type: object
+      x-examples:
+        example-1:
+          links:
+          - rel: self
+            href: http://apps.cloud.us.kontakt.io/v2/locations/room-sensors?page=0&size=20
+          content:
+          - id: 128059
+            x: 8.650711325863393
+            y: 2.969598029016233
+            z: 3
+            trackingId: c4:0a:ef:9e:71:03
+            inbounds: []
+            outbounds: []
+            type: Static
+            room:
+              id: 127236
+            status: Assigned
+          - id: 128058
+            x: 8.591470391603178
+            y: 7.2133787526002004
+            z: 3.1
+            trackingId: c9:39:37:9a:12:bc
+            inbounds: []
+            outbounds: []
+            type: Static
+            room:
+              id: 127236
+            status: Assigned
+          - id: 128075
+            x: 12.2430005
+            y: 8.021051
+            z: 3.2
+            trackingId: eb:90:e8:f4:b4:8b
+            type: Static
+            room:
+              id: 126956
+            status: Assigned
+          - id: 128594
+            x: 11.35313563325963
+            y: 13.668869216741786
+            trackingId: fa:bf:dc:81:9d:9e
+            name: ''
+            inbounds:
+            - id: 619e418cd272f240e3d00518
+              name: Conference and Spaces
+            outbounds: []
+            type: Traffic
+            room:
+              id: 94110
+            status: Assigned
+          - id: 106814
+            x: 12.399999999999999
+            y: 12.85
+            trackingId: d7:23:8e:76:44:65
+            inbounds: []
+            outbounds: []
+            type: Static
+            room:
+              id: 94110
+            status: Assigned
+          - id: 102894
+            x: 3.8124449255128443
+            y: 7.53125
+            trackingId: d6:3c:5d:b2:7c:a9
+            type: Static
+            room:
+              id: 94108
+            status: Assigned
+          - id: 127099
+            x: 2.7
+            y: 10.399999999999999
+            trackingId: f2:24:0f:2f:82:4f
+            type: Static
+            room:
+              id: 94107
+            status: Assigned
+          - id: 94055
+            x: 11.412103845330275
+            y: 15.893985791575489
+            trackingId: e0:91:1b:d7:42:07
+            inbounds: []
+            outbounds: []
+            type: Static
+            room:
+              id: 94105
+            status: Assigned
+          page:
+            size: 20
+            totalElements: 8
+            totalPages: 1
+            number: 0
+      properties:
+        content:
+          type: array
+          uniqueItems: true
+          minItems: 1
+          items:
+            type: object
+            properties:
+              id:
+                type: number
+              x:
+                type: number
+              y:
+                type: number
+              z:
+                type: number
+              trackingId:
+                type: string
+                minLength: 1
+              inbounds:
+                type: array
+                items:
+                  type: object
+              outbounds:
+                type: array
+                items:
+                  type: object
+              type:
+                type: string
+                minLength: 1
+              room:
+                type: object
+                properties:
+                  id:
+                    type: number
+                required:
+                - id
+              status:
+                type: string
+                minLength: 1
+            required:
+            - id
+            - x
+            - y
+            - z
+            - trackingId
+            - type
+            - status
+      required:
+      - content
   securitySchemes:
     api_key:
       type: apiKey

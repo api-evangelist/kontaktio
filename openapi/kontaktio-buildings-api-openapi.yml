@@ -112,7 +112,9 @@ paths:
         description: Filter by building IDs
       - $ref: '#/components/parameters/name'
       - $ref: '#/components/parameters/description'
-      description: "Returns a list of all buildings. \nResource supports pagination through request parameters."
+      description: 'Returns a list of all buildings.
+
+        Resource supports pagination through request parameters.'
       tags:
       - Buildings
       security:
@@ -144,6 +146,13 @@ paths:
       - api_key: []
 components:
   parameters:
+    name:
+      name: name
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Filter by name
     description:
       name: description
       in: query
@@ -151,6 +160,13 @@ components:
       schema:
         type: string
       description: Filter by description
+    page:
+      name: page
+      in: query
+      schema:
+        type: integer
+        default: '0'
+      description: Page you want to retrieve; 0 indexed.
     size:
       name: size
       in: query
@@ -176,20 +192,6 @@ components:
         - asc
         - desc
       description: 'Sort objects returned in the response. Format property,property '
-    page:
-      name: page
-      in: query
-      schema:
-        type: integer
-        default: '0'
-      description: Page you want to retrieve; 0 indexed.
-    name:
-      name: name
-      in: query
-      required: false
-      schema:
-        type: string
-      description: Filter by name
   schemas:
     Building:
       description: 'Smart Location Building. Includes the building''s floors and campus. '

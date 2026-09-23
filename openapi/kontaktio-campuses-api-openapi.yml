@@ -24,9 +24,7 @@ paths:
     get:
       summary: List all campuses
       operationId: get-locations-campuses
-      description: 'Returns a list of all campuses. Resource supports pagination through request parameters.
-
-        '
+      description: Returns a list of all campuses. Resource supports pagination through request parameters.
       parameters:
       - $ref: '#/components/parameters/page'
       - $ref: '#/components/parameters/size'
@@ -157,7 +155,10 @@ paths:
               examples: {}
           headers: {}
       operationId: get-locations-campuses
-      description: "Retrieves the details of a single campus by its ID. \n\nSupply the unique Campus ID and its corresponding information returned includes the campus buildings, building floors, and each floor's gateway and sensor devices.\n"
+      description: 'Retrieves the details of a single campus by its ID.
+
+
+        Supply the unique Campus ID and its corresponding information returned includes the campus buildings, building floors, and each floor''s gateway and sensor devices.'
       parameters: []
       x-internal: false
       tags:
@@ -165,39 +166,6 @@ paths:
       security:
       - api_key: []
 components:
-  parameters:
-    size:
-      name: size
-      in: query
-      schema:
-        type: string
-        default: '20'
-      description: Size of the page to retrieve.
-    floorName:
-      name: floorName
-      in: query
-      required: false
-      schema:
-        type: string
-      description: Filter by floor name
-    sort:
-      name: sort
-      in: query
-      schema:
-        type: string
-        default: asc
-        example: ?sort=firstname&sort=lastname,asc
-        enum:
-        - asc
-        - desc
-      description: 'Sort objects returned in the response. Format property,property '
-    page:
-      name: page
-      in: query
-      schema:
-        type: integer
-        default: '0'
-      description: Page you want to retrieve; 0 indexed.
   schemas:
     Campus:
       type: object
@@ -1929,6 +1897,39 @@ components:
                     - {}
                     '4':
                     - {}
+  parameters:
+    page:
+      name: page
+      in: query
+      schema:
+        type: integer
+        default: '0'
+      description: Page you want to retrieve; 0 indexed.
+    size:
+      name: size
+      in: query
+      schema:
+        type: string
+        default: '20'
+      description: Size of the page to retrieve.
+    floorName:
+      name: floorName
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Filter by floor name
+    sort:
+      name: sort
+      in: query
+      schema:
+        type: string
+        default: asc
+        example: ?sort=firstname&sort=lastname,asc
+        enum:
+        - asc
+        - desc
+      description: 'Sort objects returned in the response. Format property,property '
   securitySchemes:
     api_key:
       type: apiKey

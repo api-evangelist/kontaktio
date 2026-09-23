@@ -68,9 +68,7 @@ paths:
         in: query
         name: lost
         description: Filter by lost flag.
-      description: 'Returns the last postion of a Kontakt.io Tag device (BLE beacon) by trackingId (MAC address) or multiple trackingIds.
-
-        '
+      description: Returns the last postion of a Kontakt.io Tag device (BLE beacon) by trackingId (MAC address) or multiple trackingIds.
       tags:
       - Positions
       security:
@@ -89,7 +87,34 @@ paths:
         '429':
           $ref: '#/components/responses/error-429'
       operationId: get-positions-history
-      description: "Returns the location history for a device; by trackingId (MAC address). \n\n> **IMPORTANT**\n> <br> - **trackingID** must be in **all lower case** (example: d6:3c:5d:b2:7c:a9) <br>\n> <br> - If **startTime** is empty, automatically sets startTime to **current time -15 minutes** <br>\n> <br> - **endTime** is not required, but can used it to limit the displayed data <br>\n> <br> - Difference between **startTime** to **endTime** cannot exceed **7 days** <br>\n> <br> - **Size** parameter specifies how many records will be displayed (20 by default). If there are records that haven't been displayed because of the size limit, the response will be paginated - it will contain links array, with a link to the next page, and page.hasNext value will be True.<br>"
+      description: 'Returns the location history for a device; by trackingId (MAC address).
+
+
+        > **IMPORTANT**
+
+        >
+
+        - **trackingID** must be in **all lower case** (example: d6:3c:5d:b2:7c:a9)
+
+
+        >
+
+        - If **startTime** is empty, automatically sets startTime to **current time -15 minutes**
+
+
+        >
+
+        - **endTime** is not required, but can used it to limit the displayed data
+
+
+        >
+
+        - Difference between **startTime** to **endTime** cannot exceed **7 days**
+
+
+        >
+
+        - **Size** parameter specifies how many records will be displayed (20 by default). If there are records that haven''t been displayed because of the size limit, the response will be paginated - it will contain links array, with a link to the next page, and page.hasNext value will be True.'
       parameters:
       - $ref: '#/components/parameters/page'
       - $ref: '#/components/parameters/size'
@@ -121,31 +146,6 @@ paths:
       - api_key: []
 components:
   parameters:
-    size:
-      name: size
-      in: query
-      schema:
-        type: string
-        default: '20'
-      description: Size of the page to retrieve.
-    sort:
-      name: sort
-      in: query
-      schema:
-        type: string
-        default: asc
-        example: ?sort=firstname&sort=lastname,asc
-        enum:
-        - asc
-        - desc
-      description: 'Sort objects returned in the response. Format property,property '
-    page:
-      name: page
-      in: query
-      schema:
-        type: integer
-        default: '0'
-      description: Page you want to retrieve; 0 indexed.
     floorId:
       name: floorId
       in: query
@@ -164,6 +164,31 @@ components:
         - 'false'
         - 'null'
       description: Filter by lost flag.
+    page:
+      name: page
+      in: query
+      schema:
+        type: integer
+        default: '0'
+      description: Page you want to retrieve; 0 indexed.
+    size:
+      name: size
+      in: query
+      schema:
+        type: string
+        default: '20'
+      description: Size of the page to retrieve.
+    sort:
+      name: sort
+      in: query
+      schema:
+        type: string
+        default: asc
+        example: ?sort=firstname&sort=lastname,asc
+        enum:
+        - asc
+        - desc
+      description: 'Sort objects returned in the response. Format property,property '
   schemas:
     Position-Device-History:
       type: object

@@ -2,12 +2,10 @@ openapi: 3.2.0
 info:
   version: 1.0.0
   title: Entity Management Integration Entity Integration API
-  description: 'Use this API to integrate third-party systems with the Kontakt.io Kio Apps platform.  You can batch import and update Entities such as Staff and Assets, and retrieve their current configuration.
+  description: 'Use this API to integrate third-party systems with the Kontakt.io Kio Apps platform. You can batch import and update Entities such as Staff and Assets, and retrieve their current configuration.
 
 
-    API requests require an [Access token](client-credentials-flow.md).
-
-    '
+    API requests require an Access token.'
   termsOfService: https://kontakt.io/legal-documents/terms-of-sale-and-service/
   contact:
     name: Kontakt.io
@@ -28,9 +26,7 @@ paths:
       tags:
       - entity-integration
       summary: Batch import or update entities
-      description: 'This endpoint allows the import or update up to 1000 entities (e.g. Staff or Assets) in a single request.  Each entity must include a unique `entityId`, and may optionally include device identifiers and custom attributes.  Entities will be created if they do not already exist, or updated if they do.  Validation errors for individual items will be returned in the response body.
-
-        '
+      description: This endpoint allows the import or update up to 1000 entities (e.g. Staff or Assets) in a single request. Each entity must include a unique `entityId`, and may optionally include device identifiers and custom attributes. Entities will be created if they do not already exist, or updated if they do. Validation errors for individual items will be returned in the response body.
       operationId: createUpdateEntities
       parameters:
       - name: Realm
@@ -105,9 +101,7 @@ paths:
       tags:
       - entity-integration
       summary: Retrieve details of a single entity
-      description: 'Returns the full configuration of a specific entity, including its ID, type, lifecycle status, and assigned attributes.  Use this to verify the current state of an entity in the Kontakt.io platform.
-
-        '
+      description: Returns the full configuration of a specific entity, including its ID, type, lifecycle status, and assigned attributes. Use this to verify the current state of an entity in the Kontakt.io platform.
       operationId: entityDetails
       parameters:
       - name: Realm
@@ -139,6 +133,28 @@ paths:
         description: UK Kio Cloud
 components:
   schemas:
+    ItemError:
+      type: object
+      description: Details about an entity that couldn't be processed.
+      properties:
+        item:
+          type: string
+          description: The `entityId` of the failed entity.
+        errorMessage:
+          type: string
+          description: Message describing the error.
+      required:
+      - item
+      - errorMessage
+    EntityStatus:
+      type: string
+      enum:
+      - ACTIVE
+      - DEACTIVATED
+      - DELETED
+      description: 'Indicates the current lifefcyle of the entity:   - `ACTIVE`: Fully operational.   - `DEACTIVATED`: Entity position data is collected, but not monitored by alert rules (alerts and notfications are disabled). - `DELETED`: Entity is archived and hidden from the UI. The `entityId` can be restored or re-registered with a new entity.
+
+        '
     Attribute:
       type: object
       properties:
@@ -156,28 +172,30 @@ components:
       required:
       - name
       - value
-    EntityStatus:
-      type: string
-      enum:
-      - ACTIVE
-      - DEACTIVATED
-      - DELETED
-      description: 'Indicates the current lifefcyle of the entity:   - `ACTIVE`: Fully operational.   - `DEACTIVATED`: Entity position data is collected, but not monitored by alert rules (alerts and notfications are disabled). - `DELETED`: Entity is archived and hidden from the UI. The `entityId` can be restored or re-registered with a new entity.
-
-        '
-    ItemError:
+    EntityDetails:
       type: object
-      description: Details about an entity that couldn't be processed.
       properties:
-        item:
+        name:
           type: string
-          description: The `entityId` of the failed entity.
-        errorMessage:
+          description: Name of entity
+        entityId:
           type: string
-          description: Message describing the error.
+          description: Unique identifier of entity
+        entityTypeId:
+          type: string
+          description: ID of existing Entity Type
+        status:
+          $ref: '#/components/schemas/EntityStatus'
+        attributes:
+          type: array
+          description: Entity attributes
+          items:
+            $ref: '#/components/schemas/Attribute'
       required:
-      - item
-      - errorMessage
+      - name
+      - entityId
+      - entityTypeId
+      - status
     EntityCreateUpdateResult:
       type: object
       description: Response model that summarizes the result of a batch create/update operation.
@@ -236,30 +254,6 @@ components:
       required:
       - entityId
       - name
-      - entityTypeId
-      - status
-    EntityDetails:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Name of entity
-        entityId:
-          type: string
-          description: Unique identifier of entity
-        entityTypeId:
-          type: string
-          description: ID of existing Entity Type
-        status:
-          $ref: '#/components/schemas/EntityStatus'
-        attributes:
-          type: array
-          description: Entity attributes
-          items:
-            $ref: '#/components/schemas/Attribute'
-      required:
-      - name
-      - entityId
       - entityTypeId
       - status
   parameters:

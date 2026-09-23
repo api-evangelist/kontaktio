@@ -5,21 +5,7 @@ info:
     url: https://kontakt.io/wp-content/themes/kontakt/dist/img/site-header/logo.svg
     backgroundColor: '#FFFFFF'
   version: '10'
-  description: 'This Kontakt.io API provides direct access to all Kio Cloud Device Management resources. It allows integrating device administration functionality into 3rd-party applications without the need to build all underlying logic from the ground up.
-
-
-    ## Authentication
-
-
-    All requests must include a **JWT Bearer token** in the `Authorization` header, obtained via the [OAuth2 Client Credentials flow](https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow).
-
-
-    > **Deprecated:** The `Api-Key` header is still accepted for backward compatibility but is deprecated and will be removed. Do not use it for new integrations.
-
-
-    Each API call requires the `Accept` header with the API version. **By default, set to the current stable version:** `application/vnd.com.kontakt+json;version=10`
-
-    '
+  description: This Kontakt.io API provides direct access to all Kio Cloud Device Management resources.
   contact:
     name: Support
     url: https://support.kontakt.io
@@ -35,7 +21,7 @@ security:
 - api_key: []
 tags:
 - name: Manager
-  description: Managers represent user accounts that can manage Kontakt.io Devices. Everyone can freely create an account on [Kontakt.io Web Panel](https://panel.kontakt.io) and then use it to work with this API.
+  description: Managers represent user accounts that can manage Kontakt.io Devices. Everyone can freely create an account on Kontakt.io Web Panel and then use it to work with this API.
 paths:
   /manager:
     get:
@@ -71,8 +57,33 @@ paths:
       - api_key: []
       parameters:
       - $ref: '#/components/parameters/accept'
+      operationId: getManager
+      x-operation-id-source: derived
 components:
+  parameters:
+    accept:
+      name: Accept
+      in: header
+      required: true
+      schema:
+        type: string
+        default: application/vnd.com.kontakt+json;version=10
+      description: Accept header is required.
   schemas:
+    Company:
+      type: object
+      properties:
+        id:
+          type: string
+          format: UUID
+        name:
+          type: string
+        uniqueId:
+          type: string
+        countryCode:
+          type:
+          - string
+          - 'null'
     SearchMeta:
       type: object
       title: Search Metadata
@@ -122,29 +133,6 @@ components:
           - ASC
           - DESC
           default: ASC
-    Company:
-      type: object
-      properties:
-        id:
-          type: string
-          format: UUID
-        name:
-          type: string
-        uniqueId:
-          type: string
-        countryCode:
-          type:
-          - string
-          - 'null'
-  parameters:
-    accept:
-      name: Accept
-      in: header
-      required: true
-      schema:
-        type: string
-        default: application/vnd.com.kontakt+json;version=10
-      description: Accept header is required.
   securitySchemes:
     bearer_token:
       type: http

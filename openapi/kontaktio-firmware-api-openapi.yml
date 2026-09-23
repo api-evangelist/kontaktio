@@ -5,21 +5,7 @@ info:
     url: https://kontakt.io/wp-content/themes/kontakt/dist/img/site-header/logo.svg
     backgroundColor: '#FFFFFF'
   version: '10'
-  description: 'This Kontakt.io API provides direct access to all Kio Cloud Device Management resources. It allows integrating device administration functionality into 3rd-party applications without the need to build all underlying logic from the ground up.
-
-
-    ## Authentication
-
-
-    All requests must include a **JWT Bearer token** in the `Authorization` header, obtained via the [OAuth2 Client Credentials flow](https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow).
-
-
-    > **Deprecated:** The `Api-Key` header is still accepted for backward compatibility but is deprecated and will be removed. Do not use it for new integrations.
-
-
-    Each API call requires the `Accept` header with the API version. **By default, set to the current stable version:** `application/vnd.com.kontakt+json;version=10`
-
-    '
+  description: This Kontakt.io API provides direct access to all Kio Cloud Device Management resources.
   contact:
     name: Support
     url: https://support.kontakt.io
@@ -82,6 +68,8 @@ paths:
       security:
       - bearer_token: []
       - api_key: []
+      operationId: getFirmware
+      x-operation-id-source: derived
   /firmware/{firmwareVersion}:
     get:
       tags:
@@ -116,6 +104,8 @@ paths:
       - bearer_token: []
       - api_key: []
       deprecated: true
+      operationId: getFirmwareByFirmwareVersion
+      x-operation-id-source: derived
   /firmware/{firmwareVersion}/file:
     get:
       tags:
@@ -146,8 +136,89 @@ paths:
       - bearer_token: []
       - api_key: []
       deprecated: true
+      operationId: getFirmwareByFirmwareVersionFile
+      x-operation-id-source: derived
 components:
   schemas:
+    Firmware:
+      type: object
+      properties:
+        id:
+          type: string
+          format: UUID
+          description: Firmware id.
+        name:
+          type: string
+          description: Firmware name
+        description:
+          type:
+          - string
+          - 'null'
+          description: Optional Firmware description
+        deviceType:
+          type: string
+          description: Type of a device that the Firmware applies to
+          enum:
+          - BEACON
+          - GATEWAY
+        uniqueId:
+          type: array
+          description: List of Unique IDs of beacons that this Firmware can be applied to
+          items:
+            type: string
+        validVersions:
+          description: List of Firmware versions from which it's possible to update to the returned Firmware
+          type: string
+        scheduled:
+          type: boolean
+          description: Flag indicating whether an optional firmware should be made available for upgrading beacons (`true`) or not (`false`)
+        important:
+          type: boolean
+          description: Flag indicating whether this Firmware should be considered important (`true`) or just a minor update (`false`)
+        optional:
+          type: boolean
+          description: Flag indicating whether this Firmware is optional (`true`) or not ('false')
+        url:
+          type: string
+          format: URL
+          description: Link to a binary file with the Firmware
+        fileExtension:
+          type: string
+          description: Extension of the Firmware file
+        crc32:
+          type: string
+          description: Checksum
+    FirmwareCore:
+      title: Firmware (Core Parameters)
+      properties:
+        id:
+          type: string
+          format: UUID
+          description: Firmware identificator
+        name:
+          type: string
+          description: Firmware name
+        description:
+          type:
+          - string
+          - 'null'
+          description: Optional Firmware description
+        deviceType:
+          type: string
+          description: Type of a device that the Firmware applies to
+          enum:
+          - BEACON
+          - GATEWAY
+        validVersions:
+          description: List of Firmware versions from which it's possible to update to the returned Firmware
+          type: string
+        important:
+          type: boolean
+          description: Flag indicating whether this Firmware should be considered important (`true`) or just a minor update (`false`)
+        url:
+          type: string
+          format: URL
+          description: Link to a binary file with the Firmware
     SearchMeta:
       type: object
       title: Search Metadata
@@ -197,85 +268,6 @@ components:
           - ASC
           - DESC
           default: ASC
-    FirmwareCore:
-      title: Firmware (Core Parameters)
-      properties:
-        id:
-          type: string
-          format: UUID
-          description: Firmware identificator
-        name:
-          type: string
-          description: Firmware name
-        description:
-          type:
-          - string
-          - 'null'
-          description: Optional Firmware description
-        deviceType:
-          type: string
-          description: Type of a device that the Firmware applies to
-          enum:
-          - BEACON
-          - GATEWAY
-        validVersions:
-          description: List of Firmware versions from which it's possible to update to the returned Firmware
-          type: string
-        important:
-          type: boolean
-          description: Flag indicating whether this Firmware should be considered important (`true`) or just a minor update (`false`)
-        url:
-          type: string
-          format: URL
-          description: Link to a binary file with the Firmware
-    Firmware:
-      type: object
-      properties:
-        id:
-          type: string
-          format: UUID
-          description: Firmware id.
-        name:
-          type: string
-          description: Firmware name
-        description:
-          type:
-          - string
-          - 'null'
-          description: Optional Firmware description
-        deviceType:
-          type: string
-          description: Type of a device that the Firmware applies to
-          enum:
-          - BEACON
-          - GATEWAY
-        uniqueId:
-          type: array
-          description: List of Unique IDs of beacons that this Firmware can be applied to
-          items:
-            type: string
-        validVersions:
-          description: List of Firmware versions from which it's possible to update to the returned Firmware
-          type: string
-        scheduled:
-          type: boolean
-          description: Flag indicating whether an optional firmware should be made available for upgrading beacons (`true`) or not (`false`)
-        important:
-          type: boolean
-          description: Flag indicating whether this Firmware should be considered important (`true`) or just a minor update (`false`)
-        optional:
-          type: boolean
-          description: Flag indicating whether this Firmware is optional (`true`) or not ('false')
-        url:
-          type: string
-          format: URL
-          description: Link to a binary file with the Firmware
-        fileExtension:
-          type: string
-          description: Extension of the Firmware file
-        crc32:
-          type: string
-          description: Checksum
   parameters:
     accept:
       name: Accept

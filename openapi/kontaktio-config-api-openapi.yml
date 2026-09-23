@@ -5,21 +5,7 @@ info:
     url: https://kontakt.io/wp-content/themes/kontakt/dist/img/site-header/logo.svg
     backgroundColor: '#FFFFFF'
   version: '10'
-  description: 'This Kontakt.io API provides direct access to all Kio Cloud Device Management resources. It allows integrating device administration functionality into 3rd-party applications without the need to build all underlying logic from the ground up.
-
-
-    ## Authentication
-
-
-    All requests must include a **JWT Bearer token** in the `Authorization` header, obtained via the [OAuth2 Client Credentials flow](https://developer.kontakt.io/docs/entity-management-integration-api/0255c5646ab01-authentication-o-auth2-client-credentials-flow).
-
-
-    > **Deprecated:** The `Api-Key` header is still accepted for backward compatibility but is deprecated and will be removed. Do not use it for new integrations.
-
-
-    Each API call requires the `Accept` header with the API version. **By default, set to the current stable version:** `application/vnd.com.kontakt+json;version=10`
-
-    '
+  description: This Kontakt.io API provides direct access to all Kio Cloud Device Management resources.
   contact:
     name: Support
     url: https://support.kontakt.io
@@ -42,7 +28,10 @@ paths:
       tags:
       - Config
       summary: Get Configs
-      description: "Returns all pending configurations for the specified Devices or device type. \n\nIf no query parameters are provided, this endpoint returns all pending configurations that can be applied to Devices that the user has access to."
+      description: 'Returns all pending configurations for the specified Devices or device type.
+
+
+        If no query parameters are provided, this endpoint returns all pending configurations that can be applied to Devices that the user has access to.'
       parameters:
       - name: uniqueId
         in: query
@@ -85,6 +74,8 @@ paths:
       security:
       - bearer_token: []
       - api_key: []
+      operationId: getConfig
+      x-operation-id-source: derived
   /config/create:
     post:
       tags:
@@ -182,12 +173,17 @@ paths:
       security:
       - bearer_token: []
       - api_key: []
+      operationId: postConfigCreate
+      x-operation-id-source: derived
   /config/encrypt:
     get:
       tags:
       - Config
       summary: Encrypt a Config
-      description: "Returns a list of Base64-encoded configs with encrypted pending configurations for each   Device or Device types specified in a request. This payload can be sent directly via Bluetooth to a device to change its settings. \n\nIf no query parameters are provided, this endpoint returns encrypted versions of all pending configurations."
+      description: 'Returns a list of Base64-encoded configs with encrypted pending configurations for each Device or Device types specified in a request. This payload can be sent directly via Bluetooth to a device to change its settings.
+
+
+        If no query parameters are provided, this endpoint returns encrypted versions of all pending configurations.'
       parameters:
       - name: uniqueId
         in: query
@@ -224,6 +220,8 @@ paths:
       security:
       - bearer_token: []
       - api_key: []
+      operationId: getConfigEncrypt
+      x-operation-id-source: derived
   /config/delete:
     post:
       tags:
@@ -262,263 +260,14 @@ paths:
       security:
       - bearer_token: []
       - api_key: []
+      operationId: postConfigDelete
+      x-operation-id-source: derived
   /config/export:
     post:
       tags:
       - Config
       summary: Export Configs
-      description: '#### Note: this endpoint requires a user to have permission to call POST /config/create endpoint.
-
-
-        Writes pending configurations merged with the current state of devices into a CSV file. The link to this file
-
-        will be returned in the response.
-
-
-        Merging algorithm works as follows - for any given device''s parameter:
-
-
-        * if it''s a virtual parameter OR a physical one but no pending config exists which aims to change its value - the current value of this parameter is used.
-
-        * if it''s a physical parameter with a pending config changing its value - the value from that pending config is used.
-
-
-        List of parameters contained in the resulting CSV file:
-
-
-        | Parameter | Comment |
-
-        |-----------|---------|
-
-        |uniqueId| |
-
-        |mac| |
-
-        |alias| |
-
-        |tags| |
-
-        |currentLocation.campusId| |
-
-        |currentLocation.campusName| |
-
-        |currentLocation.buildingId| |
-
-        |currentLocation.buildingName| |
-
-        |currentLocation.floorId| |
-
-        |currentLocation.floorName| |
-
-        |currentLocation.roomId| |
-
-        |currentLocation.roomName| |
-
-        |packets| |
-
-        |profiles| |
-
-        |proximity| |
-
-        |major| |
-
-        |minor| |
-
-        |namespace| |
-
-        |instanceId| |
-
-        |lightSensorSamplingInterval| |
-
-        |url| |
-
-        |txPower| |
-
-        |shuffled| |
-
-        |interval| |
-
-        |name| |
-
-        |rssi0m| |
-
-        |rssi1m| |
-
-        |powerSaving.mode| See the `powerSaving.mode` field in the `Get Devices` endpoint response for possible values and descriptions. `OFF` = empty list in API response (default configuration); empty = not applicable to the device. |
-
-        |powerSaving.moveSuspendTimeout| |
-
-        |powerSaving.lightSensorHysteresis| |
-
-        |powerSaving.lightSensorThreshold| |
-
-        |powerSaving.rtc.MON| |
-
-        |powerSaving.rtc.TUE| |
-
-        |powerSaving.rtc.WED| |
-
-        |powerSaving.rtc.THU| |
-
-        |powerSaving.rtc.FRI| |
-
-        |powerSaving.rtc.SAT| |
-
-        |powerSaving.rtc.SUN| |
-
-        |eidRotationPeriodExponent| |
-
-        |wifiSsid| |
-
-        |wifiUserName| |
-
-        |wifiProtocol| |
-
-        |wifiPassword| |
-
-        |ibeaconUUID| |
-
-        |rssi_threshold| |
-
-        |filtration_mask| |
-
-        |fallbackSsid| |
-
-        |fallbackPass| |
-
-        |fallbackServer| |
-
-        |apiHost| |
-
-        |dataHost| |
-
-        |otaUrl| |
-
-        |proxyURL| |
-
-        |proxyPort| |
-
-        |eapType| |
-
-        |bleScanChannel| |
-
-        |accelerometer.features| |
-
-        |accelerometer.sensitivity| |
-
-        |accelerometer.preset| |
-
-        |accelerometer.move.threshold| |
-
-        |accelerometer.move.duration| |
-
-        |accelerometer.doubleTap.threshold| |
-
-        |accelerometer.doubleTap.timeLimit| |
-
-        |accelerometer.doubleTap.timeLatency| |
-
-        |accelerometer.doubleTap.timeWindow| |
-
-        |accelerometer.move.detectionFlags| |
-
-        |accelerometer.move.detectionFlagsJunction| |
-
-        |accelerometer.doubleTap.detectionFlags| |
-
-        |accelerometer.highPass.mode| |
-
-        |accelerometer.highPass.cutoffFrequency| |
-
-        |accelerometer.highPass.moveDetection| |
-
-        |accelerometer.highPass.doubleTapDetection| |
-
-        |accelerometer.highPass.accelerometerData| |
-
-        |accelerometer.highPass.reference| |
-
-        |batteryLevel| |
-
-        |lastSeen| |
-
-        |deployment.status| |
-
-        |secureProximity| |
-
-        |vendor| |
-
-        |firmware| |
-
-        |product| |
-
-        |productCode| |
-
-        |secureNamespace| |
-
-        |orderId| |
-
-        |category| |
-
-        |roomNumber| |
-
-        |temperatureOffset| |
-
-        |telemetryInterval| |
-
-        |telemetryFields| See the `telemetryFields` field in the `Get Devices` endpoint response for possible values and descriptions. `OFF` = empty list in API response (default configuration); empty = not applicable to the device. |
-
-        |eidIdentityKey| |
-
-        |kontaktFrameInterval| |
-
-        |locationFrameChannel| |
-
-        |locationFrameInterval| |
-
-        |buttonFeatures| See the `buttonFeatures` field in the `Get Devices` endpoint response for possible values and descriptions. `OFF` = empty list in API response (default configuration); empty = not applicable to the device. |
-
-        |multiClickCount| Number of clicks required for multi-click detection (1–10). |
-
-        |panicDuration| |
-
-        |bleScan.duration| |
-
-        |bleScan.models| |
-
-        |bleScan.force| |
-
-        |bleScan.interval| |
-
-        |bleScan.size| Maximum number of scanned items reported per scan (0–255). Requires nrf52 firmware >= 2.5.88. |
-
-        |occupancy.sleepInterval| |
-
-        |occupancy.minInterval| |
-
-        |occupancy.footfallLine| |
-
-        |occupancy.calibration| |
-
-        |occupancy.model| |
-
-        |irBlinkInterval| |
-
-        |irReceiver.wakeUpInterval| |
-
-        |irReceiver.maxListenInterval| |
-
-        |irReceiver.disableOnNoMotion| |
-
-        |irTransmitter.intensity| |
-
-        |irTransmitter.dutyCycle| |
-
-        |irTransmitter.protoV2| |
-
-        |irDetectionParams| |
-
-        '
+      description: '#### Note: this endpoint requires a user to have permission to call POST /config/create endpoint.'
       parameters:
       - $ref: '#/components/parameters/UniqueIdList'
       - name: deviceType
@@ -571,12 +320,285 @@ paths:
       security:
       - bearer_token: []
       - api_key: []
+      operationId: postConfigExport
+      x-operation-id-source: derived
   /config/import:
     post:
       tags:
       - Config
       summary: Import Configs
-      description: "#### Note: this endpoint requires a user to have permission to call POST /config/create endpoint.\n\nImports a CSV file with configuration parameters, virtual or physical, and applies them to the devices\nas pointed in that file.\n\nVirtual parameters are modified instantly upon successful response, whereas for physical parameters a pending\nconfiguration is created.\n\nThis endpoint can take in a file generated by the POST /config/export without any modifications or modified as needed,\nbut also any valid CSV file.        \n\n#### Note: All rows will be processed even if one of them contains errors - this is to aid in fixing errors in CSV files and resubmitting it.However **if one of the rows contains errors, the proper rows won't take effect**.\n#### The proper course of action when an error is returned for one or more of the rows is fixing errors in the file and submitting it again.\n\n\n## File format \n\nBelow is a comma-separated text file rendered as a table:\n\n|  uniqueId  | parameter 1 | ... | parameter N |\n|------------|-------------|-----|-------------|\n|  11P10AvW  |      1      | ... | abctexttext |\n|  11S13AhY  |      42     | ... |  textvalue  |\n| .......... |     ...     | ... |     ...     |\n| uniqueId N |             | ... |     abd     |\n\nIn other words, each row is a *uniqueId* of a device followed by configuration properties we want to change in it.\n\nLack of value in a cell means no change to that value, with some exceptions:\n* alias: lack of value resets it to an empty string\n* tags: lack of value resets it to an empty list\n\n| Supported parameters |\n|----------------------|\n|deployment.status|\n|alias|\n|tags|\n|url|\n|namespace|\n|instanceId|\n|name|\n|password|\n|proximity|\n|major|\n|minor|\n|txPower|\n|interval|\n|shuffled|\n|lightSensorSamplingInterval|\n|eidRotationPeriodExponent|\n|profiles|\n|packets|\n|rssi0m|\n|rssi1m|\n|powerSaving.mode|\n|powerSaving.moveSuspendTimeout|\n|powerSaving.lightSensorHysteresis|\n|powerSaving.lightSensorThreshold|\n|powerSaving.rtc.MON|\n|powerSaving.rtc.TUE|\n|powerSaving.rtc.WED|\n|powerSaving.rtc.THU|\n|powerSaving.rtc.FRI|\n|powerSaving.rtc.SAT|\n|powerSaving.rtc.SUN|\n|accelerometer.features|\n|accelerometer.sensitivity|\n|accelerometer.preset|\n|accelerometer.move.threshold|\n|accelerometer.move.duration|\n|accelerometer.move.detectionFlags|\n|accelerometer.move.detectionFlagsJunction|\n|accelerometer.doubleTap.threshold|\n|accelerometer.doubleTap.timeLimit|\n|accelerometer.doubleTap.timeLatency|\n|accelerometer.doubleTap.timeWindow|\n|accelerometer.doubleTap.detectionFlags|\n|accelerometer.highPass.mode|\n|accelerometer.highPass.cutoffFrequency|\n|accelerometer.highPass.moveDetection|\n|accelerometer.highPass.doubleTapDetection|\n|accelerometer.highPass.accelerometerData|\n|accelerometer.highPass.reference|\n|occupancy.sleepInterval|\n|occupancy.minInterval|\n|occupancy.model|\n|occupancy.footfallLine|\n|occupancy.calibration|\n|irReceiver.wakeUpInterval|\n|irReceiver.maxListenInterval|\n|irReceiver.disableOnNoMotio|\n|irTransmitter.intensity|\n|irTransmitter.dutyCycle|\n|irTransmitter.protoV2|\n|irDetectionParams|\n|irBlinkInterval|\n|roomNumber|\n|temperatureOffset|\n|telemetryInterval|\n|telemetryFields|\n|eidIdentityKey|\n|kontaktFrameInterval|\n|locationFrameChannel|\n|locationFrameInterval|\n|buttonFeatures|\n|multiClickCount|\n|panicDuration|\n|bleScan.duration|\n|bleScan.models|\n|bleScan.force|\n|bleScan.interval|\n|bleScan.size|\n|wifiSsid|\n|wifiUserName|\n|wifiProtocol|\n|wifiPassword|\n|ibeaconUUID|\n|rssi_threshold|\n|filtration_mask|\n|apiHost|\n|dataHost|\n|otaUrl|\n|proxyURL|\n|proxyPort|\n|eapType|\n|bleScanChannel|\n\n| Ignored parameters (due to them being read-only) |\n|----------------------|\n|mac|\n|orderId|\n|batteryLevel|\n|lastSeen|\n|category|\n|firmware|\n|product|\n|productCode|\n|secureProximity|\n|vendor|\n|secureNamespace|\n|fallbackSsid|\n|fallbackPass|\n|fallbackServer|\n"
+      description: '#### Note: this endpoint requires a user to have permission to call POST /config/create endpoint.
+
+
+        Imports a CSV file with configuration parameters, virtual or physical, and applies them to the devices
+
+        as pointed in that file.
+
+
+        Virtual parameters are modified instantly upon successful response, whereas for physical parameters a pending
+
+        configuration is created.
+
+
+        This endpoint can take in a file generated by the POST /config/export without any modifications or modified as needed,
+
+        but also any valid CSV file.
+
+
+        #### Note: All rows will be processed even if one of them contains errors - this is to aid in fixing errors in CSV files and resubmitting it.However **if one of the rows contains errors, the proper rows won''t take effect**.
+
+        #### The proper course of action when an error is returned for one or more of the rows is fixing errors in the file and submitting it again.
+
+
+        ## File format
+
+
+        Below is a comma-separated text file rendered as a table:
+
+
+        | uniqueId | parameter 1 | ... | parameter N |
+
+        |------------|-------------|-----|-------------|
+
+        | 11P10AvW | 1 | ... | abctexttext |
+
+        | 11S13AhY | 42 | ... | textvalue |
+
+        | .......... | ... | ... | ... |
+
+        | uniqueId N | | ... | abd |
+
+
+        In other words, each row is a *uniqueId* of a device followed by configuration properties we want to change in it.
+
+
+        Lack of value in a cell means no change to that value, with some exceptions:
+
+        * alias: lack of value resets it to an empty string
+
+        * tags: lack of value resets it to an empty list
+
+
+        | Supported parameters |
+
+        |----------------------|
+
+        |deployment.status|
+
+        |alias|
+
+        |tags|
+
+        |url|
+
+        |namespace|
+
+        |instanceId|
+
+        |name|
+
+        |password|
+
+        |proximity|
+
+        |major|
+
+        |minor|
+
+        |txPower|
+
+        |interval|
+
+        |shuffled|
+
+        |lightSensorSamplingInterval|
+
+        |eidRotationPeriodExponent|
+
+        |profiles|
+
+        |packets|
+
+        |rssi0m|
+
+        |rssi1m|
+
+        |powerSaving.mode|
+
+        |powerSaving.moveSuspendTimeout|
+
+        |powerSaving.lightSensorHysteresis|
+
+        |powerSaving.lightSensorThreshold|
+
+        |powerSaving.rtc.MON|
+
+        |powerSaving.rtc.TUE|
+
+        |powerSaving.rtc.WED|
+
+        |powerSaving.rtc.THU|
+
+        |powerSaving.rtc.FRI|
+
+        |powerSaving.rtc.SAT|
+
+        |powerSaving.rtc.SUN|
+
+        |accelerometer.features|
+
+        |accelerometer.sensitivity|
+
+        |accelerometer.preset|
+
+        |accelerometer.move.threshold|
+
+        |accelerometer.move.duration|
+
+        |accelerometer.move.detectionFlags|
+
+        |accelerometer.move.detectionFlagsJunction|
+
+        |accelerometer.doubleTap.threshold|
+
+        |accelerometer.doubleTap.timeLimit|
+
+        |accelerometer.doubleTap.timeLatency|
+
+        |accelerometer.doubleTap.timeWindow|
+
+        |accelerometer.doubleTap.detectionFlags|
+
+        |accelerometer.highPass.mode|
+
+        |accelerometer.highPass.cutoffFrequency|
+
+        |accelerometer.highPass.moveDetection|
+
+        |accelerometer.highPass.doubleTapDetection|
+
+        |accelerometer.highPass.accelerometerData|
+
+        |accelerometer.highPass.reference|
+
+        |occupancy.sleepInterval|
+
+        |occupancy.minInterval|
+
+        |occupancy.model|
+
+        |occupancy.footfallLine|
+
+        |occupancy.calibration|
+
+        |irReceiver.wakeUpInterval|
+
+        |irReceiver.maxListenInterval|
+
+        |irReceiver.disableOnNoMotio|
+
+        |irTransmitter.intensity|
+
+        |irTransmitter.dutyCycle|
+
+        |irTransmitter.protoV2|
+
+        |irDetectionParams|
+
+        |irBlinkInterval|
+
+        |roomNumber|
+
+        |temperatureOffset|
+
+        |telemetryInterval|
+
+        |telemetryFields|
+
+        |eidIdentityKey|
+
+        |kontaktFrameInterval|
+
+        |locationFrameChannel|
+
+        |locationFrameInterval|
+
+        |buttonFeatures|
+
+        |multiClickCount|
+
+        |panicDuration|
+
+        |bleScan.duration|
+
+        |bleScan.models|
+
+        |bleScan.force|
+
+        |bleScan.interval|
+
+        |bleScan.size|
+
+        |wifiSsid|
+
+        |wifiUserName|
+
+        |wifiProtocol|
+
+        |wifiPassword|
+
+        |ibeaconUUID|
+
+        |rssi_threshold|
+
+        |filtration_mask|
+
+        |apiHost|
+
+        |dataHost|
+
+        |otaUrl|
+
+        |proxyURL|
+
+        |proxyPort|
+
+        |eapType|
+
+        |bleScanChannel|
+
+
+        | Ignored parameters (due to them being read-only) |
+
+        |----------------------|
+
+        |mac|
+
+        |orderId|
+
+        |batteryLevel|
+
+        |lastSeen|
+
+        |category|
+
+        |firmware|
+
+        |product|
+
+        |productCode|
+
+        |secureProximity|
+
+        |vendor|
+
+        |secureNamespace|
+
+        |fallbackSsid|
+
+        |fallbackPass|
+
+        |fallbackServer|'
       parameters:
       - $ref: '#/components/parameters/accept'
       requestBody:
@@ -634,6 +656,8 @@ paths:
       security:
       - bearer_token: []
       - api_key: []
+      operationId: postConfigImport
+      x-operation-id-source: derived
   /config/readall:
     get:
       tags:
@@ -673,6 +697,8 @@ paths:
       security:
       - bearer_token: []
       - api_key: []
+      operationId: getConfigReadall
+      x-operation-id-source: derived
   /config/{fileName}/csv:
     get:
       tags:
@@ -701,8 +727,44 @@ paths:
       security:
       - bearer_token: []
       - api_key: []
+      operationId: getConfigByFileNameCsv
+      x-operation-id-source: derived
 components:
   schemas:
+    UniqueId:
+      description: Unique identifier of a device.
+      type: string
+      example: 11P10AvW
+    EncryptedConfig:
+      title: Encrypted Config/Command
+      x-stoplight:
+        id: yvjpgdrc5gygd
+      type: object
+      properties:
+        uniqueId:
+          type: string
+          description: Unique ID of the device that can consume this Encrypted Config/Command.
+        config:
+          type: string
+          format: byte
+          description: Base64-encoded data with a new Config/Command for a Device with an Unique ID specified in the `uniqueId` field.
+    IrTransmitterSettings:
+      type: object
+      description: IR Transmitter setting.
+      properties:
+        dutyCycle:
+          type: integer
+          minimum: 0
+          maximum: 100
+          description: Duty cycle used for the IR emission as a percentage
+        intensity:
+          type: integer
+          minimum: 0
+          maximum: 100
+          description: Power intensity for the IR emission as a percentage
+        protoV2:
+          type: boolean
+          description: Flag that enables IR Protocol V2
     ApiError:
       type: object
       title: API Error
@@ -742,6 +804,466 @@ components:
                 type: string
                 description: Error message
                 example: Invalid value for field name
+    LockDetails:
+      type: object
+      properties:
+        confirmationId:
+          $ref: '#/components/schemas/LockDetailsConfirmationId'
+    EditableGatewayConfig:
+      description: Gateway (e.g. Portal Light) settings that can be changed via API
+      type: object
+      properties:
+        applications:
+          type: object
+          properties:
+            system:
+              type: object
+              properties:
+                wifiSsid:
+                  type: string
+                  description: Name of the WiFi network a gateway should connect to
+                  minLength: 2
+                  maxLength: 32
+                wifiProtocol:
+                  type: string
+                  description: WiFi authentication protocol that a gateway should use
+                  enum:
+                  - WPA_PSK
+                  - WPA_EAP
+                  - OPEN
+                wifiUserName:
+                  type: string
+                  description: When `wifiProtocol` is set to `WPA_EAP` this parameter represents PEAP MSCHAPv2 username. If `WPA_PSK` is used, this value will be ignored by a gateway.
+                  maxLength: 256
+                wifiPassword:
+                  type: string
+                  description: When `wifiProtocol` is set to `WPA_EAP` this parameter represents PEAP MSCHAPv2 password. If `WPA_PSK` is used, this value will be ignored by a gateway.
+                  maxLength: 63
+                apiHost:
+                  type: string
+                  description: DM API host URL.
+                  format: uri
+                  minLength: 1
+                apiKey:
+                  type: string
+                  description: API key for DM API (alphanumeric)
+                  minLength: 1
+                dataHost:
+                  type: string
+                  description: Data host URL
+                  format: uri
+                dataApiKey:
+                  type: string
+                  description: API key for Data host (alphanumeric)
+                otaUrl:
+                  type: string
+                  description: OTA update URL
+                  format: uri
+                  maxLength: 64
+                proxyURL:
+                  type: string
+                  description: Proxy URL for the gateway to connect to. Empty value disables proxying.
+                  minLength: 0
+                  maxLength: 64
+                  default: ''
+                proxyPort:
+                  type: integer
+                  description: Proxy port for the gateway to connect to
+                  minimum: 0
+                  maximum: 65535
+                  default: 80
+                eapType:
+                  type: string
+                  description: Extensible Authentication Protocol (EAP) for network access
+                  enum:
+                  - DEFAULT
+                  - TLS
+                  - TTLS
+                  - PEAP
+                  default: DEFAULT
+                ibeaconUUID:
+                  type: string
+                  format: uuid
+                  description: "iBeacon UUID to broadcast. \n Broadcasting the iBeacon is disabled by default. To enable, the ibeaconUUID need to be set."
+                  minLength: 36
+                  maxLength: 36
+                  default: 00000000-0000-0000-0000-000000000000
+                ibeacon_major:
+                  type: integer
+                  description: Major to use when broadcasting iBeacon frames.
+                  default: 0
+                ibeacon_minor:
+                  type: integer
+                  description: Minor to use when broadcasting iBeacon frames.
+                  default: 0
+                roomID:
+                  type: integer
+                  description: Room ID used in location frame
+                  default: 0
+                tx_power:
+                  type: integer
+                  description: Tx power used by the gateway (allowed values are defined in documentation)
+                filtration_mask:
+                  type: integer
+                  description: "Filtration mask is the second stage of frame filtration implemented in Portal light. Each bit in that mask defines whether to process a specific type of frames or omit them. \n Bit order is as follows: Mac filtration, Eddystone,iBeacon, Kontakt. \n The default value is 0b1111 (15 decimal), meaning that Kontakt frames, iBeacon, Eddystone and devices with Kontakt MAC will be sent to the cloud. It is possible to set this mask to process only selected types of frames/devices."
+                  default: 15
+                rssi_threshold:
+                  type: integer
+                  description: Rssi threshold filtration is the first stage of frame filtration implemented in Portal light. It means that if rssi filtration is on and set to desired value then all scans with lower rssi will be rejected.
+                  default: -127
+                bleAdvChannel:
+                  type: integer
+                  description: "BLE advertising channel.\nAll channels advertising (0) is set as a default. Possibility to advertise only on one of three channels was added for Location Engine needs: 37, 38, 39 \n Other values such as 10,35 etc… will be treated as 0 - it means all channels advertising."
+                  enum:
+                  - 0
+                  - 37
+                  - 38
+                  - 39
+                bleScanChannel:
+                  type: integer
+                  description: "BLE scanning channel.\nAll channels scanning (0) is set as a default. Possibility to scan only on one of three channels was added for Location Engine needs: 37, 38, 39 \n Other values such as 10,35 etc… will be treated as 0 - it means all channels scanning."
+                  enum:
+                  - 0
+                  - 37
+                  - 38
+                  - 39
+                dm_poll_interval_s:
+                  type: integer
+                  description: DM poll interval in seconds.
+                defaultNTP:
+                  type: string
+                  description: Default NTP server URL.
+                  format: uri
+                  minLength: 1
+                secondNTP:
+                  type: string
+                  description: Secondary NTP server URL.
+                  format: uri
+                  minLength: 1
+                apiCACertificate:
+                  type: string
+                  description: API CA certificate.
+                  minLength: 1
+                wpa2Certificate:
+                  type: string
+                  description: "Enterprise WiFi. Base64-encoded P12 certificate. \n Keystore in p12/pfx format (with certificate and private key)"
+                wpa2CertificatePassword:
+                  type: string
+                  description: "Enterprise WiFi. Certificate password. \n Password to the keystore"
+                wpa2PrivateKeyAlias:
+                  type: string
+                  description: "Enterprise WiFi. Alias for private key. \n Private key alias specified by --name param in openssl utility"
+                  default: '1'
+                wpa2CACertificate:
+                  type: string
+                  description: "Enterprise WiFi. For deployment and client-specific requirement there was a need to add CA certificates to validate the server. \n Sent as a string in .pem format with header -----BEGIN CERTIFICATE----- and footer ----END CERTIFICATE-----"
+                beacon_packets_mask:
+                  type: integer
+                  description: Beacon packets mask.
+                led_intensity:
+                  type: integer
+                  description: LED brightness can be adjusted from 0% (completely off) to 100% - maximum brightness.
+                  minimum: 0
+                  maximum: 100
+                  default: 10
+                blink_interval_s:
+                  type: integer
+                  description: Blink interval in seconds.
+                  minimum: 0
+                  maximum: 3600
+                ir_duty_cycle:
+                  type: integer
+                  description: IR duty cycle (0-100%).
+                  minimum: 0
+                  maximum: 100
+                ir_intensity:
+                  type: integer
+                  description: IR intensity (0-100%).
+                  minimum: 0
+                  maximum: 100
+                device_name:
+                  type: string
+                  description: Device name.
+                  minLength: 1
+                adv_int:
+                  type: integer
+                  description: Advertising interval. Must be between 160 and 16384.
+                  minimum: 160
+                  maximum: 16384
+                debug_features_mask:
+                  type: integer
+                  description: Debug features mask.
+                bound_device:
+                  type: string
+                  description: 'Bound device must be a lowercase MAC address.
+
+                    Only both bound_device and bound_device_password can be set to a non-blank string at the same time or both be set to blank.'
+                bound_device_password:
+                  type: string
+                  description: Bound device password. Must be provided together with bound_device.
+                relay_mode:
+                  type: integer
+                  description: Relay mode.
+                mqtt_auth:
+                  type: string
+                  description: MQTT authentication credentials.
+                ir_config_mask:
+                  type: integer
+                  description: IR configuration mask.
+                  minimum: 0
+                  maximum: 255
+                data_interval_ms:
+                  type: integer
+                  description: Target interval between scans uploads, in ms. 0 means as fast as possible.
+                  minimum: 0
+                  maximum: 65535
+                  default: 2000
+    IrReceiverSettings:
+      type: object
+      description: IR Receiver setting.
+      properties:
+        wakeUpInterval:
+          type: integer
+          minimum: 0
+          maximum: 255
+          description: 'Interval between detection attempts, encoded as u8. 0 - disabled. Encodes time using 2-bit scale + 6-bit mantissa: 0b00=seconds, 0b01=ms, 0b10=ms*10, 0b11=ms*100. Max 63 per scale (e.g. max 63 seconds, or 6300ms, or 63000ms)'
+        maxListenInterval:
+          type: integer
+          minimum: 0
+          maximum: 255
+          description: 'Maximum duration to try and detect IR signal, encoded as u8. Encodes time using 2-bit scale + 6-bit mantissa: 0b00=seconds, 0b01=ms, 0b10=ms*10, 0b11=ms*100. Max 63 per scale (e.g. max 63 seconds, or 6300ms, or 63000ms)'
+        disableOnNoMotion:
+          type: boolean
+          description: Whether or not to disable IR receiver when the beacon is stationary.
+    TemperatureProbesSettings:
+      type: object
+      description: Settings for temperature probes.
+      properties:
+        probe0:
+          $ref: '#/components/schemas/TemperatureProbe'
+        probe1:
+          $ref: '#/components/schemas/TemperatureProbe'
+        probe2:
+          $ref: '#/components/schemas/TemperatureProbe'
+    HumidityProbesSettings:
+      type: object
+      description: Settings for humidity probes.
+      properties:
+        probe0:
+          $ref: '#/components/schemas/HumidityProbe'
+    DisplaySettings:
+      type: object
+      description: Device display settings.
+      properties:
+        ledIntensity:
+          type: number
+          description: LED light intensity, ranging from 0% (completely off) to 100% (maximum brightness).
+          minimum: 0
+          maximum: 100
+        ledBlinkInterval:
+          type: number
+          description: The number of seconds between LED blinks.
+          minimum: 1
+          maximum: 255
+        ledBlinkEnabled:
+          type: boolean
+          description: Indicates whether the LED light is enabled.
+          example: true
+        temperatureUnit:
+          type: string
+          description: The unit for displaying temperature.
+          enum:
+          - CELSIUS
+          - FAHRENHEIT
+    ConfigLocksResponse:
+      type: object
+      properties:
+        locks:
+          type: object
+          properties:
+            roomNumber:
+              $ref: '#/components/schemas/LockDetails'
+            temperatureMonitor:
+              $ref: '#/components/schemas/LockDetails'
+    ConfigButton:
+      type: object
+      description: Button settings.
+      properties:
+        buttonFeatures:
+          type: array
+          description: 'Bitmask-based hardware button configuration. Each value in the list enables a specific flag.
+
+            An empty list `[]` corresponds to a mask of `0b000` (all flags unset) which is the default:
+
+            click and long-press are enabled, triple-click is disabled.
+
+            Send an empty list to restore defaults.
+
+
+            Note: `CLICK_OFF` and `LONG_PRESS_OFF` are inverted flags — setting them **disables** a behavior
+
+            that is on by default. `TRIPLE_CLICK` is a normal flag — setting it **enables** a behavior
+
+            that is off by default.
+
+
+            | Value | Description |
+
+            |-------|-------------|
+
+            | CLICK_OFF | Disable single-click detection. On by default — set this flag to turn it off |
+
+            | LONG_PRESS_OFF | Disable long-press detection. On by default — set this flag to turn it off |
+
+            | TRIPLE_CLICK | Require a triple-click to trigger a panic event instead of a single click. Off by default |
+
+            | MULTI_CLICK | Enable multi-click detection. Mutually exclusive with TRIPLE_CLICK. Off by default |
+
+            '
+          items:
+            type: string
+            enum:
+            - CLICK_OFF
+            - LONG_PRESS_OFF
+            - TRIPLE_CLICK
+            - MULTI_CLICK
+        multiClickCount:
+          type: integer
+          description: 'Number of clicks required for multi-click detection (1–10). Only applicable when MULTI_CLICK is set in buttonFeatures.
+
+            '
+          minimum: 1
+          maximum: 10
+        panicDuration:
+          type: integer
+          minimum: 0
+          maximum: 65535
+          description: Number of second the `BUTTON_IBEACON` packet should be broadcast after a button press.
+    ConfigEid:
+      type: object
+      description: Eddystone-EID settings.
+      properties:
+        eidIdentityKey:
+          description: Eddystone-EID Identity Key.
+          type:
+          - string
+          - 'null'
+        eidRotationPeriodExponent:
+          description: Eddystone-EID rotation period exponent.
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+          maximum: 15
+    DeviceModel:
+      type: string
+      enum:
+      - SMART_BEACON
+      - USB_BEACON
+      - SENSOR_BEACON
+      - CARD_BEACON
+      - GATEWAY
+      - BEACON_PRO
+      - TAG_BEACON
+      - SMART_BEACON_3
+      - HEAVY_DUTY_BEACON
+      - CARD_BEACON_2
+      - TOUGH_BEACON_2
+      - BRACELET_TAG
+      - UNIVERSAL_TAG
+      - BRACELET_TAG_2
+      - LANYARD_TAG
+      - NANO_TAG
+      - STICKER_TAG
+      - PUCK_TAG
+      - PORTAL_LIGHT
+      - SMART_BADGE
+      - SMART_BADGE_3_MINI
+      - PORTAL_BEAM
+      - NANO_SERIES
+      - NANO_TAG_IR
+      - ASSET_TAG_2
+      - ANCHOR_BEACON_2
+      - BEAM_MINI
+      - PORTAL_BEAM_IR
+      - DISPENSER_BEACON
+      - ES10_DISPENSER_BEACON
+      - UNIVERSAL_DISPENSER_BEACON
+      - PORTAL_LIGHT_2S
+      - PORTAL_LIGHT_2
+      - ASSET_TAG_2_MINI
+      - PARTNER_DEVICE
+      - EXTERNAL
+      description: Kontakt.io internal model name of the device. Multiple products may have the same model name. Managed 3rd party devices will all have `PARTNER_DEVICE`.
+    TemperatureProbe:
+      type: object
+      description: Settings for a temperature probe.
+      properties:
+        alertMaxEnabled:
+          type: boolean
+          description: Indicates if the maximum temperature alert is enabled.
+          example: true
+        alertMaxLevel:
+          type: number
+          format: float
+          description: The maximum temperature level (in Celsius) to trigger an alert.
+          example: 40.5
+          minimum: -273
+          maximum: 1000
+        alertMinEnabled:
+          type: boolean
+          description: Indicates if the minimum temperature alert is enabled.
+          example: true
+        alertMinLevel:
+          type: number
+          format: float
+          description: The minimum temperature level (in Celsius) to trigger an alert.
+          example: -100.5
+          minimum: -273
+          maximum: 1000
+        sensorEnabled:
+          type: boolean
+          description: Indicates if the temperature sensor is enabled.
+          example: true
+    UpdatedDate:
+      description: Informs when the object has been updated.
+      type: string
+      format: date-time
+      example: 2023‐09‐18T15:33:00Z
+    PendingBeaconConfig:
+      description: Pending Beacon Configuration.
+      x-stoplight:
+        id: gnufpxhymraym
+      allOf:
+      - $ref: '#/components/schemas/BeaconConfig'
+      - type: object
+        properties:
+          created:
+            $ref: '#/components/schemas/CreatedDate'
+          updated:
+            $ref: '#/components/schemas/UpdatedDate'
+          uniqueId:
+            $ref: '#/components/schemas/UniqueId'
+          model:
+            $ref: '#/components/schemas/DeviceModel'
+      - $ref: '#/components/schemas/ConfigLocksResponse'
+    NewGatewayConfig:
+      allOf:
+      - $ref: '#/components/schemas/EditableGatewayConfig'
+      - type: object
+        properties:
+          uniqueId:
+            description: List of Gateway Unique IDs for which configs should be created.
+            type: array
+            items:
+              $ref: '#/components/schemas/UniqueId'
+          deviceType:
+            description: Type of a device that a configuration should be created for.
+            type: string
+            enum:
+            - GATEWAY
+      - $ref: '#/components/schemas/ConfigLocksRequest'
+      title: New Gateway Config
     Dispenser:
       type: object
       description: Dispenser settings for UHH dispenser beacons. Maps to PIDs dispenser_model_id (0x917E) and dispenser_detection_params (0x917F). Requires soap_dispenser capability and firmware nrf52 >= 2.16.1.
@@ -767,98 +1289,6 @@ components:
           pattern: ^([0-9A-Fa-f]{2})*$
           maxLength: 1000
           example: '00010002030405'
-    NewGatewayConfig:
-      allOf:
-      - $ref: '#/components/schemas/EditableGatewayConfig'
-      - type: object
-        properties:
-          uniqueId:
-            description: List of Gateway Unique IDs for which configs should be created.
-            type: array
-            items:
-              $ref: '#/components/schemas/UniqueId'
-          deviceType:
-            description: Type of a device that a configuration should be created for.
-            type: string
-            enum:
-            - GATEWAY
-      - $ref: '#/components/schemas/ConfigLocksRequest'
-      title: New Gateway Config
-    OccupancyPhysicalSettings:
-      type: object
-      x-stoplight:
-        id: ri25ewp162tv9
-      description: Occupancy settings. Only applicable to devices with occupancy capability.
-      properties:
-        sleepInterval:
-          type: integer
-          minimum: 0
-          maximum: 65535
-          default: 0
-          description: Occupancy sampling interval in seconds when in power-saving mode (outside of working hours).
-        minInterval:
-          type: integer
-          minimum: 0
-          maximum: 65535
-          default: 60
-          description: Min sampling interval in seconds. 0 means disabled.
-        calibration:
-          type: integer
-          minimum: -128
-          maximum: 127
-          default: 0
-          description: Common threshold delta (all occupancy modes). Allows to fine-tune the sensitivity relative to the newest default. For example, use -5 to lower the threshold by 5 units from the default (allow more detections), or conversely setting it to 5 adds 5 to that threshold, reducing false positives. In other words, this is a linear value, not a percentage.
-        sensitivity:
-          type: integer
-          minimum: 0
-          maximum: 100
-          deprecated: true
-          description: Deprecated! Please use the calibration parameter instead. Percentage of sensitivity. 0-100, 0 for very strict, 100 accept everything
-        model:
-          type: integer
-          description: "Detection model. \n\n0 - static occupancy.  \n2 - traffic footfall."
-        footfallLine:
-          type: string
-          default: 28502800
-          description: Threshold line for footfall detection. [x0, y0, x1, y1] pixel coordinates for the line. Hex encoded.
-        footfallSensitivity:
-          type: integer
-          minimum: 0
-          maximum: 100
-          default: 40
-          deprecated: true
-          description: Deprecated! Please use the calibration parameter instead. Sensitivity for accepting footfall tracks. 0-100, 0 for very strict, 100 accept everything
-    PendingBeaconConfig:
-      description: Pending Beacon Configuration.
-      x-stoplight:
-        id: gnufpxhymraym
-      allOf:
-      - $ref: '#/components/schemas/BeaconConfig'
-      - type: object
-        properties:
-          created:
-            $ref: '#/components/schemas/CreatedDate'
-          updated:
-            $ref: '#/components/schemas/UpdatedDate'
-          uniqueId:
-            $ref: '#/components/schemas/UniqueId'
-          model:
-            $ref: '#/components/schemas/DeviceModel'
-      - $ref: '#/components/schemas/ConfigLocksResponse'
-    LockDetailsConfirmationId:
-      type: string
-      description: The value included in the DeviceChangedEvent.UPDATED to confirm that a specific configuration has been applied on a device
-      example: ed26348a-e33e-428c-a343-33e0054ebdf9
-    ConfigLocksRequest:
-      type: object
-      properties:
-        locks:
-          type: object
-          properties:
-            roomNumber:
-              $ref: '#/components/schemas/LockDetailsConfirmationId'
-            temperatureMonitor:
-              $ref: '#/components/schemas/LockDetailsConfirmationId'
     LocalAlertingSettings:
       type: object
       description: Device local alerting settings.
@@ -905,10 +1335,450 @@ components:
           $ref: '#/components/schemas/TemperatureProbesSettings'
         humidityProbes:
           $ref: '#/components/schemas/HumidityProbesSettings'
-    UniqueId:
-      description: Unique identifier of a device.
+    ConfigLocksRequest:
+      type: object
+      properties:
+        locks:
+          type: object
+          properties:
+            roomNumber:
+              $ref: '#/components/schemas/LockDetailsConfirmationId'
+            temperatureMonitor:
+              $ref: '#/components/schemas/LockDetailsConfirmationId'
+    ConfigIBeacon:
+      type: object
+      description: iBeacon settings.
+      properties:
+        proximity:
+          type:
+          - string
+          - 'null'
+          format: UUID
+          description: iBeacon Proximity UUID.
+        major:
+          type:
+          - integer
+          - 'null'
+          format: uint16
+          minimum: 0
+          maximum: 65535
+          description: iBeacon Major.
+        minor:
+          type:
+          - integer
+          - 'null'
+          format: uint16
+          minimum: 0
+          maximum: 65535
+          description: iBeacon Minor.
+        rssi1m:
+          type:
+          - array
+          - 'null'
+          description: List of new Calibrated RSSI@1m values (iBeacon) for each TX power level the Device can use.
+          items:
+            type: integer
+          example:
+          - -115
+          - -84
+          - -81
+          - -77
+          - -72
+          - -69
+          - -65
+          - -59
+    ConfigEddystone:
+      type: object
+      description: Eddystone settings.
+      properties:
+        namespace:
+          type:
+          - string
+          - 'null'
+          description: Eddystone UID Namespace.
+          maxLength: 20
+          minLength: 20
+        instanceId:
+          type:
+          - string
+          - 'null'
+          description: Eddystone UID Instance ID.
+          maxLength: 12
+          minLength: 12
+        url:
+          type:
+          - string
+          - 'null'
+          description: Eddystone URL address. Hex-encoded according to Eddystone specification.
+        decodedUrl:
+          type:
+          - string
+          - 'null'
+          description: Eddystone URL address. Alias for `url` but in decoded format. `decodedUrl` takes precedence.
+        rssi0m:
+          type:
+          - array
+          - 'null'
+          description: List of new Calibrated RSSI@0m values (Eddystone) for each TX power level the Device can use.
+          deprecated: true
+          items:
+            type: integer
+    LowBatterySettings:
+      type: object
+      description: Device low battery settings.
+      properties:
+        alertLevel:
+          type: integer
+          description: The battery level threshold (percentage) below which a low battery alert is triggered.
+          example: 10
+          minimum: 1
+          maximum: 100
+        alertEnabled:
+          type: boolean
+          description: Indicates whether the low battery alert is enabled.
+          example: true
+    AccelerometerSettings:
+      type: object
+      x-stoplight:
+        id: q22ra4lowsp5r
+      description: Accelerometer settings.
+      properties:
+        features:
+          description: List of Accelerometer features that are enabled
+          type: array
+          items:
+            type: string
+            enum:
+            - ACCELEROMETER
+            - X_AXIS
+            - Y_AXIS
+            - Z_AXIS
+            - MOVE_DETECTION
+            - DOUBLE_TAP_DETECTION
+        sensitivity:
+          description: Accelerometer sensitivity
+          type: integer
+          enum:
+          - 16
+          - 32
+          - 64
+          - 128
+        preset:
+          description: Preset for Accelerometer configuration
+          type: string
+          enum:
+          - MOVEMENT
+          - FREE_FALL
+          - DOUBLE_TAP
+          - DOUBLE_TAP_AND_MOVEMENT
+          - DOUBLE_TAP_AND_FREE_FALL
+        move:
+          description: Movement detection parameters
+          type: object
+          properties:
+            threshold:
+              description: Value (in m*g*) that an acceleration needs to exceeds in order to trigger movement detection
+              type: integer
+            duration:
+              description: Time (in ms) than an acceleration needs to stay above threshold value in order to trigger movement detection
+              type: integer
+            detectionFlags:
+              type: array
+              items:
+                type: string
+                enum:
+                - X_POSITIVE
+                - Y_POSITIVE
+                - Z_POSITIVE
+                - X_NEGATIVE
+                - Y_NEGATIVE
+                - Z_NEGATIVE
+            detectionFlagsJunction:
+              type: string
+              enum:
+              - AND
+              - OR
+        doubleTap:
+          description: Double tap detection parameters
+          type: object
+          properties:
+            threshold:
+              description: Value ( in m*g*) that an acceleration needs to exceeds in order to trigger movement detection
+              type: integer
+            timeLimit:
+              description: Maximum duration (in ms) of a single tap
+              type: integer
+            timeLatency:
+              description: Minimum time gap (in ms) between two taps
+              type: integer
+            timeWindow:
+              description: Maximum duration (in ms) of the whole event
+              type: integer
+            detectionFlags:
+              description: List of accelerometer axes that are monitored for double tap events
+              type: array
+              items:
+                type: string
+                enum:
+                - X_AXIS
+                - Y_AXIS
+                - Z_AXIS
+        highPass:
+          description: High-pass filter parameters
+          type: object
+          properties:
+            accelerometerData:
+              type: boolean
+              description: Flag indicating whether the high-pass filter should be applied to raw accelerometer data
+            moveDetection:
+              type: boolean
+              description: Flag indicating whether the high-pass filter should be applied when movement detection is enabled
+            doubleTapDetection:
+              type: boolean
+              description: Flag indicating whether the high-pass filter should be applied when double tap detection is enabled
+            mode:
+              description: High-pass filter mode
+              type: string
+              enum:
+              - NORMAL
+              - NORMAL_RESET
+              - AUTORESET
+              - REFERENCE
+            cutOffFrequency:
+              description: High-pass filter cut-off frequency
+              type: number
+              enum:
+              - 0.05
+              - 0.1
+              - 0.2
+              - 0.5
+            reference:
+              description: High-pass filter reference
+              type: integer
+    LockDetailsConfirmationId:
       type: string
-      example: 11P10AvW
+      description: The value included in the DeviceChangedEvent.UPDATED to confirm that a specific configuration has been applied on a device
+      example: ed26348a-e33e-428c-a343-33e0054ebdf9
+    PendingGatewayConfig:
+      description: Pending Gateway (e.g. Portal Light) Configuration.
+      x-stoplight:
+        id: 5bcdyhznq27sa
+      allOf:
+      - $ref: '#/components/schemas/EditableGatewayConfig'
+      - type: object
+        properties:
+          created:
+            $ref: '#/components/schemas/CreatedDate'
+          updated:
+            $ref: '#/components/schemas/UpdatedDate'
+          uniqueId:
+            $ref: '#/components/schemas/UniqueId'
+      - $ref: '#/components/schemas/ConfigLocksResponse'
+    NewBeaconConfig:
+      allOf:
+      - $ref: '#/components/schemas/BeaconConfig'
+      - type: object
+        properties:
+          uniqueId:
+            description: List of Beacon Unique IDs for which configs should be created.
+            type: array
+            items:
+              $ref: '#/components/schemas/UniqueId'
+          deviceType:
+            description: Type of a device that a configuration should be created for.
+            type: string
+            enum:
+            - BEACON
+      - $ref: '#/components/schemas/ConfigLocksRequest'
+      title: New Beacon Config
+    SearchMeta:
+      type: object
+      title: Search Metadata
+      description: Additional information, pagination and metadata about an API response
+      externalDocs:
+        description: Pagination model description
+        url: /backend/management/pagination/
+      properties:
+        filter:
+          type: string
+          description: Filter query used in the API call
+        startIndex:
+          type: integer
+          description: Start index for the results array
+        maxResult:
+          type: integer
+          description: Maximum numbers of results in a single response
+        prevResults:
+          type: string
+          description: URL for the previous page of results
+          format: URL
+        count:
+          type:
+          - integer
+          - 'null'
+          description: Number of results. Not `null` only when the `queryType` is set to `COUNTED` or `SEARCH_META`.
+        orderBy:
+          type: string
+          enum:
+          - CREATED
+        nextResults:
+          type: string
+          format: URL
+          description: URL for the next page of results
+        queryType:
+          description: Query type. `COUNTED` - returns a number of results in the `count` field. `SEARCH_META` - returns only the `searchMeta` object, but with a number of results in the `count` field.
+          type: string
+          enum:
+          - NORMAL
+          - COUNTED
+          - SEARCH_META
+          default: NORMAL
+        order:
+          type: string
+          description: Sorting order - `ASC`ending (default) or `DESC`ending
+          enum:
+          - ASC
+          - DESC
+          default: ASC
+    SensorSettings:
+      type: object
+      description: Device sensor settings.
+      properties:
+        samplingInterval:
+          type: integer
+          description: Interval (in seconds) at which sensor data is sampled.
+          example: 60
+          minimum: 1
+          maximum: 3600
+        loggingFactor:
+          type: integer
+          description: Factor used to determine how often sensor data is logged.
+          example: 15
+          minimum: 1
+          maximum: 65535
+    BeaconConfig:
+      description: Full beacon-type configuration.
+      allOf:
+      - $ref: '#/components/schemas/ConfigBle'
+      - $ref: '#/components/schemas/ConfigIBeacon'
+      - $ref: '#/components/schemas/ConfigEddystone'
+      - $ref: '#/components/schemas/ConfigButton'
+      - $ref: '#/components/schemas/ConfigEid'
+      - type: object
+        properties:
+          powerSaving:
+            $ref: '#/components/schemas/PowerSavingSettings'
+          accelerometer:
+            $ref: '#/components/schemas/AccelerometerSettings'
+          occupancy:
+            $ref: '#/components/schemas/OccupancyPhysicalSettings'
+          irReceiver:
+            $ref: '#/components/schemas/IrReceiverSettings'
+          irTransmitter:
+            $ref: '#/components/schemas/IrTransmitterSettings'
+          bleScan:
+            $ref: '#/components/schemas/BleScanSettings'
+          fingerprinting:
+            type: object
+            description: Alias for bleScan, same fields. Deprecated.
+            deprecated: true
+          irRoomNumber:
+            type: integer
+            minimum: 0
+            maximum: 4095
+            default: 65535
+            description: Static room number to broadcast over BLE, and transmit over IR. Up to 12 bits. Default 0xFFFF (disabled)
+          irBlinkInterval:
+            type: integer
+            minimum: 0
+            maximum: 999
+            default: 2
+            description: Time between IR transmissions, encoded as u16. 0 - disabled, 1 - 10 seconds, 11 - 999 milliseconds
+          irSlotDuration:
+            type: integer
+            minimum: 0
+            maximum: 65535
+            default: 0
+            description: Time between IR slots in the same transmission window, in ms. Available for IR room emitters and IR receivers.
+          irSlotCount:
+            type: integer
+            minimum: 0
+            maximum: 8
+            default: 0
+            description: 'IR slot count. 0 - disabled, 1-4: 2 bits for slots, 5-8: 3 bits for slots. No other values allowed'
+          irDetectionParams:
+            type: string
+            pattern: ^[0-9A-Fa-f]{20}$
+            description: Opaque 10-byte struct for IR detection tuning.
+            example: '01020301000001145403'
+          pirEnabled:
+            type: boolean
+            description: Turn PIR sensor on/off.
+          airQualityInterval:
+            type: integer
+            description: Interval at which the air quality is measured. Unit is seconds. 0 to disable air quality probing.
+            enum:
+            - 0
+            - 3
+            - 300
+          lightSensorSamplingInterval:
+            type: integer
+            minimum: 0
+            maximum: 1800000
+            description: Interval at which the ambient light level is measured. Unit is milliseconds (i.e. 1800000 = 30 minutes).
+          temperatureOffset:
+            type: integer
+            description: Calibration parameter for devices equipped with dedicated thermometer and broadcasting temperature values in `KONTAKT_TLM` packet. This offset does not affect values reported in Eddystone Telemetry packets.
+          displaySettings:
+            $ref: '#/components/schemas/DisplaySettings'
+          lowBatterySettings:
+            $ref: '#/components/schemas/LowBatterySettings'
+          sensorSettings:
+            $ref: '#/components/schemas/SensorSettings'
+          localAlertingSettings:
+            $ref: '#/components/schemas/LocalAlertingSettings'
+          buzzerSnoozing:
+            $ref: '#/components/schemas/BuzzerSnoozing'
+          dispenser:
+            $ref: '#/components/schemas/Dispenser'
+          timeSync:
+            type: boolean
+            description: Synchronizes the device's internal clock
+          systemTime:
+            type: string
+            format: date-time
+            description: Device system time in ISO 8601 format (UTC). Maps to PID h_system_time (0xA004). Available on nrf52 devices with firmware >= 1.20.
+            example: '2024-03-30T12:00:00Z'
+    BleScanSettings:
+      type: object
+      description: BLE scanning setting. Can be used for fingerprinting.
+      properties:
+        interval:
+          type: integer
+          minimum: 1
+          maximum: 604800
+          default: 82800
+          description: 'The interval between BLE scans. Unit is seconds. 0: disabled. Default: 23h = 82800 seconds'
+        duration:
+          type: integer
+          minimum: 100
+          maximum: 65535
+          default: 10000
+          description: Duration of each BLE scan. Unit is milliseconds.
+        models:
+          type: string
+          default: 090e1c1d1f22
+          description: Allowed models array for scanning, expressed as hexadecimal string.
+        force:
+          type: boolean
+          default: false
+          description: Force the BLE scan.
+        size:
+          type: integer
+          minimum: 0
+          maximum: 255
+          default: 20
+          description: Maximum number of scanned items reported per scan. Requires nrf52 firmware >= 2.5.88.
     ConfigBle:
       type: object
       description: General BLE advertising settings.
@@ -1120,402 +1990,55 @@ components:
           - 37
           - 38
           - 39
-    LowBatterySettings:
+    OccupancyPhysicalSettings:
       type: object
-      description: Device low battery settings.
-      properties:
-        alertLevel:
-          type: integer
-          description: The battery level threshold (percentage) below which a low battery alert is triggered.
-          example: 10
-          minimum: 1
-          maximum: 100
-        alertEnabled:
-          type: boolean
-          description: Indicates whether the low battery alert is enabled.
-          example: true
-    IrTransmitterSettings:
-      type: object
-      description: IR Transmitter setting.
-      properties:
-        dutyCycle:
-          type: integer
-          minimum: 0
-          maximum: 100
-          description: Duty cycle used for the IR emission as a percentage
-        intensity:
-          type: integer
-          minimum: 0
-          maximum: 100
-          description: Power intensity for the IR emission as a percentage
-        protoV2:
-          type: boolean
-          description: Flag that enables IR Protocol V2
-    EditableGatewayConfig:
-      description: Gateway (e.g. Portal Light) settings that can be changed via API
-      type: object
-      properties:
-        applications:
-          type: object
-          properties:
-            system:
-              type: object
-              properties:
-                wifiSsid:
-                  type: string
-                  description: Name of the WiFi network a gateway should connect to
-                  minLength: 2
-                  maxLength: 32
-                wifiProtocol:
-                  type: string
-                  description: WiFi authentication protocol that a gateway should use
-                  enum:
-                  - WPA_PSK
-                  - WPA_EAP
-                  - OPEN
-                wifiUserName:
-                  type: string
-                  description: When `wifiProtocol` is set to `WPA_EAP` this parameter represents PEAP MSCHAPv2 username. If `WPA_PSK` is used, this value will be ignored by a gateway.
-                  maxLength: 256
-                wifiPassword:
-                  type: string
-                  description: When `wifiProtocol` is set to `WPA_EAP` this parameter represents PEAP MSCHAPv2 password. If `WPA_PSK` is used, this value will be ignored by a gateway.
-                  maxLength: 63
-                apiHost:
-                  type: string
-                  description: DM API host URL.
-                  format: uri
-                  minLength: 1
-                apiKey:
-                  type: string
-                  description: API key for DM API (alphanumeric)
-                  minLength: 1
-                dataHost:
-                  type: string
-                  description: Data host URL
-                  format: uri
-                dataApiKey:
-                  type: string
-                  description: API key for Data host (alphanumeric)
-                otaUrl:
-                  type: string
-                  description: OTA update URL
-                  format: uri
-                  maxLength: 64
-                proxyURL:
-                  type: string
-                  description: Proxy URL for the gateway to connect to. Empty value disables proxying.
-                  minLength: 0
-                  maxLength: 64
-                  default: ''
-                proxyPort:
-                  type: integer
-                  description: Proxy port for the gateway to connect to
-                  minimum: 0
-                  maximum: 65535
-                  default: 80
-                eapType:
-                  type: string
-                  description: Extensible Authentication Protocol (EAP) for network access
-                  enum:
-                  - DEFAULT
-                  - TLS
-                  - TTLS
-                  - PEAP
-                  default: DEFAULT
-                ibeaconUUID:
-                  type: string
-                  format: uuid
-                  description: "iBeacon UUID to broadcast. \n Broadcasting the iBeacon is disabled by default. To enable, the ibeaconUUID need to be set."
-                  minLength: 36
-                  maxLength: 36
-                  default: 00000000-0000-0000-0000-000000000000
-                ibeacon_major:
-                  type: integer
-                  description: Major to use when broadcasting iBeacon frames.
-                  default: 0
-                ibeacon_minor:
-                  type: integer
-                  description: Minor to use when broadcasting iBeacon frames.
-                  default: 0
-                roomID:
-                  type: integer
-                  description: Room ID used in location frame
-                  default: 0
-                tx_power:
-                  type: integer
-                  description: Tx power used by the gateway (allowed values are defined in documentation)
-                filtration_mask:
-                  type: integer
-                  description: "Filtration mask is the second stage of frame filtration implemented in Portal light. Each bit in that mask defines whether to process a specific type of frames or omit them. \n Bit order is as follows: Mac filtration, Eddystone,iBeacon, Kontakt. \n The default value is 0b1111 (15 decimal), meaning that Kontakt frames, iBeacon, Eddystone and devices with Kontakt MAC will be sent to the cloud. It is possible to set this mask to process only selected types of frames/devices."
-                  default: 15
-                rssi_threshold:
-                  type: integer
-                  description: Rssi threshold filtration is the first stage of frame filtration implemented in Portal light. It means that if rssi filtration is on and set to desired value then all scans with lower rssi will be rejected.
-                  default: -127
-                bleAdvChannel:
-                  type: integer
-                  description: "BLE advertising channel.\nAll channels advertising (0) is set as a default. Possibility to advertise only on one of three channels was added for Location Engine needs: 37, 38, 39 \n Other values such as 10,35 etc… will be treated as 0 - it means all channels advertising."
-                  enum:
-                  - 0
-                  - 37
-                  - 38
-                  - 39
-                bleScanChannel:
-                  type: integer
-                  description: "BLE scanning channel.\nAll channels scanning (0) is set as a default. Possibility to scan only on one of three channels was added for Location Engine needs: 37, 38, 39 \n Other values such as 10,35 etc… will be treated as 0 - it means all channels scanning."
-                  enum:
-                  - 0
-                  - 37
-                  - 38
-                  - 39
-                dm_poll_interval_s:
-                  type: integer
-                  description: DM poll interval in seconds.
-                defaultNTP:
-                  type: string
-                  description: Default NTP server URL.
-                  format: uri
-                  minLength: 1
-                secondNTP:
-                  type: string
-                  description: Secondary NTP server URL.
-                  format: uri
-                  minLength: 1
-                apiCACertificate:
-                  type: string
-                  description: API CA certificate.
-                  minLength: 1
-                wpa2Certificate:
-                  type: string
-                  description: "Enterprise WiFi. Base64-encoded P12 certificate. \n Keystore in p12/pfx format (with certificate and private key)"
-                wpa2CertificatePassword:
-                  type: string
-                  description: "Enterprise WiFi. Certificate password. \n Password to the keystore"
-                wpa2PrivateKeyAlias:
-                  type: string
-                  description: "Enterprise WiFi. Alias for private key. \n Private key alias specified by --name param in openssl utility"
-                  default: '1'
-                wpa2CACertificate:
-                  type: string
-                  description: "Enterprise WiFi. For deployment and client-specific requirement there was a need to add CA certificates to validate the server. \n Sent as a string in .pem format with header -----BEGIN CERTIFICATE----- and footer ----END CERTIFICATE-----"
-                beacon_packets_mask:
-                  type: integer
-                  description: Beacon packets mask.
-                led_intensity:
-                  type: integer
-                  description: LED brightness can be adjusted from 0% (completely off) to 100% - maximum brightness.
-                  minimum: 0
-                  maximum: 100
-                  default: 10
-                blink_interval_s:
-                  type: integer
-                  description: Blink interval in seconds.
-                  minimum: 0
-                  maximum: 3600
-                ir_duty_cycle:
-                  type: integer
-                  description: IR duty cycle (0-100%).
-                  minimum: 0
-                  maximum: 100
-                ir_intensity:
-                  type: integer
-                  description: IR intensity (0-100%).
-                  minimum: 0
-                  maximum: 100
-                device_name:
-                  type: string
-                  description: Device name.
-                  minLength: 1
-                adv_int:
-                  type: integer
-                  description: Advertising interval. Must be between 160 and 16384.
-                  minimum: 160
-                  maximum: 16384
-                debug_features_mask:
-                  type: integer
-                  description: Debug features mask.
-                bound_device:
-                  type: string
-                  description: 'Bound device must be a lowercase MAC address.
-
-                    Only both bound_device and bound_device_password can be set to a non-blank string at the same time or both be set to blank.'
-                bound_device_password:
-                  type: string
-                  description: Bound device password. Must be provided together with bound_device.
-                relay_mode:
-                  type: integer
-                  description: Relay mode.
-                mqtt_auth:
-                  type: string
-                  description: MQTT authentication credentials.
-                ir_config_mask:
-                  type: integer
-                  description: IR configuration mask.
-                  minimum: 0
-                  maximum: 255
-                data_interval_ms:
-                  type: integer
-                  description: Target interval between scans uploads, in ms. 0 means as fast as possible.
-                  minimum: 0
-                  maximum: 65535
-                  default: 2000
-    ConfigButton:
-      type: object
-      description: Button settings.
-      properties:
-        buttonFeatures:
-          type: array
-          description: 'Bitmask-based hardware button configuration. Each value in the list enables a specific flag.
-
-            An empty list `[]` corresponds to a mask of `0b000` (all flags unset) which is the default:
-
-            click and long-press are enabled, triple-click is disabled.
-
-            Send an empty list to restore defaults.
-
-
-            Note: `CLICK_OFF` and `LONG_PRESS_OFF` are inverted flags — setting them **disables** a behavior
-
-            that is on by default. `TRIPLE_CLICK` is a normal flag — setting it **enables** a behavior
-
-            that is off by default.
-
-
-            | Value | Description |
-
-            |-------|-------------|
-
-            | CLICK_OFF | Disable single-click detection. On by default — set this flag to turn it off |
-
-            | LONG_PRESS_OFF | Disable long-press detection. On by default — set this flag to turn it off |
-
-            | TRIPLE_CLICK | Require a triple-click to trigger a panic event instead of a single click. Off by default |
-
-            | MULTI_CLICK | Enable multi-click detection. Mutually exclusive with TRIPLE_CLICK. Off by default |
-
-            '
-          items:
-            type: string
-            enum:
-            - CLICK_OFF
-            - LONG_PRESS_OFF
-            - TRIPLE_CLICK
-            - MULTI_CLICK
-        multiClickCount:
-          type: integer
-          description: 'Number of clicks required for multi-click detection (1–10). Only applicable when MULTI_CLICK is set in buttonFeatures.
-
-            '
-          minimum: 1
-          maximum: 10
-        panicDuration:
-          type: integer
-          minimum: 0
-          maximum: 65535
-          description: Number of second the `BUTTON_IBEACON` packet should be broadcast after a button press.
-    ConfigIBeacon:
-      type: object
-      description: iBeacon settings.
-      properties:
-        proximity:
-          type:
-          - string
-          - 'null'
-          format: UUID
-          description: iBeacon Proximity UUID.
-        major:
-          type:
-          - integer
-          - 'null'
-          format: uint16
-          minimum: 0
-          maximum: 65535
-          description: iBeacon Major.
-        minor:
-          type:
-          - integer
-          - 'null'
-          format: uint16
-          minimum: 0
-          maximum: 65535
-          description: iBeacon Minor.
-        rssi1m:
-          type:
-          - array
-          - 'null'
-          description: List of new Calibrated RSSI@1m values (iBeacon) for each TX power level the Device can use.
-          items:
-            type: integer
-          example:
-          - -115
-          - -84
-          - -81
-          - -77
-          - -72
-          - -69
-          - -65
-          - -59
-    NewBeaconConfig:
-      allOf:
-      - $ref: '#/components/schemas/BeaconConfig'
-      - type: object
-        properties:
-          uniqueId:
-            description: List of Beacon Unique IDs for which configs should be created.
-            type: array
-            items:
-              $ref: '#/components/schemas/UniqueId'
-          deviceType:
-            description: Type of a device that a configuration should be created for.
-            type: string
-            enum:
-            - BEACON
-      - $ref: '#/components/schemas/ConfigLocksRequest'
-      title: New Beacon Config
-    EncryptedConfig:
-      title: Encrypted Config/Command
       x-stoplight:
-        id: yvjpgdrc5gygd
-      type: object
+        id: ri25ewp162tv9
+      description: Occupancy settings. Only applicable to devices with occupancy capability.
       properties:
-        uniqueId:
+        sleepInterval:
+          type: integer
+          minimum: 0
+          maximum: 65535
+          default: 0
+          description: Occupancy sampling interval in seconds when in power-saving mode (outside of working hours).
+        minInterval:
+          type: integer
+          minimum: 0
+          maximum: 65535
+          default: 60
+          description: Min sampling interval in seconds. 0 means disabled.
+        calibration:
+          type: integer
+          minimum: -128
+          maximum: 127
+          default: 0
+          description: Common threshold delta (all occupancy modes). Allows to fine-tune the sensitivity relative to the newest default. For example, use -5 to lower the threshold by 5 units from the default (allow more detections), or conversely setting it to 5 adds 5 to that threshold, reducing false positives. In other words, this is a linear value, not a percentage.
+        sensitivity:
+          type: integer
+          minimum: 0
+          maximum: 100
+          deprecated: true
+          description: Deprecated! Please use the calibration parameter instead. Percentage of sensitivity. 0-100, 0 for very strict, 100 accept everything
+        model:
+          type: integer
+          description: "Detection model. \n\n0 - static occupancy.  \n2 - traffic footfall."
+        footfallLine:
           type: string
-          description: Unique ID of the device that can consume this Encrypted Config/Command.
-        config:
-          type: string
-          format: byte
-          description: Base64-encoded data with a new Config/Command for a Device with an Unique ID specified in the `uniqueId` field.
-    TemperatureProbe:
-      type: object
-      description: Settings for a temperature probe.
-      properties:
-        alertMaxEnabled:
-          type: boolean
-          description: Indicates if the maximum temperature alert is enabled.
-          example: true
-        alertMaxLevel:
-          type: number
-          format: float
-          description: The maximum temperature level (in Celsius) to trigger an alert.
-          example: 40.5
-          minimum: -273
-          maximum: 1000
-        alertMinEnabled:
-          type: boolean
-          description: Indicates if the minimum temperature alert is enabled.
-          example: true
-        alertMinLevel:
-          type: number
-          format: float
-          description: The minimum temperature level (in Celsius) to trigger an alert.
-          example: -100.5
-          minimum: -273
-          maximum: 1000
-        sensorEnabled:
-          type: boolean
-          description: Indicates if the temperature sensor is enabled.
-          example: true
+          default: 28502800
+          description: Threshold line for footfall detection. [x0, y0, x1, y1] pixel coordinates for the line. Hex encoded.
+        footfallSensitivity:
+          type: integer
+          minimum: 0
+          maximum: 100
+          default: 40
+          deprecated: true
+          description: Deprecated! Please use the calibration parameter instead. Sensitivity for accepting footfall tracks. 0-100, 0 for very strict, 100 accept everything
+    CreatedDate:
+      description: Informs when the object has been created.
+      type: string
+      format: date-time
+      example: 2023‐09‐18T15:33:00Z
     HumidityProbe:
       type: object
       description: Settings for a humidity probe.
@@ -1657,306 +2180,6 @@ components:
           minimum: 1
           maximum: 10080
           description: Number of *minutes* between each broadcasts when `BURST_MODE` is active
-    DeviceModel:
-      type: string
-      enum:
-      - SMART_BEACON
-      - USB_BEACON
-      - SENSOR_BEACON
-      - CARD_BEACON
-      - GATEWAY
-      - BEACON_PRO
-      - TAG_BEACON
-      - SMART_BEACON_3
-      - HEAVY_DUTY_BEACON
-      - CARD_BEACON_2
-      - TOUGH_BEACON_2
-      - BRACELET_TAG
-      - UNIVERSAL_TAG
-      - BRACELET_TAG_2
-      - LANYARD_TAG
-      - NANO_TAG
-      - STICKER_TAG
-      - PUCK_TAG
-      - PORTAL_LIGHT
-      - SMART_BADGE
-      - SMART_BADGE_3_MINI
-      - PORTAL_BEAM
-      - NANO_SERIES
-      - NANO_TAG_IR
-      - ASSET_TAG_2
-      - ANCHOR_BEACON_2
-      - BEAM_MINI
-      - PORTAL_BEAM_IR
-      - DISPENSER_BEACON
-      - ES10_DISPENSER_BEACON
-      - UNIVERSAL_DISPENSER_BEACON
-      - PORTAL_LIGHT_2S
-      - PORTAL_LIGHT_2
-      - ASSET_TAG_2_MINI
-      - PARTNER_DEVICE
-      - EXTERNAL
-      description: Kontakt.io internal model name of the device. Multiple products may have the same model name. Managed 3rd party devices will all have `PARTNER_DEVICE`.
-    BeaconConfig:
-      description: Full beacon-type configuration.
-      allOf:
-      - $ref: '#/components/schemas/ConfigBle'
-      - $ref: '#/components/schemas/ConfigIBeacon'
-      - $ref: '#/components/schemas/ConfigEddystone'
-      - $ref: '#/components/schemas/ConfigButton'
-      - $ref: '#/components/schemas/ConfigEid'
-      - type: object
-        properties:
-          powerSaving:
-            $ref: '#/components/schemas/PowerSavingSettings'
-          accelerometer:
-            $ref: '#/components/schemas/AccelerometerSettings'
-          occupancy:
-            $ref: '#/components/schemas/OccupancyPhysicalSettings'
-          irReceiver:
-            $ref: '#/components/schemas/IrReceiverSettings'
-          irTransmitter:
-            $ref: '#/components/schemas/IrTransmitterSettings'
-          bleScan:
-            $ref: '#/components/schemas/BleScanSettings'
-          fingerprinting:
-            type: object
-            description: Alias for bleScan, same fields. Deprecated.
-            deprecated: true
-          irRoomNumber:
-            type: integer
-            minimum: 0
-            maximum: 4095
-            default: 65535
-            description: Static room number to broadcast over BLE, and transmit over IR. Up to 12 bits. Default 0xFFFF (disabled)
-          irBlinkInterval:
-            type: integer
-            minimum: 0
-            maximum: 999
-            default: 2
-            description: Time between IR transmissions, encoded as u16. 0 - disabled, 1 - 10 seconds, 11 - 999 milliseconds
-          irSlotDuration:
-            type: integer
-            minimum: 0
-            maximum: 65535
-            default: 0
-            description: Time between IR slots in the same transmission window, in ms. Available for IR room emitters and IR receivers.
-          irSlotCount:
-            type: integer
-            minimum: 0
-            maximum: 8
-            default: 0
-            description: 'IR slot count. 0 - disabled, 1-4: 2 bits for slots, 5-8: 3 bits for slots. No other values allowed'
-          irDetectionParams:
-            type: string
-            pattern: ^[0-9A-Fa-f]{20}$
-            description: Opaque 10-byte struct for IR detection tuning.
-            example: '01020301000001145403'
-          pirEnabled:
-            type: boolean
-            description: Turn PIR sensor on/off.
-          airQualityInterval:
-            type: integer
-            description: Interval at which the air quality is measured. Unit is seconds. 0 to disable air quality probing.
-            enum:
-            - 0
-            - 3
-            - 300
-          lightSensorSamplingInterval:
-            type: integer
-            minimum: 0
-            maximum: 1800000
-            description: Interval at which the ambient light level is measured. Unit is milliseconds (i.e. 1800000 = 30 minutes).
-          temperatureOffset:
-            type: integer
-            description: Calibration parameter for devices equipped with dedicated thermometer and broadcasting temperature values in `KONTAKT_TLM` packet. This offset does not affect values reported in Eddystone Telemetry packets.
-          displaySettings:
-            $ref: '#/components/schemas/DisplaySettings'
-          lowBatterySettings:
-            $ref: '#/components/schemas/LowBatterySettings'
-          sensorSettings:
-            $ref: '#/components/schemas/SensorSettings'
-          localAlertingSettings:
-            $ref: '#/components/schemas/LocalAlertingSettings'
-          buzzerSnoozing:
-            $ref: '#/components/schemas/BuzzerSnoozing'
-          dispenser:
-            $ref: '#/components/schemas/Dispenser'
-          timeSync:
-            type: boolean
-            description: Synchronizes the device's internal clock
-          systemTime:
-            type: string
-            format: date-time
-            description: Device system time in ISO 8601 format (UTC). Maps to PID h_system_time (0xA004). Available on nrf52 devices with firmware >= 1.20.
-            example: '2024-03-30T12:00:00Z'
-    DisplaySettings:
-      type: object
-      description: Device display settings.
-      properties:
-        ledIntensity:
-          type: number
-          description: LED light intensity, ranging from 0% (completely off) to 100% (maximum brightness).
-          minimum: 0
-          maximum: 100
-        ledBlinkInterval:
-          type: number
-          description: The number of seconds between LED blinks.
-          minimum: 1
-          maximum: 255
-        ledBlinkEnabled:
-          type: boolean
-          description: Indicates whether the LED light is enabled.
-          example: true
-        temperatureUnit:
-          type: string
-          description: The unit for displaying temperature.
-          enum:
-          - CELSIUS
-          - FAHRENHEIT
-    ConfigLocksResponse:
-      type: object
-      properties:
-        locks:
-          type: object
-          properties:
-            roomNumber:
-              $ref: '#/components/schemas/LockDetails'
-            temperatureMonitor:
-              $ref: '#/components/schemas/LockDetails'
-    AccelerometerSettings:
-      type: object
-      x-stoplight:
-        id: q22ra4lowsp5r
-      description: Accelerometer settings.
-      properties:
-        features:
-          description: List of Accelerometer features that are enabled
-          type: array
-          items:
-            type: string
-            enum:
-            - ACCELEROMETER
-            - X_AXIS
-            - Y_AXIS
-            - Z_AXIS
-            - MOVE_DETECTION
-            - DOUBLE_TAP_DETECTION
-        sensitivity:
-          description: Accelerometer sensitivity
-          type: integer
-          enum:
-          - 16
-          - 32
-          - 64
-          - 128
-        preset:
-          description: Preset for Accelerometer configuration
-          type: string
-          enum:
-          - MOVEMENT
-          - FREE_FALL
-          - DOUBLE_TAP
-          - DOUBLE_TAP_AND_MOVEMENT
-          - DOUBLE_TAP_AND_FREE_FALL
-        move:
-          description: Movement detection parameters
-          type: object
-          properties:
-            threshold:
-              description: Value (in m*g*) that an acceleration needs to exceeds in order to trigger movement detection
-              type: integer
-            duration:
-              description: Time (in ms) than an acceleration needs to stay above threshold value in order to trigger movement detection
-              type: integer
-            detectionFlags:
-              type: array
-              items:
-                type: string
-                enum:
-                - X_POSITIVE
-                - Y_POSITIVE
-                - Z_POSITIVE
-                - X_NEGATIVE
-                - Y_NEGATIVE
-                - Z_NEGATIVE
-            detectionFlagsJunction:
-              type: string
-              enum:
-              - AND
-              - OR
-        doubleTap:
-          description: Double tap detection parameters
-          type: object
-          properties:
-            threshold:
-              description: Value ( in m*g*) that an acceleration needs to exceeds in order to trigger movement detection
-              type: integer
-            timeLimit:
-              description: Maximum duration (in ms) of a single tap
-              type: integer
-            timeLatency:
-              description: Minimum time gap (in ms) between two taps
-              type: integer
-            timeWindow:
-              description: Maximum duration (in ms) of the whole event
-              type: integer
-            detectionFlags:
-              description: List of accelerometer axes that are monitored for double tap events
-              type: array
-              items:
-                type: string
-                enum:
-                - X_AXIS
-                - Y_AXIS
-                - Z_AXIS
-        highPass:
-          description: High-pass filter parameters
-          type: object
-          properties:
-            accelerometerData:
-              type: boolean
-              description: Flag indicating whether the high-pass filter should be applied to raw accelerometer data
-            moveDetection:
-              type: boolean
-              description: Flag indicating whether the high-pass filter should be applied when movement detection is enabled
-            doubleTapDetection:
-              type: boolean
-              description: Flag indicating whether the high-pass filter should be applied when double tap detection is enabled
-            mode:
-              description: High-pass filter mode
-              type: string
-              enum:
-              - NORMAL
-              - NORMAL_RESET
-              - AUTORESET
-              - REFERENCE
-            cutOffFrequency:
-              description: High-pass filter cut-off frequency
-              type: number
-              enum:
-              - 0.05
-              - 0.1
-              - 0.2
-              - 0.5
-            reference:
-              description: High-pass filter reference
-              type: integer
-    TemperatureProbesSettings:
-      type: object
-      description: Settings for temperature probes.
-      properties:
-        probe0:
-          $ref: '#/components/schemas/TemperatureProbe'
-        probe1:
-          $ref: '#/components/schemas/TemperatureProbe'
-        probe2:
-          $ref: '#/components/schemas/TemperatureProbe'
-    UpdatedDate:
-      description: Informs when the object has been updated.
-      type: string
-      format: date-time
-      example: 2023‐09‐18T15:33:00Z
     BuzzerSnoozing:
       type: object
       description: Buzzer snoozing settings for Temperature Monitor Pro devices. Maps to PID buzzer_snooze_duration_m (0x917D).
@@ -1973,201 +2196,6 @@ components:
           description: Snooze duration in minutes for ACTIVE. Ignored for INACTIVE and INFINITE states. Device mapping uses 0/-1 for inactive/infinite, so minimum is 1.
           minimum: 1
           maximum: 32767
-    ConfigEddystone:
-      type: object
-      description: Eddystone settings.
-      properties:
-        namespace:
-          type:
-          - string
-          - 'null'
-          description: Eddystone UID Namespace.
-          maxLength: 20
-          minLength: 20
-        instanceId:
-          type:
-          - string
-          - 'null'
-          description: Eddystone UID Instance ID.
-          maxLength: 12
-          minLength: 12
-        url:
-          type:
-          - string
-          - 'null'
-          description: Eddystone URL address. Hex-encoded according to Eddystone specification.
-        decodedUrl:
-          type:
-          - string
-          - 'null'
-          description: Eddystone URL address. Alias for `url` but in decoded format. `decodedUrl` takes precedence.
-        rssi0m:
-          type:
-          - array
-          - 'null'
-          description: List of new Calibrated RSSI@0m values (Eddystone) for each TX power level the Device can use.
-          deprecated: true
-          items:
-            type: integer
-    IrReceiverSettings:
-      type: object
-      description: IR Receiver setting.
-      properties:
-        wakeUpInterval:
-          type: integer
-          minimum: 0
-          maximum: 255
-          description: 'Interval between detection attempts, encoded as u8. 0 - disabled. Encodes time using 2-bit scale + 6-bit mantissa: 0b00=seconds, 0b01=ms, 0b10=ms*10, 0b11=ms*100. Max 63 per scale (e.g. max 63 seconds, or 6300ms, or 63000ms)'
-        maxListenInterval:
-          type: integer
-          minimum: 0
-          maximum: 255
-          description: 'Maximum duration to try and detect IR signal, encoded as u8. Encodes time using 2-bit scale + 6-bit mantissa: 0b00=seconds, 0b01=ms, 0b10=ms*10, 0b11=ms*100. Max 63 per scale (e.g. max 63 seconds, or 6300ms, or 63000ms)'
-        disableOnNoMotion:
-          type: boolean
-          description: Whether or not to disable IR receiver when the beacon is stationary.
-    HumidityProbesSettings:
-      type: object
-      description: Settings for humidity probes.
-      properties:
-        probe0:
-          $ref: '#/components/schemas/HumidityProbe'
-    BleScanSettings:
-      type: object
-      description: BLE scanning setting. Can be used for fingerprinting.
-      properties:
-        interval:
-          type: integer
-          minimum: 1
-          maximum: 604800
-          default: 82800
-          description: 'The interval between BLE scans. Unit is seconds. 0: disabled. Default: 23h = 82800 seconds'
-        duration:
-          type: integer
-          minimum: 100
-          maximum: 65535
-          default: 10000
-          description: Duration of each BLE scan. Unit is milliseconds.
-        models:
-          type: string
-          default: 090e1c1d1f22
-          description: Allowed models array for scanning, expressed as hexadecimal string.
-        force:
-          type: boolean
-          default: false
-          description: Force the BLE scan.
-        size:
-          type: integer
-          minimum: 0
-          maximum: 255
-          default: 20
-          description: Maximum number of scanned items reported per scan. Requires nrf52 firmware >= 2.5.88.
-    LockDetails:
-      type: object
-      properties:
-        confirmationId:
-          $ref: '#/components/schemas/LockDetailsConfirmationId'
-    PendingGatewayConfig:
-      description: Pending Gateway (e.g. Portal Light) Configuration.
-      x-stoplight:
-        id: 5bcdyhznq27sa
-      allOf:
-      - $ref: '#/components/schemas/EditableGatewayConfig'
-      - type: object
-        properties:
-          created:
-            $ref: '#/components/schemas/CreatedDate'
-          updated:
-            $ref: '#/components/schemas/UpdatedDate'
-          uniqueId:
-            $ref: '#/components/schemas/UniqueId'
-      - $ref: '#/components/schemas/ConfigLocksResponse'
-    ConfigEid:
-      type: object
-      description: Eddystone-EID settings.
-      properties:
-        eidIdentityKey:
-          description: Eddystone-EID Identity Key.
-          type:
-          - string
-          - 'null'
-        eidRotationPeriodExponent:
-          description: Eddystone-EID rotation period exponent.
-          type:
-          - integer
-          - 'null'
-          minimum: 0
-          maximum: 15
-    SensorSettings:
-      type: object
-      description: Device sensor settings.
-      properties:
-        samplingInterval:
-          type: integer
-          description: Interval (in seconds) at which sensor data is sampled.
-          example: 60
-          minimum: 1
-          maximum: 3600
-        loggingFactor:
-          type: integer
-          description: Factor used to determine how often sensor data is logged.
-          example: 15
-          minimum: 1
-          maximum: 65535
-    SearchMeta:
-      type: object
-      title: Search Metadata
-      description: Additional information, pagination and metadata about an API response
-      externalDocs:
-        description: Pagination model description
-        url: /backend/management/pagination/
-      properties:
-        filter:
-          type: string
-          description: Filter query used in the API call
-        startIndex:
-          type: integer
-          description: Start index for the results array
-        maxResult:
-          type: integer
-          description: Maximum numbers of results in a single response
-        prevResults:
-          type: string
-          description: URL for the previous page of results
-          format: URL
-        count:
-          type:
-          - integer
-          - 'null'
-          description: Number of results. Not `null` only when the `queryType` is set to `COUNTED` or `SEARCH_META`.
-        orderBy:
-          type: string
-          enum:
-          - CREATED
-        nextResults:
-          type: string
-          format: URL
-          description: URL for the next page of results
-        queryType:
-          description: Query type. `COUNTED` - returns a number of results in the `count` field. `SEARCH_META` - returns only the `searchMeta` object, but with a number of results in the `count` field.
-          type: string
-          enum:
-          - NORMAL
-          - COUNTED
-          - SEARCH_META
-          default: NORMAL
-        order:
-          type: string
-          description: Sorting order - `ASC`ending (default) or `DESC`ending
-          enum:
-          - ASC
-          - DESC
-          default: ASC
-    CreatedDate:
-      description: Informs when the object has been created.
-      type: string
-      format: date-time
-      example: 2023‐09‐18T15:33:00Z
   parameters:
     QueryStartIndex:
       in: query
@@ -2178,14 +2206,18 @@ components:
         type: integer
         default: 0
         minimum: 0
-    accept:
-      name: Accept
-      in: header
+    UniqueIdList:
+      name: uniqueId
+      in: query
+      description: List of devices' unique ids
       required: true
       schema:
-        type: string
-        default: application/vnd.com.kontakt+json;version=10
-      description: Accept header is required.
+        type: array
+        items:
+          type: string
+        example:
+        - 11P10AvW
+        - 11S13AhY
     QueryType:
       in: query
       name: queryType
@@ -2200,18 +2232,6 @@ components:
         - COUNTED
         - SEARCH_META
         default: NORMAL
-    UniqueIdList:
-      name: uniqueId
-      in: query
-      description: List of devices' unique ids
-      required: true
-      schema:
-        type: array
-        items:
-          type: string
-        example:
-        - 11P10AvW
-        - 11S13AhY
     QueryMaxResult:
       in: query
       name: maxResult
@@ -2222,6 +2242,14 @@ components:
         default: 50
         minimum: 0
         maximum: 500
+    accept:
+      name: Accept
+      in: header
+      required: true
+      schema:
+        type: string
+        default: application/vnd.com.kontakt+json;version=10
+      description: Accept header is required.
   securitySchemes:
     bearer_token:
       type: http

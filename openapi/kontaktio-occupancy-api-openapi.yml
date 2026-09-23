@@ -25,6 +25,10 @@ paths:
       description: ''
       tags:
       - Occupancy
+      summary: Get occupancy
+      x-summary-source: derived
+      operationId: getV3Occupancy
+      x-operation-id-source: derived
 components:
   securitySchemes:
     api_key:
