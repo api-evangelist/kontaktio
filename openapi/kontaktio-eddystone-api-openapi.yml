@@ -114,27 +114,16 @@ paths:
       operationId: getNamespaces
       x-operation-id-source: derived
 components:
+  parameters:
+    accept:
+      name: Accept
+      in: header
+      required: true
+      schema:
+        type: string
+        default: application/vnd.com.kontakt+json;version=10
+      description: Accept header is required.
   schemas:
-    EddystoneDecrypted:
-      title: Decrypted Eddystone-TLM packet
-      type: object
-      properties:
-        advertisementCount:
-          type: integer
-          description: Number of Bluetooth advertising packets broadcasted since the last reboot of a beacon
-        batteryVoltage:
-          type: number
-          description: Battery voltage
-        raw:
-          type: string
-          format: byte
-          description: Base64-encoded Eddystone Encrypted Telemetry frame
-        temperature:
-          type: number
-          description: Temperature of a beacon (**not** an ambient temperature, although it might be similar) in °C
-        uptime:
-          type: integer
-          description: Number of seconds since the last reboot of a beacon
     SearchMeta:
       type: object
       title: Search Metadata
@@ -184,15 +173,26 @@ components:
           - ASC
           - DESC
           default: ASC
-  parameters:
-    accept:
-      name: Accept
-      in: header
-      required: true
-      schema:
-        type: string
-        default: application/vnd.com.kontakt+json;version=10
-      description: Accept header is required.
+    EddystoneDecrypted:
+      title: Decrypted Eddystone-TLM packet
+      type: object
+      properties:
+        advertisementCount:
+          type: integer
+          description: Number of Bluetooth advertising packets broadcasted since the last reboot of a beacon
+        batteryVoltage:
+          type: number
+          description: Battery voltage
+        raw:
+          type: string
+          format: byte
+          description: Base64-encoded Eddystone Encrypted Telemetry frame
+        temperature:
+          type: number
+          description: Temperature of a beacon (**not** an ambient temperature, although it might be similar) in °C
+        uptime:
+          type: integer
+          description: Number of seconds since the last reboot of a beacon
   securitySchemes:
     bearer_token:
       type: http

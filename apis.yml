@@ -1128,9 +1128,11 @@ apis:
     https://developer.kontakt.io/docs/dev-ctr-device-api/a09dcbf0d03de-device-management-api-introduction
   baseURL: https://dm-api.cloud.us.kontakt.io
   tags:
+  - Spaces
   - Space
   tags_raw:
   - Spaces
+  - Space
   properties:
   - type: OpenAPI
     url: openapi/kontaktio-spaces-api-openapi.yml

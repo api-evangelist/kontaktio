@@ -142,15 +142,6 @@ paths:
       operationId: getOrderClaim
       x-operation-id-source: derived
 components:
-  parameters:
-    accept:
-      name: Accept
-      in: header
-      required: true
-      schema:
-        type: string
-        default: application/vnd.com.kontakt+json;version=10
-      description: Accept header is required.
   schemas:
     OrderManagementResponse:
       type: object
@@ -205,6 +196,15 @@ components:
                 totalDevices:
                   type: number
                   description: Number of devices in this order
+  parameters:
+    accept:
+      name: Accept
+      in: header
+      required: true
+      schema:
+        type: string
+        default: application/vnd.com.kontakt+json;version=10
+      description: Accept header is required.
   securitySchemes:
     bearer_token:
       type: http

@@ -145,50 +145,17 @@ paths:
       security:
       - api_key: []
 components:
-  parameters:
-    floorId:
-      name: floorId
-      in: query
-      required: false
-      schema:
-        type: number
-      description: Filter by one or multiple floor ID(s)
-    lost:
-      name: lost
-      in: query
-      required: false
-      schema:
-        type: boolean
-        enum:
-        - 'true'
-        - 'false'
-        - 'null'
-      description: Filter by lost flag.
-    page:
-      name: page
-      in: query
-      schema:
-        type: integer
-        default: '0'
-      description: Page you want to retrieve; 0 indexed.
-    size:
-      name: size
-      in: query
-      schema:
-        type: string
-        default: '20'
-      description: Size of the page to retrieve.
-    sort:
-      name: sort
-      in: query
-      schema:
-        type: string
-        default: asc
-        example: ?sort=firstname&sort=lastname,asc
-        enum:
-        - asc
-        - desc
-      description: 'Sort objects returned in the response. Format property,property '
+  responses:
+    error-429:
+      description: Rate limit exceeded. The response has no body.
+      headers:
+        Retry-After:
+          description: 'Indicates how long to wait before making a new request. The response includes this header twice: once with an HTTP-date format (e.g., "Wed, 21 Oct 2015 07:28:00 GMT") and once with delay-seconds format (e.g., "120").'
+          schema:
+            type: string
+          required: true
+      content:
+        text/plain: null
   schemas:
     Position-Device-History:
       type: object
@@ -437,17 +404,50 @@ components:
               moving:
                 type: boolean
                 description: Flag that indicates whether device was moving when the position was calculated.
-  responses:
-    error-429:
-      description: Rate limit exceeded. The response has no body.
-      headers:
-        Retry-After:
-          description: 'Indicates how long to wait before making a new request. The response includes this header twice: once with an HTTP-date format (e.g., "Wed, 21 Oct 2015 07:28:00 GMT") and once with delay-seconds format (e.g., "120").'
-          schema:
-            type: string
-          required: true
-      content:
-        text/plain: null
+  parameters:
+    sort:
+      name: sort
+      in: query
+      schema:
+        type: string
+        default: asc
+        example: ?sort=firstname&sort=lastname,asc
+        enum:
+        - asc
+        - desc
+      description: 'Sort objects returned in the response. Format property,property '
+    size:
+      name: size
+      in: query
+      schema:
+        type: string
+        default: '20'
+      description: Size of the page to retrieve.
+    page:
+      name: page
+      in: query
+      schema:
+        type: integer
+        default: '0'
+      description: Page you want to retrieve; 0 indexed.
+    lost:
+      name: lost
+      in: query
+      required: false
+      schema:
+        type: boolean
+        enum:
+        - 'true'
+        - 'false'
+        - 'null'
+      description: Filter by lost flag.
+    floorId:
+      name: floorId
+      in: query
+      required: false
+      schema:
+        type: number
+      description: Filter by one or multiple floor ID(s)
   securitySchemes:
     api_key:
       type: apiKey

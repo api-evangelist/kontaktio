@@ -133,19 +133,6 @@ paths:
         description: UK Kio Cloud
 components:
   schemas:
-    ItemError:
-      type: object
-      description: Details about an entity that couldn't be processed.
-      properties:
-        item:
-          type: string
-          description: The `entityId` of the failed entity.
-        errorMessage:
-          type: string
-          description: Message describing the error.
-      required:
-      - item
-      - errorMessage
     EntityStatus:
       type: string
       enum:
@@ -172,48 +159,6 @@ components:
       required:
       - name
       - value
-    EntityDetails:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Name of entity
-        entityId:
-          type: string
-          description: Unique identifier of entity
-        entityTypeId:
-          type: string
-          description: ID of existing Entity Type
-        status:
-          $ref: '#/components/schemas/EntityStatus'
-        attributes:
-          type: array
-          description: Entity attributes
-          items:
-            $ref: '#/components/schemas/Attribute'
-      required:
-      - name
-      - entityId
-      - entityTypeId
-      - status
-    EntityCreateUpdateResult:
-      type: object
-      description: Response model that summarizes the result of a batch create/update operation.
-      properties:
-        processed:
-          type: integer
-          description: Number of entities successfully created or updated.
-        totalItems:
-          type: integer
-          description: Total number of entities submitted in the request.
-        errors:
-          type: array
-          description: A list of failed items along with details about each error.
-          items:
-            $ref: '#/components/schemas/ItemError'
-      required:
-      - processed
-      - totalItems
     EntityCreateUpdateDto:
       type: object
       title: EntityCreateDto
@@ -256,6 +201,61 @@ components:
       - name
       - entityTypeId
       - status
+    EntityDetails:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of entity
+        entityId:
+          type: string
+          description: Unique identifier of entity
+        entityTypeId:
+          type: string
+          description: ID of existing Entity Type
+        status:
+          $ref: '#/components/schemas/EntityStatus'
+        attributes:
+          type: array
+          description: Entity attributes
+          items:
+            $ref: '#/components/schemas/Attribute'
+      required:
+      - name
+      - entityId
+      - entityTypeId
+      - status
+    ItemError:
+      type: object
+      description: Details about an entity that couldn't be processed.
+      properties:
+        item:
+          type: string
+          description: The `entityId` of the failed entity.
+        errorMessage:
+          type: string
+          description: Message describing the error.
+      required:
+      - item
+      - errorMessage
+    EntityCreateUpdateResult:
+      type: object
+      description: Response model that summarizes the result of a batch create/update operation.
+      properties:
+        processed:
+          type: integer
+          description: Number of entities successfully created or updated.
+        totalItems:
+          type: integer
+          description: Total number of entities submitted in the request.
+        errors:
+          type: array
+          description: A list of failed items along with details about each error.
+          items:
+            $ref: '#/components/schemas/ItemError'
+      required:
+      - processed
+      - totalItems
   parameters:
     entityId:
       name: entityId

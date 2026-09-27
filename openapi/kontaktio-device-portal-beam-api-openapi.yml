@@ -225,6 +225,44 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    StitchingPivotWorld:
+      description: 'Pivot (rotation point) of the image in the world coordinates that are shared between stitched devices.
+
+        Origin is top left corner.'
+      type: object
+      required:
+      - x
+      - y
+      properties:
+        x:
+          description: X coordinate in world coordinates.
+          type: integer
+          example: 420
+        y:
+          description: Y coordinate in world coordinates.
+          type: integer
+          example: 160
+    StitchingImage:
+      type: object
+      required:
+      - captured
+      - original
+      - corrected
+      properties:
+        captured:
+          type: string
+          format: date-time
+          example: '2026-01-09T12:09:30.726Z'
+        original:
+          type: string
+          format: byte
+          description: Base64-encoded image bytes (no data URL prefix).
+          example: iVBORw0KGgoAAAANSUhEUgAAAAUA...
+        corrected:
+          type: string
+          format: byte
+          description: Base64-encoded image bytes (no data URL prefix).
+          example: iVBORw0KGgoAAAANSUhEUgAAAAUA...
     StitchingConfig:
       type: object
       required:
@@ -238,35 +276,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/StitchingPair'
-    StitchedDevice:
-      type: object
-      required:
-      - uniqueId
-      - image
-      - pose
-      properties:
-        uniqueId:
-          type: string
-          description: Unique identifier of a beam/device.
-        image:
-          $ref: '#/components/schemas/StitchingImage'
-        pose:
-          $ref: '#/components/schemas/StitchingPose'
-    Polygon:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        polygon:
-          type: array
-          items:
-            type: object
-            properties:
-              x:
-                type: integer
-              y:
-                type: integer
     StitchingPose:
       type: object
       required:
@@ -322,6 +331,35 @@ components:
                 type: string
                 description: Error message
                 example: Invalid value for field name
+    Polygon:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        polygon:
+          type: array
+          items:
+            type: object
+            properties:
+              x:
+                type: integer
+              y:
+                type: integer
+    StitchedDevice:
+      type: object
+      required:
+      - uniqueId
+      - image
+      - pose
+      properties:
+        uniqueId:
+          type: string
+          description: Unique identifier of a beam/device.
+        image:
+          $ref: '#/components/schemas/StitchingImage'
+        pose:
+          $ref: '#/components/schemas/StitchingPose'
     StitchingPair:
       type: object
       required:
@@ -332,48 +370,6 @@ components:
           $ref: '#/components/schemas/StitchedDevice'
         secondDevice:
           $ref: '#/components/schemas/StitchedDevice'
-    StitchingImage:
-      type: object
-      required:
-      - captured
-      - original
-      - corrected
-      properties:
-        captured:
-          type: string
-          format: date-time
-          example: '2026-01-09T12:09:30.726Z'
-        original:
-          type: string
-          format: byte
-          description: Base64-encoded image bytes (no data URL prefix).
-          example: iVBORw0KGgoAAAANSUhEUgAAAAUA...
-        corrected:
-          type: string
-          format: byte
-          description: Base64-encoded image bytes (no data URL prefix).
-          example: iVBORw0KGgoAAAANSUhEUgAAAAUA...
-    StitchingPivotLocal:
-      description: Pivot (rotation point) of the image in the device image's local coordinates.
-      type: object
-      required:
-      - x
-      - y
-      properties:
-        x:
-          description: X coordinate in local coordinates, between 0 and 1. Where 0 is leftmost and 1 is rightmost.
-          type: number
-          format: decimal
-          minimum: 0
-          maximum: 1
-          example: 0.5
-        y:
-          description: Y coordinate in local coordinates, between 0 and 1. Where 0 is top and 1 is bottom.
-          type: number
-          format: decimal
-          minimum: 0
-          maximum: 1
-          example: 0.5
     OccupancyImage:
       type: object
       x-stoplight:
@@ -402,23 +398,27 @@ components:
           items:
             allOf:
             - $ref: '#/components/schemas/Polygon'
-    StitchingPivotWorld:
-      description: 'Pivot (rotation point) of the image in the world coordinates that are shared between stitched devices.
-
-        Origin is top left corner.'
+    StitchingPivotLocal:
+      description: Pivot (rotation point) of the image in the device image's local coordinates.
       type: object
       required:
       - x
       - y
       properties:
         x:
-          description: X coordinate in world coordinates.
-          type: integer
-          example: 420
+          description: X coordinate in local coordinates, between 0 and 1. Where 0 is leftmost and 1 is rightmost.
+          type: number
+          format: decimal
+          minimum: 0
+          maximum: 1
+          example: 0.5
         y:
-          description: Y coordinate in world coordinates.
-          type: integer
-          example: 160
+          description: Y coordinate in local coordinates, between 0 and 1. Where 0 is top and 1 is bottom.
+          type: number
+          format: decimal
+          minimum: 0
+          maximum: 1
+          example: 0.5
   securitySchemes:
     bearer_token:
       type: http

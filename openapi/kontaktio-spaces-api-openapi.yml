@@ -155,25 +155,12 @@ components:
             type: SEAT
             status: ACTIVE
   schemas:
-    Page:
+    AppType:
       x-stoplight:
-        id: runkht3gb0bn7
-      __ERROR__: "Error: Error getting file \"/domain-common/schemas/paging/Page.yaml\". \n'/domain-common/schemas/paging/Page.yaml' not found."
-    SpaceItemType:
+        id: muig4i86za48p
+      x-internal: false
       type: string
-      enum:
-      - ROOM
-      - SEAT
-      - FOOTFALL
-      x-stoplight:
-        id: 2mqtd27sei0fb
-    SpaceItemStatus:
-      type: string
-      enum:
-      - ACTIVE
-      - SL_REMOVED
-      x-stoplight:
-        id: bkh8vmwluk3ur
+      example: SMART_LOCATION
     SpaceItem:
       type: object
       properties:
@@ -204,6 +191,17 @@ components:
           default: 0
       x-stoplight:
         id: wd6sdemxmqx2r
+    SpaceItemStatus:
+      type: string
+      enum:
+      - ACTIVE
+      - SL_REMOVED
+      x-stoplight:
+        id: bkh8vmwluk3ur
+    Page:
+      x-stoplight:
+        id: runkht3gb0bn7
+      __ERROR__: "Error: Error getting file \"/domain-common/schemas/paging/Page.yaml\". \n'/domain-common/schemas/paging/Page.yaml' not found."
     Space:
       type: object
       x-stoplight:
@@ -224,12 +222,14 @@ components:
       - name
       - appType
       - items
-    AppType:
-      x-stoplight:
-        id: muig4i86za48p
-      x-internal: false
+    SpaceItemType:
       type: string
-      example: SMART_LOCATION
+      enum:
+      - ROOM
+      - SEAT
+      - FOOTFALL
+      x-stoplight:
+        id: 2mqtd27sei0fb
     ApiErrorResponse:
       type: object
       properties:
@@ -240,19 +240,6 @@ components:
       x-stoplight:
         id: ydm0aiasec7sz
   parameters:
-    appType:
-      name: appType
-      in: query
-      explode: false
-      required: true
-      schema:
-        uniqueItems: true
-        type: string
-        items:
-          $ref: '#/components/schemas/AppType'
-        example: SMART_LOCATION
-      example: SMART_LOCATION
-      description: Required to be SMART_LOCATION
     page:
       name: page
       in: query
@@ -269,6 +256,19 @@ components:
           value:
             page: 1
             size: 100
+    appType:
+      name: appType
+      in: query
+      explode: false
+      required: true
+      schema:
+        uniqueItems: true
+        type: string
+        items:
+          $ref: '#/components/schemas/AppType'
+        example: SMART_LOCATION
+      example: SMART_LOCATION
+      description: Required to be SMART_LOCATION
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
