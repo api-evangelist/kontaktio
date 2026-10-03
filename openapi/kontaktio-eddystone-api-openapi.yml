@@ -114,15 +114,6 @@ paths:
       operationId: getNamespaces
       x-operation-id-source: derived
 components:
-  parameters:
-    accept:
-      name: Accept
-      in: header
-      required: true
-      schema:
-        type: string
-        default: application/vnd.com.kontakt+json;version=10
-      description: Accept header is required.
   schemas:
     SearchMeta:
       type: object
@@ -193,6 +184,15 @@ components:
         uptime:
           type: integer
           description: Number of seconds since the last reboot of a beacon
+  parameters:
+    accept:
+      name: Accept
+      in: header
+      required: true
+      schema:
+        type: string
+        default: application/vnd.com.kontakt+json;version=10
+      description: Accept header is required.
   securitySchemes:
     bearer_token:
       type: http

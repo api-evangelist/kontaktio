@@ -61,20 +61,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    Company:
-      type: object
-      properties:
-        id:
-          type: string
-          format: UUID
-        name:
-          type: string
-        uniqueId:
-          type: string
-        countryCode:
-          type:
-          - string
-          - 'null'
     SearchMeta:
       type: object
       title: Search Metadata
@@ -124,6 +110,20 @@ components:
           - ASC
           - DESC
           default: ASC
+    Company:
+      type: object
+      properties:
+        id:
+          type: string
+          format: UUID
+        name:
+          type: string
+        uniqueId:
+          type: string
+        countryCode:
+          type:
+          - string
+          - 'null'
   parameters:
     accept:
       name: Accept

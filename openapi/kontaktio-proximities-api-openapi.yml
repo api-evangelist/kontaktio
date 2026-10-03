@@ -75,15 +75,6 @@ paths:
       operationId: getProximities
       x-operation-id-source: derived
 components:
-  parameters:
-    accept:
-      name: Accept
-      in: header
-      required: true
-      schema:
-        type: string
-        default: application/vnd.com.kontakt+json;version=10
-      description: Accept header is required.
   schemas:
     SearchMeta:
       type: object
@@ -134,6 +125,15 @@ components:
           - ASC
           - DESC
           default: ASC
+  parameters:
+    accept:
+      name: Accept
+      in: header
+      required: true
+      schema:
+        type: string
+        default: application/vnd.com.kontakt+json;version=10
+      description: Accept header is required.
   securitySchemes:
     bearer_token:
       type: http

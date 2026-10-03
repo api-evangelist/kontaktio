@@ -91,70 +91,30 @@ paths:
       tags:
       - Spaces
 components:
-  examples:
-    SpaceObject:
-      summary: Single Space details
-      value:
-        id: 63a334433b96464465766198
-        name: Product Software Department
-        appType: SMART_LOCATION
-        items:
-        - id: d7794ace-80a2-4ed5-93d7-7856781134ff
-          type: SEAT
-          status: ACTIVE
-        - id: '187303'
-          type: ROOM
-          status: ACTIVE
-        - id: 5d505b93-3f3b-42c5-be08-2e3507937728
-          type: SEAT
-          status: ACTIVE
-        - id: faf02b7e-2b38-4d33-a91e-33097424af8a
-          type: SEAT
-          status: ACTIVE
-        - id: 20963ff0-cdcd-4372-b4f8-47171250c7be
-          type: SEAT
-          status: ACTIVE
-        - id: 8e851c87-6819-4136-9d80-c6ac8c56e48e
-          type: SEAT
-          status: ACTIVE
-        - id: 4df0f61d-5cab-40d4-b9c2-237f60bffa04
-          type: SEAT
-          status: ACTIVE
-    SpaceId:
-      summary: Space `id` taken from GET spaces list
-      value: 63a334433b96464465766198
-    SpacePage:
-      summary: Page of Spaces objects
-      value:
-        page:
-          number: 0
-          size: 50
-          totalElements: 1
-          totalPages: 1
-        content:
-        - id: 63a334433b96464465766198
-          name: Software Department
-          appType: SMART_LOCATION
-          items:
-          - id: '187303'
-            type: ROOM
-            status: ACTIVE
-          - id: 5d505b93-3f3b-42c5-be08-2e3507937728
-            type: SEAT
-            status: ACTIVE
-          - id: faf02b7e-2b38-4d33-a91e-33097424af8a
-            type: SEAT
-            status: ACTIVE
-          - id: 20963ff0-cdcd-4372-b4f8-47171250c7be
-            type: SEAT
-            status: ACTIVE
-          - id: 8e851c87-6819-4136-9d80-c6ac8c56e48e
-            type: SEAT
-            status: ACTIVE
-          - id: 4df0f61d-5cab-40d4-b9c2-237f60bffa04
-            type: SEAT
-            status: ACTIVE
   schemas:
+    PageFilter:
+      type: object
+      properties:
+        size:
+          description: The size of the page to be returned
+          type: integer
+          default: 20
+          minimum: 1
+        page:
+          description: Zero-based page index (0..N)
+          minimum: 0
+          type: integer
+          default: 0
+      x-stoplight:
+        id: wd6sdemxmqx2r
+    SpaceItemType:
+      type: string
+      enum:
+      - ROOM
+      - SEAT
+      - FOOTFALL
+      x-stoplight:
+        id: 2mqtd27sei0fb
     AppType:
       x-stoplight:
         id: muig4i86za48p
@@ -176,21 +136,6 @@ components:
       - status
       x-stoplight:
         id: 3jvxvrcedw16o
-    PageFilter:
-      type: object
-      properties:
-        size:
-          description: The size of the page to be returned
-          type: integer
-          default: 20
-          minimum: 1
-        page:
-          description: Zero-based page index (0..N)
-          minimum: 0
-          type: integer
-          default: 0
-      x-stoplight:
-        id: wd6sdemxmqx2r
     SpaceItemStatus:
       type: string
       enum:
@@ -222,14 +167,6 @@ components:
       - name
       - appType
       - items
-    SpaceItemType:
-      type: string
-      enum:
-      - ROOM
-      - SEAT
-      - FOOTFALL
-      x-stoplight:
-        id: 2mqtd27sei0fb
     ApiErrorResponse:
       type: object
       properties:
@@ -240,6 +177,19 @@ components:
       x-stoplight:
         id: ydm0aiasec7sz
   parameters:
+    appType:
+      name: appType
+      in: query
+      explode: false
+      required: true
+      schema:
+        uniqueItems: true
+        type: string
+        items:
+          $ref: '#/components/schemas/AppType'
+        example: SMART_LOCATION
+      example: SMART_LOCATION
+      description: Required to be SMART_LOCATION
     page:
       name: page
       in: query
@@ -256,19 +206,69 @@ components:
           value:
             page: 1
             size: 100
-    appType:
-      name: appType
-      in: query
-      explode: false
-      required: true
-      schema:
-        uniqueItems: true
-        type: string
+  examples:
+    SpaceObject:
+      summary: Single Space details
+      value:
+        id: 63a334433b96464465766198
+        name: Product Software Department
+        appType: SMART_LOCATION
         items:
-          $ref: '#/components/schemas/AppType'
-        example: SMART_LOCATION
-      example: SMART_LOCATION
-      description: Required to be SMART_LOCATION
+        - id: d7794ace-80a2-4ed5-93d7-7856781134ff
+          type: SEAT
+          status: ACTIVE
+        - id: '187303'
+          type: ROOM
+          status: ACTIVE
+        - id: 5d505b93-3f3b-42c5-be08-2e3507937728
+          type: SEAT
+          status: ACTIVE
+        - id: faf02b7e-2b38-4d33-a91e-33097424af8a
+          type: SEAT
+          status: ACTIVE
+        - id: 20963ff0-cdcd-4372-b4f8-47171250c7be
+          type: SEAT
+          status: ACTIVE
+        - id: 8e851c87-6819-4136-9d80-c6ac8c56e48e
+          type: SEAT
+          status: ACTIVE
+        - id: 4df0f61d-5cab-40d4-b9c2-237f60bffa04
+          type: SEAT
+          status: ACTIVE
+    SpacePage:
+      summary: Page of Spaces objects
+      value:
+        page:
+          number: 0
+          size: 50
+          totalElements: 1
+          totalPages: 1
+        content:
+        - id: 63a334433b96464465766198
+          name: Software Department
+          appType: SMART_LOCATION
+          items:
+          - id: '187303'
+            type: ROOM
+            status: ACTIVE
+          - id: 5d505b93-3f3b-42c5-be08-2e3507937728
+            type: SEAT
+            status: ACTIVE
+          - id: faf02b7e-2b38-4d33-a91e-33097424af8a
+            type: SEAT
+            status: ACTIVE
+          - id: 20963ff0-cdcd-4372-b4f8-47171250c7be
+            type: SEAT
+            status: ACTIVE
+          - id: 8e851c87-6819-4136-9d80-c6ac8c56e48e
+            type: SEAT
+            status: ACTIVE
+          - id: 4df0f61d-5cab-40d4-b9c2-237f60bffa04
+            type: SEAT
+            status: ACTIVE
+    SpaceId:
+      summary: Space `id` taken from GET spaces list
+      value: 63a334433b96464465766198
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

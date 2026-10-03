@@ -98,28 +98,56 @@ paths:
       operationId: getCommandEncrypt
       x-operation-id-source: derived
 components:
-  parameters:
-    UniqueIdList:
-      name: uniqueId
-      in: query
-      description: List of devices' unique ids
-      required: true
-      schema:
-        type: array
-        items:
-          type: string
-        example:
-        - 11P10AvW
-        - 11S13AhY
-    accept:
-      name: Accept
-      in: header
-      required: true
-      schema:
-        type: string
-        default: application/vnd.com.kontakt+json;version=10
-      description: Accept header is required.
   schemas:
+    SearchMeta:
+      type: object
+      title: Search Metadata
+      description: Additional information, pagination and metadata about an API response
+      externalDocs:
+        description: Pagination model description
+        url: /backend/management/pagination/
+      properties:
+        filter:
+          type: string
+          description: Filter query used in the API call
+        startIndex:
+          type: integer
+          description: Start index for the results array
+        maxResult:
+          type: integer
+          description: Maximum numbers of results in a single response
+        prevResults:
+          type: string
+          description: URL for the previous page of results
+          format: URL
+        count:
+          type:
+          - integer
+          - 'null'
+          description: Number of results. Not `null` only when the `queryType` is set to `COUNTED` or `SEARCH_META`.
+        orderBy:
+          type: string
+          enum:
+          - CREATED
+        nextResults:
+          type: string
+          format: URL
+          description: URL for the next page of results
+        queryType:
+          description: Query type. `COUNTED` - returns a number of results in the `count` field. `SEARCH_META` - returns only the `searchMeta` object, but with a number of results in the `count` field.
+          type: string
+          enum:
+          - NORMAL
+          - COUNTED
+          - SEARCH_META
+          default: NORMAL
+        order:
+          type: string
+          description: Sorting order - `ASC`ending (default) or `DESC`ending
+          enum:
+          - ASC
+          - DESC
+          default: ASC
     ApiError:
       type: object
       title: API Error
@@ -172,55 +200,27 @@ components:
           type: string
           format: byte
           description: Base64-encoded data with a new Config/Command for a Device with an Unique ID specified in the `uniqueId` field.
-    SearchMeta:
-      type: object
-      title: Search Metadata
-      description: Additional information, pagination and metadata about an API response
-      externalDocs:
-        description: Pagination model description
-        url: /backend/management/pagination/
-      properties:
-        filter:
+  parameters:
+    accept:
+      name: Accept
+      in: header
+      required: true
+      schema:
+        type: string
+        default: application/vnd.com.kontakt+json;version=10
+      description: Accept header is required.
+    UniqueIdList:
+      name: uniqueId
+      in: query
+      description: List of devices' unique ids
+      required: true
+      schema:
+        type: array
+        items:
           type: string
-          description: Filter query used in the API call
-        startIndex:
-          type: integer
-          description: Start index for the results array
-        maxResult:
-          type: integer
-          description: Maximum numbers of results in a single response
-        prevResults:
-          type: string
-          description: URL for the previous page of results
-          format: URL
-        count:
-          type:
-          - integer
-          - 'null'
-          description: Number of results. Not `null` only when the `queryType` is set to `COUNTED` or `SEARCH_META`.
-        orderBy:
-          type: string
-          enum:
-          - CREATED
-        nextResults:
-          type: string
-          format: URL
-          description: URL for the next page of results
-        queryType:
-          description: Query type. `COUNTED` - returns a number of results in the `count` field. `SEARCH_META` - returns only the `searchMeta` object, but with a number of results in the `count` field.
-          type: string
-          enum:
-          - NORMAL
-          - COUNTED
-          - SEARCH_META
-          default: NORMAL
-        order:
-          type: string
-          description: Sorting order - `ASC`ending (default) or `DESC`ending
-          enum:
-          - ASC
-          - DESC
-          default: ASC
+        example:
+        - 11P10AvW
+        - 11S13AhY
   securitySchemes:
     bearer_token:
       type: http
