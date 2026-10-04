@@ -92,6 +92,14 @@ paths:
       - Spaces
 components:
   schemas:
+    SpaceItemType:
+      type: string
+      enum:
+      - ROOM
+      - SEAT
+      - FOOTFALL
+      x-stoplight:
+        id: 2mqtd27sei0fb
     PageFilter:
       type: object
       properties:
@@ -107,35 +115,25 @@ components:
           default: 0
       x-stoplight:
         id: wd6sdemxmqx2r
-    SpaceItemType:
-      type: string
-      enum:
-      - ROOM
-      - SEAT
-      - FOOTFALL
+    ApiErrorResponse:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: string
       x-stoplight:
-        id: 2mqtd27sei0fb
+        id: ydm0aiasec7sz
+    Page:
+      x-stoplight:
+        id: runkht3gb0bn7
+      __ERROR__: "Error: Error getting file \"/domain-common/schemas/paging/Page.yaml\". \n'/domain-common/schemas/paging/Page.yaml' not found."
     AppType:
       x-stoplight:
         id: muig4i86za48p
       x-internal: false
       type: string
       example: SMART_LOCATION
-    SpaceItem:
-      type: object
-      properties:
-        id:
-          type: string
-        type:
-          $ref: '#/components/schemas/SpaceItemType'
-        status:
-          $ref: '#/components/schemas/SpaceItemStatus'
-      required:
-      - id
-      - type
-      - status
-      x-stoplight:
-        id: 3jvxvrcedw16o
     SpaceItemStatus:
       type: string
       enum:
@@ -143,10 +141,6 @@ components:
       - SL_REMOVED
       x-stoplight:
         id: bkh8vmwluk3ur
-    Page:
-      x-stoplight:
-        id: runkht3gb0bn7
-      __ERROR__: "Error: Error getting file \"/domain-common/schemas/paging/Page.yaml\". \n'/domain-common/schemas/paging/Page.yaml' not found."
     Space:
       type: object
       x-stoplight:
@@ -167,15 +161,21 @@ components:
       - name
       - appType
       - items
-    ApiErrorResponse:
+    SpaceItem:
       type: object
       properties:
-        errors:
-          type: array
-          items:
-            type: string
+        id:
+          type: string
+        type:
+          $ref: '#/components/schemas/SpaceItemType'
+        status:
+          $ref: '#/components/schemas/SpaceItemStatus'
+      required:
+      - id
+      - type
+      - status
       x-stoplight:
-        id: ydm0aiasec7sz
+        id: 3jvxvrcedw16o
   parameters:
     appType:
       name: appType
@@ -207,34 +207,6 @@ components:
             page: 1
             size: 100
   examples:
-    SpaceObject:
-      summary: Single Space details
-      value:
-        id: 63a334433b96464465766198
-        name: Product Software Department
-        appType: SMART_LOCATION
-        items:
-        - id: d7794ace-80a2-4ed5-93d7-7856781134ff
-          type: SEAT
-          status: ACTIVE
-        - id: '187303'
-          type: ROOM
-          status: ACTIVE
-        - id: 5d505b93-3f3b-42c5-be08-2e3507937728
-          type: SEAT
-          status: ACTIVE
-        - id: faf02b7e-2b38-4d33-a91e-33097424af8a
-          type: SEAT
-          status: ACTIVE
-        - id: 20963ff0-cdcd-4372-b4f8-47171250c7be
-          type: SEAT
-          status: ACTIVE
-        - id: 8e851c87-6819-4136-9d80-c6ac8c56e48e
-          type: SEAT
-          status: ACTIVE
-        - id: 4df0f61d-5cab-40d4-b9c2-237f60bffa04
-          type: SEAT
-          status: ACTIVE
     SpacePage:
       summary: Page of Spaces objects
       value:
@@ -269,6 +241,34 @@ components:
     SpaceId:
       summary: Space `id` taken from GET spaces list
       value: 63a334433b96464465766198
+    SpaceObject:
+      summary: Single Space details
+      value:
+        id: 63a334433b96464465766198
+        name: Product Software Department
+        appType: SMART_LOCATION
+        items:
+        - id: d7794ace-80a2-4ed5-93d7-7856781134ff
+          type: SEAT
+          status: ACTIVE
+        - id: '187303'
+          type: ROOM
+          status: ACTIVE
+        - id: 5d505b93-3f3b-42c5-be08-2e3507937728
+          type: SEAT
+          status: ACTIVE
+        - id: faf02b7e-2b38-4d33-a91e-33097424af8a
+          type: SEAT
+          status: ACTIVE
+        - id: 20963ff0-cdcd-4372-b4f8-47171250c7be
+          type: SEAT
+          status: ACTIVE
+        - id: 8e851c87-6819-4136-9d80-c6ac8c56e48e
+          type: SEAT
+          status: ACTIVE
+        - id: 4df0f61d-5cab-40d4-b9c2-237f60bffa04
+          type: SEAT
+          status: ACTIVE
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

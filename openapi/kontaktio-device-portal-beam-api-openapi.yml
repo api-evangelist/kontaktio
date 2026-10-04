@@ -225,6 +225,22 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    StitchingPose:
+      type: object
+      required:
+      - pivotLocal
+      - pivotWorld
+      - rotationDeg
+      properties:
+        pivotLocal:
+          $ref: '#/components/schemas/StitchingPivotLocal'
+        pivotWorld:
+          $ref: '#/components/schemas/StitchingPivotWorld'
+        rotationDeg:
+          type: number
+          format: decimal
+          description: Clockwise rotation in degrees around pivot point.
+          example: 25
     StitchingPair:
       type: object
       required:
@@ -252,43 +268,20 @@ components:
           description: Y coordinate in world coordinates.
           type: integer
           example: 160
-    StitchingPose:
+    StitchedDevice:
       type: object
       required:
-      - pivotLocal
-      - pivotWorld
-      - rotationDeg
+      - uniqueId
+      - image
+      - pose
       properties:
-        pivotLocal:
-          $ref: '#/components/schemas/StitchingPivotLocal'
-        pivotWorld:
-          $ref: '#/components/schemas/StitchingPivotWorld'
-        rotationDeg:
-          type: number
-          format: decimal
-          description: Clockwise rotation in degrees around pivot point.
-          example: 25
-    StitchingImage:
-      type: object
-      required:
-      - captured
-      - original
-      - corrected
-      properties:
-        captured:
+        uniqueId:
           type: string
-          format: date-time
-          example: '2026-01-09T12:09:30.726Z'
-        original:
-          type: string
-          format: byte
-          description: Base64-encoded image bytes (no data URL prefix).
-          example: iVBORw0KGgoAAAANSUhEUgAAAAUA...
-        corrected:
-          type: string
-          format: byte
-          description: Base64-encoded image bytes (no data URL prefix).
-          example: iVBORw0KGgoAAAANSUhEUgAAAAUA...
+          description: Unique identifier of a beam/device.
+        image:
+          $ref: '#/components/schemas/StitchingImage'
+        pose:
+          $ref: '#/components/schemas/StitchingPose'
     StitchingPivotLocal:
       description: Pivot (rotation point) of the image in the device image's local coordinates.
       type: object
@@ -310,6 +303,19 @@ components:
           minimum: 0
           maximum: 1
           example: 0.5
+    StitchingConfig:
+      type: object
+      required:
+      - uniqueId
+      - intersections
+      properties:
+        uniqueId:
+          type: string
+          description: Unique identifier of a beam/device.
+        intersections:
+          type: array
+          items:
+            $ref: '#/components/schemas/StitchingPair'
     Polygon:
       type: object
       properties:
@@ -325,48 +331,6 @@ components:
                 type: integer
               y:
                 type: integer
-    StitchedDevice:
-      type: object
-      required:
-      - uniqueId
-      - image
-      - pose
-      properties:
-        uniqueId:
-          type: string
-          description: Unique identifier of a beam/device.
-        image:
-          $ref: '#/components/schemas/StitchingImage'
-        pose:
-          $ref: '#/components/schemas/StitchingPose'
-    OccupancyImage:
-      type: object
-      x-stoplight:
-        id: blcpt1fqfd6zh
-      description: Occupancy image taken from occupancy-capable device.
-      properties:
-        captured:
-          type: string
-          format: date-time
-          description: Timestamp when image was captured. If present in POST request, will be accounted for, otherwise defaults to now()
-        raw:
-          type: string
-          format: byte
-          description: Raw Base64-encoded bytes received from device.
-        content:
-          type: string
-          format: byte
-          description: Base64-encoded PNG image.
-        calibration:
-          type: string
-          format: byte
-          description: Base64-encoded calibration mask received from device.
-        recognitionBoxes:
-          type: array
-          description: Objects recognized as humans by occupancy model on the device.
-          items:
-            allOf:
-            - $ref: '#/components/schemas/Polygon'
     ApiError:
       type: object
       title: API Error
@@ -406,19 +370,55 @@ components:
                 type: string
                 description: Error message
                 example: Invalid value for field name
-    StitchingConfig:
+    StitchingImage:
       type: object
       required:
-      - uniqueId
-      - intersections
+      - captured
+      - original
+      - corrected
       properties:
-        uniqueId:
+        captured:
           type: string
-          description: Unique identifier of a beam/device.
-        intersections:
+          format: date-time
+          example: '2026-01-09T12:09:30.726Z'
+        original:
+          type: string
+          format: byte
+          description: Base64-encoded image bytes (no data URL prefix).
+          example: iVBORw0KGgoAAAANSUhEUgAAAAUA...
+        corrected:
+          type: string
+          format: byte
+          description: Base64-encoded image bytes (no data URL prefix).
+          example: iVBORw0KGgoAAAANSUhEUgAAAAUA...
+    OccupancyImage:
+      type: object
+      x-stoplight:
+        id: blcpt1fqfd6zh
+      description: Occupancy image taken from occupancy-capable device.
+      properties:
+        captured:
+          type: string
+          format: date-time
+          description: Timestamp when image was captured. If present in POST request, will be accounted for, otherwise defaults to now()
+        raw:
+          type: string
+          format: byte
+          description: Raw Base64-encoded bytes received from device.
+        content:
+          type: string
+          format: byte
+          description: Base64-encoded PNG image.
+        calibration:
+          type: string
+          format: byte
+          description: Base64-encoded calibration mask received from device.
+        recognitionBoxes:
           type: array
+          description: Objects recognized as humans by occupancy model on the device.
           items:
-            $ref: '#/components/schemas/StitchingPair'
+            allOf:
+            - $ref: '#/components/schemas/Polygon'
   securitySchemes:
     bearer_token:
       type: http

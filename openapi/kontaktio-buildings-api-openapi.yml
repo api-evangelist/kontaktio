@@ -146,6 +146,20 @@ paths:
       - api_key: []
 components:
   parameters:
+    name:
+      name: name
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Filter by name
+    floorName:
+      name: floorName
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Filter by floor name
     description:
       name: description
       in: query
@@ -160,13 +174,6 @@ components:
         type: string
         default: '20'
       description: Size of the page to retrieve.
-    name:
-      name: name
-      in: query
-      required: false
-      schema:
-        type: string
-      description: Filter by name
     sort:
       name: sort
       in: query
@@ -185,13 +192,6 @@ components:
         type: integer
         default: '0'
       description: Page you want to retrieve; 0 indexed.
-    floorName:
-      name: floorName
-      in: query
-      required: false
-      schema:
-        type: string
-      description: Filter by floor name
   schemas:
     Building:
       description: 'Smart Location Building. Includes the building''s floors and campus. '

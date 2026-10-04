@@ -148,6 +148,17 @@ paths:
       security:
       - api_key: []
 components:
+  responses:
+    error-429:
+      description: Rate limit exceeded. The response has no body.
+      headers:
+        Retry-After:
+          description: 'Indicates how long to wait before making a new request. The response includes this header twice: once with an HTTP-date format (e.g., "Wed, 21 Oct 2015 07:28:00 GMT") and once with delay-seconds format (e.g., "120").'
+          schema:
+            type: string
+          required: true
+      content:
+        text/plain: null
   parameters:
     size:
       name: size
@@ -390,17 +401,6 @@ components:
             - beaconTimestamp
             - gatewayTimestamp
             - cloudTimestamp
-  responses:
-    error-429:
-      description: Rate limit exceeded. The response has no body.
-      headers:
-        Retry-After:
-          description: 'Indicates how long to wait before making a new request. The response includes this header twice: once with an HTTP-date format (e.g., "Wed, 21 Oct 2015 07:28:00 GMT") and once with delay-seconds format (e.g., "120").'
-          schema:
-            type: string
-          required: true
-      content:
-        text/plain: null
   securitySchemes:
     api_key:
       type: apiKey

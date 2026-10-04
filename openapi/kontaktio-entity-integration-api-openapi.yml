@@ -175,45 +175,6 @@ components:
       - name
       - entityTypeId
       - status
-    Attribute:
-      type: object
-      properties:
-        id:
-          type: string
-          description: 'Id of attribute definition on EntityType level. If not provided attribute will be matched by name if the same name exists  If no match is found, the attribute will be ignored.
-
-            '
-        name:
-          type: string
-          description: The name of the attribute (e.g. "Department", "Role").
-        value:
-          type: string
-          description: The attribute's value (e.g. "Radiology", "Technician").
-      required:
-      - name
-      - value
-    ItemError:
-      type: object
-      description: Details about an entity that couldn't be processed.
-      properties:
-        item:
-          type: string
-          description: The `entityId` of the failed entity.
-        errorMessage:
-          type: string
-          description: Message describing the error.
-      required:
-      - item
-      - errorMessage
-    EntityStatus:
-      type: string
-      enum:
-      - ACTIVE
-      - DEACTIVATED
-      - DELETED
-      description: 'Indicates the current lifefcyle of the entity:   - `ACTIVE`: Fully operational.   - `DEACTIVATED`: Entity position data is collected, but not monitored by alert rules (alerts and notfications are disabled). - `DELETED`: Entity is archived and hidden from the UI. The `entityId` can be restored or re-registered with a new entity.
-
-        '
     EntityCreateUpdateResult:
       type: object
       description: Response model that summarizes the result of a batch create/update operation.
@@ -232,6 +193,23 @@ components:
       required:
       - processed
       - totalItems
+    Attribute:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 'Id of attribute definition on EntityType level. If not provided attribute will be matched by name if the same name exists  If no match is found, the attribute will be ignored.
+
+            '
+        name:
+          type: string
+          description: The name of the attribute (e.g. "Department", "Role").
+        value:
+          type: string
+          description: The attribute's value (e.g. "Radiology", "Technician").
+      required:
+      - name
+      - value
     EntityDetails:
       type: object
       properties:
@@ -256,6 +234,28 @@ components:
       - entityId
       - entityTypeId
       - status
+    ItemError:
+      type: object
+      description: Details about an entity that couldn't be processed.
+      properties:
+        item:
+          type: string
+          description: The `entityId` of the failed entity.
+        errorMessage:
+          type: string
+          description: Message describing the error.
+      required:
+      - item
+      - errorMessage
+    EntityStatus:
+      type: string
+      enum:
+      - ACTIVE
+      - DEACTIVATED
+      - DELETED
+      description: 'Indicates the current lifefcyle of the entity:   - `ACTIVE`: Fully operational.   - `DEACTIVATED`: Entity position data is collected, but not monitored by alert rules (alerts and notfications are disabled). - `DELETED`: Entity is archived and hidden from the UI. The `entityId` can be restored or re-registered with a new entity.
+
+        '
   parameters:
     entityId:
       name: entityId

@@ -148,6 +148,19 @@ components:
           - ASC
           - DESC
           default: ASC
+    EncryptedConfig:
+      title: Encrypted Config/Command
+      x-stoplight:
+        id: yvjpgdrc5gygd
+      type: object
+      properties:
+        uniqueId:
+          type: string
+          description: Unique ID of the device that can consume this Encrypted Config/Command.
+        config:
+          type: string
+          format: byte
+          description: Base64-encoded data with a new Config/Command for a Device with an Unique ID specified in the `uniqueId` field.
     ApiError:
       type: object
       title: API Error
@@ -187,19 +200,6 @@ components:
                 type: string
                 description: Error message
                 example: Invalid value for field name
-    EncryptedConfig:
-      title: Encrypted Config/Command
-      x-stoplight:
-        id: yvjpgdrc5gygd
-      type: object
-      properties:
-        uniqueId:
-          type: string
-          description: Unique ID of the device that can consume this Encrypted Config/Command.
-        config:
-          type: string
-          format: byte
-          description: Base64-encoded data with a new Config/Command for a Device with an Unique ID specified in the `uniqueId` field.
   parameters:
     accept:
       name: Accept

@@ -189,6 +189,37 @@ components:
           - ASC
           - DESC
           default: ASC
+    FirmwareCore:
+      title: Firmware (Core Parameters)
+      properties:
+        id:
+          type: string
+          format: UUID
+          description: Firmware identificator
+        name:
+          type: string
+          description: Firmware name
+        description:
+          type:
+          - string
+          - 'null'
+          description: Optional Firmware description
+        deviceType:
+          type: string
+          description: Type of a device that the Firmware applies to
+          enum:
+          - BEACON
+          - GATEWAY
+        validVersions:
+          description: List of Firmware versions from which it's possible to update to the returned Firmware
+          type: string
+        important:
+          type: boolean
+          description: Flag indicating whether this Firmware should be considered important (`true`) or just a minor update (`false`)
+        url:
+          type: string
+          format: URL
+          description: Link to a binary file with the Firmware
     Firmware:
       type: object
       properties:
@@ -237,37 +268,6 @@ components:
         crc32:
           type: string
           description: Checksum
-    FirmwareCore:
-      title: Firmware (Core Parameters)
-      properties:
-        id:
-          type: string
-          format: UUID
-          description: Firmware identificator
-        name:
-          type: string
-          description: Firmware name
-        description:
-          type:
-          - string
-          - 'null'
-          description: Optional Firmware description
-        deviceType:
-          type: string
-          description: Type of a device that the Firmware applies to
-          enum:
-          - BEACON
-          - GATEWAY
-        validVersions:
-          description: List of Firmware versions from which it's possible to update to the returned Firmware
-          type: string
-        important:
-          type: boolean
-          description: Flag indicating whether this Firmware should be considered important (`true`) or just a minor update (`false`)
-        url:
-          type: string
-          format: URL
-          description: Link to a binary file with the Firmware
   parameters:
     accept:
       name: Accept
